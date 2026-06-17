@@ -4,6 +4,7 @@ import CountUp from 'react-countup';
 // mantine
 import { Button, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import packageJson from '../../../../package.json'
 // files
 import CV from '../../../files/CV.pdf'
 // icons
@@ -27,6 +28,7 @@ export default function TopComponent() {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     // model hook
     const [opened, { open, close }] = useDisclosure(false);
+    const modalTitle = `About This Website - ${packageJson.version}`;
 
     // icon box animation
     useEffect(() => {
@@ -162,10 +164,10 @@ export default function TopComponent() {
             {/* modal components */}
             {
                 theme === "light" ?
-                    <Modal opened={opened} onClose={close} size="lg" title="About This Website" centered>
+                    <Modal opened={opened} onClose={close} size="lg" title={modalTitle} centered>
                         <IntroductionModalComponent />
                     </Modal> :
-                    <Modal opened={opened} onClose={close} size="lg" title="About This Website" centered
+                    <Modal opened={opened} onClose={close} size="lg" title={modalTitle} centered
                         styles={{
                             header: {
                                 backgroundColor: "#0B1A33",
