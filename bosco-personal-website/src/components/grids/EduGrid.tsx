@@ -39,7 +39,6 @@ export default function EduGrid() {
                             className='w-full p-4 sm:p-4 md:p-4 lg:p-10'
                             src={school.Logo.URL}
                             alt={school.SchoolName}
-                            effect="blur"
                         />
                     </div>
                 ))}
