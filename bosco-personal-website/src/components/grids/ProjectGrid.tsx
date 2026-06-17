@@ -9,7 +9,6 @@ import { Modal } from '@mantine/core';
 import ProjectModalComponent from '../modal/project/ProjectModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
 
 // project interface
 interface Project {
@@ -49,7 +48,6 @@ export default function ProjectGrid() {
                             className='w-full p-4 sm:p-4 md:p-4 lg:p-10'
                             src={project.Logo}
                             alt={project.ProjectName}
-                            effect="blur"
                         />
                     </div>
                 ))}
@@ -60,13 +58,11 @@ export default function ProjectGrid() {
                     <Modal opened={opened} onClose={close} size="lg" centered>
                         {selectedProject && (
                             <ProjectModalComponent
-                                docID={selectedProject.id}
                                 projectName={selectedProject.ProjectName}
                                 description={selectedProject.Description}
                                 techStack={selectedProject.TechStack}
                                 link={selectedProject.Link}
                                 logo={selectedProject.Logo}
-                                createDate={selectedProject.CreateDate}
                             />
                         )}
                     </Modal> :
@@ -82,13 +78,11 @@ export default function ProjectGrid() {
                     >
                         {selectedProject && (
                             <ProjectModalComponent
-                                docID={selectedProject.id}
                                 projectName={selectedProject.ProjectName}
                                 description={selectedProject.Description}
                                 techStack={selectedProject.TechStack}
                                 link={selectedProject.Link}
                                 logo={selectedProject.Logo}
-                                createDate={selectedProject.CreateDate}
                             />
                         )}
                     </Modal>

@@ -9,23 +9,8 @@ import { Modal } from '@mantine/core';
 import CompanyModalComponent from '../modal/company/CompanyModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-
-// company interface
-interface Company {
-    id: string;
-    CompanyName: string;
-    Team: string;
-    Position: string;
-    JobDuties: string;
-    Projects: string;
-    SkillSets: [];
-    StartDate: any;
-    EndDate: any;
-    Present: boolean;
-    Logo: string;
-    CreateDate: Date;
-}
+// types
+import { CompanyData } from '../../types/type';
 
 export default function CompanyGrid() {
     // global variable
@@ -36,10 +21,10 @@ export default function CompanyGrid() {
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected company
-    const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+    const [selectedCompany, setSelectedCompany] = useState<CompanyData | null>(null);
 
     // open modal with set selected company
-    const openModal = (company: Company) => {
+    const openModal = (company: CompanyData) => {
         setSelectedCompany(company);
         open();
     };
@@ -52,9 +37,8 @@ export default function CompanyGrid() {
                     <div key={i} onClick={() => openModal(company)} className='bg-white shadow-md rounded-sm flex justify-center items-center h-[115.66px] sm:h-[115.66px] md:h-[115.66px] lg:h-[298px] cursor-pointer'>
                         <LazyLoadImage
                             className='p-2 sm:p-2 md:p-2 lg:p-5'
-                            src={company.Logo}
+                            src={company.Logo.URL}
                             alt={company.CompanyName}
-                            effect="blur"
                         />
                     </div>
                 ))}
@@ -75,7 +59,7 @@ export default function CompanyGrid() {
                                 startDate={selectedCompany.StartDate}
                                 endDate={selectedCompany.EndDate}
                                 present={selectedCompany.Present}
-                                logo={selectedCompany.Logo}
+                                logo={selectedCompany.Logo.URL}
                                 createDate={selectedCompany.CreateDate}
                             />
                         )}
@@ -102,7 +86,7 @@ export default function CompanyGrid() {
                                 startDate={selectedCompany.StartDate}
                                 endDate={selectedCompany.EndDate}
                                 present={selectedCompany.Present}
-                                logo={selectedCompany.Logo}
+                                logo={selectedCompany.Logo.URL}
                                 createDate={selectedCompany.CreateDate}
                             />
                         )}

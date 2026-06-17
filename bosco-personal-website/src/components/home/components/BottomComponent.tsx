@@ -1,16 +1,9 @@
 // others
-import { useContext, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom';
 // global components
-import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 // mantine components
-import { Modal, Button, Loader } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-// page components
-import AddCompanyModalComponent from '../../modal/company/AddCompanyModalComponent';
-import AddEducationModalComponent from '../../modal/education/AddEducationModalComponent';
-import AddProjectModalComponent from '../../modal/project/AddProjectModalComponent';
-import AddSkillModalComponent from '../../modal/skill/AddSkillModalComponent';
+import { Loader } from '@mantine/core';
 // icons
 import { BiGrid, BiObjectsVerticalBottom, BiBookContent, BiCalendarCheck } from "react-icons/bi";
 // lazy load component
@@ -36,12 +29,6 @@ const SkillGrid = lazy(() => {
 })
 
 export default function BottomComponent() {
-    // global variable
-    const {
-        authUser
-    } = useContext(MapperContext);
-    // model hook
-    const [opened, { open, close }] = useDisclosure(false);
     // navigate hook
     const navigate = useNavigate();
     // url parameter
@@ -68,23 +55,6 @@ export default function BottomComponent() {
             <nav className='py-[1rem] flex flex-col justify-between items-center sticky top-[-0.1px] z-10 bg-white dark:bg-[#0B1A33] w-full max-w-[365px] sm:max-w-[355px] md:max-w-[355px] lg:max-w-[910px]'>
                 {/* nav line */}
                 <div className='overflow-hidden animate-fade-up animate-delay-200 animate-once flex flex-col justify-end items-end'>
-                    {/* Add Button= */}
-                    {
-                        authUser !== null ?
-                            <Button onClick={open} className='text-[12px] sm:text-[12px] md:text-[12px] lg:text-[14px] mt-[-0.5rem] mr-[-1.1rem] hover:bg-transparent text-[#9A9A9A] dark:text-[#94A3B8] font-normal'>
-                                {
-                                    widget === "1" || widget === null ?
-                                        "+ Add Work" :
-                                        widget === "2" ?
-                                            "+ Add Education" :
-                                            widget === "3" ?
-                                                "+ Add Project" :
-                                                widget === "4" ?
-                                                    "+ Add Skill" : ""
-                                }
-                            </Button> :
-                            <></>
-                    }
                     <div className='w-[355px] sm:w-[355px] md:w-[355px] lg:w-[900px] h-[1px] bg-[#9a9a9a60] dark:bg-[#94A3B860]' />
                 </div>
                 {/* nav button */}
@@ -131,49 +101,6 @@ export default function BottomComponent() {
                     }
                 </Suspense>
             </div>
-            {/* add item modal */}
-            {
-                localStorage.getItem('theme') === "light" ?
-                    <Modal opened={opened} onClose={close} size="lg" padding="xl" title={widget === "1" || widget === null ? "Add Work" : widget === "2" ? "Add Education" : widget === "3" ? "Add Project" : "Add Skill"} centered>
-                        {
-                            widget === "1" || widget === null ?
-                                <AddCompanyModalComponent /> :
-                                widget === "2" ?
-                                    <AddEducationModalComponent /> :
-                                    widget === "3" ?
-                                        <AddProjectModalComponent /> :
-                                        widget === "4" ?
-                                            <AddSkillModalComponent /> :
-                                            <></>
-
-                        }
-                    </Modal> :
-                    <Modal opened={opened} onClose={close} size="lg" padding="xl" title={widget === "1" || widget === null ? "Add Work" : widget === "2" ? "Add Education" : widget === "3" ? "Add Project" : "Add Skill"} centered
-                        styles={{
-                            header: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            content: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            title: {
-                                color: "white",
-                            }
-                        }}
-                    >
-                        {
-                            widget === "1" || widget === null ?
-                                <AddCompanyModalComponent /> :
-                                widget === "2" ?
-                                    <AddEducationModalComponent /> :
-                                    widget === "3" ?
-                                        <AddProjectModalComponent /> :
-                                        widget === "4" ?
-                                            <AddSkillModalComponent /> :
-                                            <></>
-                        }
-                    </Modal>
-            }
         </div>
     )
 }

@@ -9,21 +9,8 @@ import { Modal } from '@mantine/core';
 import EducationModalComponent from '../modal/education/EducationModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-
-// school interface
-interface School {
-    id: string;
-    SchoolName: string;
-    Type: string;
-    Title: string;
-    GPA: string;
-    StartDate: any;
-    EndDate: any;
-    Present: boolean;
-    Logo: string;
-    CreateDate: Date;
-}
+// types
+import { SchoolData } from '../../types/type';
 
 export default function EduGrid() {
     // global variable
@@ -34,10 +21,10 @@ export default function EduGrid() {
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected school
-    const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+    const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
 
     // open modal with set selected school
-    const openModal = (school: School) => {
+    const openModal = (school: SchoolData) => {
         setSelectedSchool(school);
         open();
     };
@@ -46,11 +33,11 @@ export default function EduGrid() {
         <div className='animate-fade animate-delay-0 animate-once flex justify-center items-center mt-[1rem] sm:mt-[1rem] md:mt-[1rem] lg:mt-[2rem]'>
             {/* school grid */}
             <div className='mx-0 sm:mx-0 md:mx-0 lg:mx-2 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-1'>
-                {schoolData.map((school: any, i: any) => (
+                {schoolData.map((school: SchoolData, i: number) => (
                     <div key={i} onClick={() => openModal(school)} className='bg-white shadow-md rounded-sm flex justify-center items-center h-[115.66px] sm:h-[115.66px] md:h-[115.66px] lg:h-[298px] cursor-pointer'>
                         <LazyLoadImage
                             className='w-full p-4 sm:p-4 md:p-4 lg:p-10'
-                            src={school.Logo}
+                            src={school.Logo.URL}
                             alt={school.SchoolName}
                             effect="blur"
                         />
@@ -71,8 +58,7 @@ export default function EduGrid() {
                                 startDate={selectedSchool.StartDate}
                                 endDate={selectedSchool.EndDate}
                                 present={selectedSchool.Present}
-                                logo={selectedSchool.Logo}
-                                createDate={selectedSchool.CreateDate}
+                                logo={selectedSchool.Logo.URL}
                             />
                         )}
                     </Modal> :
@@ -96,8 +82,7 @@ export default function EduGrid() {
                                 startDate={selectedSchool.StartDate}
                                 endDate={selectedSchool.EndDate}
                                 present={selectedSchool.Present}
-                                logo={selectedSchool.Logo}
-                                createDate={selectedSchool.CreateDate}
+                                logo={selectedSchool.Logo.URL}
                             />
                         )}
                     </Modal>

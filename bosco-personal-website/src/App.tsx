@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 // others
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -8,11 +8,6 @@ import MainLoading from "./components/loading/MainLoading";
 const Home = lazy(() => {
   return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
     resolve(import('./components/home/Home'));
-  });
-});
-const Login = lazy(() => {
-  return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-    resolve(import('./components/login/Login'));
   });
 });
 
@@ -35,8 +30,6 @@ function App() {
         <Routes>
           {/* link setup */}
           <Route path="/?w=1" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Home />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Suspense>

@@ -1,0 +1,96 @@
+[
+    {
+        "SkillSets": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "WordPress"
+        ],
+        "EndDate": {
+            "seconds": 1651161600,
+            "nanoseconds": 0
+        },
+        "CreateDate": {
+            "seconds": 1691552850,
+            "nanoseconds": 649000000
+        },
+        "Team": "Project Team",
+        "CompanyName": "Sisters Pro AI Solutions Limited",
+        "StartDate": {
+            "seconds": 1619971200,
+            "nanoseconds": 0
+        },
+        "Position": "Web Developer",
+        "Logo": {
+            "URL": "/images/company/sister_pro_ai_solution_limited_icon.png",
+            "FileName": "sister_pro_ai_solution_limited_icon.png"
+        },
+        "JobDuties": "Web Development & Customer Management",
+        "Present": false,
+        "Projects": "Vendor Web Projects",
+        "id": 1
+    },
+    {
+        "SkillSets": [
+            "Node",
+            "React",
+            "JavaScript",
+            "Tailwind CSS",
+            "Express",
+            "Unity",
+            "C#",
+            "WordPress",
+            "Firebase"
+        ],
+        "EndDate": {
+            "seconds": 1682870400,
+            "nanoseconds": 0
+        },
+        "CreateDate": {
+            "seconds": 1691552950,
+            "nanoseconds": 120000000
+        },
+        "CompanyName": "Sisters Pro AI Solutions Limited",
+        "Team": "Project Team",
+        "Logo": {
+            "URL": "/images/company/sister_pro_ai_solution_limited_icon.png",
+            "FileName": "sister_pro_ai_solution_limited_icon.png"
+        },
+        "JobDuties": "Web / App Development & Customer Management",
+        "Present": false,
+        "Projects": "Vendor Web / App Projects",
+        "StartDate": {
+            "seconds": 1651420800,
+            "nanoseconds": 0
+        },
+        "Position": "Project Developer",
+        "id": 2
+    },
+    {
+        "SkillSets": [
+            "React",
+            "TypeScript",
+            "Java"
+        ],
+        "EndDate": null,
+        "CreateDate": {
+            "seconds": 1722590090,
+            "nanoseconds": 20000000
+        },
+        "StartDate": {
+            "seconds": 1695571200,
+            "nanoseconds": 0
+        },
+        "Position": "Programmer",
+        "Present": true,
+        "JobDuties": "Clinical IT Product Development",
+        "Logo": {
+            "URL": "/images/company/hospital_authority_icon.png",
+            "FileName": "hospital_authority_icon.png"
+        },
+        "Projects": "Clinical IT Product Development",
+        "Team": "Clinical IT Product Development",
+        "CompanyName": "Hospital Authority",
+        "id": 3
+    }
+]

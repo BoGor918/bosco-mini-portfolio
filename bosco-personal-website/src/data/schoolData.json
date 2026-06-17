@@ -1,0 +1,74 @@
+[
+    {
+        "Logo": {
+            "URL": "/images/school/shun_tak_fraternal_association_cheng_yu_tung_secondary_school_icon.png",
+            "FileName": "shun_tak_fraternal_association_cheng_yu_tung_secondary_school_icon.png"
+        },
+        "Type": "Secondary",
+        "EndDate": {
+            "seconds": 1567180898,
+            "nanoseconds": 0
+        },
+        "SchoolName": "Shun Tak Fraternal Association Cheng Yu Tung Secondary School",
+        "Title": "Hong Kong Diploma of Secondary Education",
+        "StartDate": {
+            "seconds": 1378051200,
+            "nanoseconds": 0
+        },
+        "Present": false,
+        "GPA": 17,
+        "CreateDate": {
+            "seconds": 1691546764,
+            "nanoseconds": 575000000
+        },
+        "id": 1
+    },
+    {
+        "Present": false,
+        "Title": "Associate in Information Technology",
+        "StartDate": {
+            "seconds": 1567353600,
+            "nanoseconds": 0
+        },
+        "SchoolName": "Hong Kong Community College",
+        "EndDate": {
+            "seconds": 1630339200,
+            "nanoseconds": 133000000
+        },
+        "Type": "Associate Degree",
+        "Logo": {
+            "URL": "/images/school/hong_kong_community_college_icon.png",
+            "FileName": "hong_kong_community_college_icon.png"
+        },
+        "CreateDate": {
+            "seconds": 1691546868,
+            "nanoseconds": 408000000
+        },
+        "GPA": 3.88,
+        "id": 2
+    },
+    {
+        "CreateDate": {
+            "seconds": 1691562897,
+            "nanoseconds": 672000000
+        },
+        "GPA": 3.49,
+        "Present": false,
+        "SchoolName": "The Hong Kong Polytechnic University",
+        "Title": "Bachelor of Science (Hons) Scheme in Computing / Computer Science",
+        "StartDate": {
+            "seconds": 1630252800,
+            "nanoseconds": 0
+        },
+        "EndDate": {
+            "seconds": 1693411295,
+            "nanoseconds": 0
+        },
+        "Type": "Bachelor Degree",
+        "Logo": {
+            "URL": "/images/school/the_hong_kong_polytechnic_university_icon.png",
+            "FileName": "the_hong_kong_polytechnic_university_icon.png"
+        },
+        "id": 3
+    }
+]

@@ -9,15 +9,8 @@ import { Modal } from '@mantine/core';
 import SkillModalComponent from '../modal/skill/SkillModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-
-// skill interface
-interface Skill {
-    id: string;
-    SkillName: string;
-    Logo: string;
-    CreateDate: Date;
-}
+// types
+import { SkillData } from '../../types/type';
 
 export default function SkillGrid() {
     // global variable
@@ -28,10 +21,10 @@ export default function SkillGrid() {
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected skill
-    const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+    const [selectedSkill, setSelectedSkill] = useState<SkillData | null>(null);
 
     // open modal with set selected skill
-    const openModal = (project: Skill) => {
+    const openModal = (project: SkillData) => {
         setSelectedSkill(project);
         open();
     };
@@ -46,7 +39,6 @@ export default function SkillGrid() {
                             className='w-full p-4 sm:p-4 md:p-4 lg:p-10'
                             src={skill.Logo}
                             alt={skill.SkillName}
-                            effect="blur"
                         />
                     </div>
                 ))}
@@ -57,10 +49,8 @@ export default function SkillGrid() {
                     <Modal opened={opened} onClose={close} size="md" centered>
                         {selectedSkill && (
                             <SkillModalComponent
-                                docID={selectedSkill.id}
                                 skillName={selectedSkill.SkillName}
                                 logo={selectedSkill.Logo}
-                                createDate={selectedSkill.CreateDate}
                             />
                         )}
                     </Modal> :
@@ -76,10 +66,8 @@ export default function SkillGrid() {
                     >
                         {selectedSkill && (
                             <SkillModalComponent
-                                docID={selectedSkill.id}
                                 skillName={selectedSkill.SkillName}
                                 logo={selectedSkill.Logo}
-                                createDate={selectedSkill.CreateDate}
                             />
                         )}
                     </Modal>

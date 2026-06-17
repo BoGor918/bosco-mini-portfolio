@@ -1,0 +1,138 @@
+[
+    {
+        "Link": [
+            "https://zqbvut.axshare.com"
+        ],
+        "CreateDate": {
+            "seconds": 1691569336,
+            "nanoseconds": 649000000
+        },
+        "ProjectName": "Trigove",
+        "Logo": "/images/project/trigove_icon.png",
+        "Description": "Hong Kong Travel Application - Interface",
+        "TechStack": [
+            "Axure RP",
+            "Figma"
+        ],
+        "id": 1
+    },
+    {
+        "Link": [
+            "https://github.com/BoGor918/Smart-Math"
+        ],
+        "CreateDate": {
+            "seconds": 1691655796,
+            "nanoseconds": 839000000
+        },
+        "ProjectName": "Smart Math",
+        "Description": "Math Multiplication Learning Tools Platform - Web",
+        "Logo": "/images/project/smart_math_icon.png",
+        "TechStack": [
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ],
+        "id": 2
+    },
+    {
+        "Logo": "/images/project/socave_icon.png",
+        "Description": "Social Media Platform - Web App",
+        "TechStack": [
+            "Vue",
+            "JavaScript",
+            "Tailwind CSS",
+            "MongoDB"
+        ],
+        "Link": [
+            "https://github.com/BoGor918/Socave"
+        ],
+        "ProjectName": "Socave",
+        "CreateDate": {
+            "seconds": 1691747362,
+            "nanoseconds": 294000000
+        },
+        "id": 3
+    },
+    {
+        "Link": [
+            "https://github.com/BoGor918/OpenLava"
+        ],
+        "ProjectName": "OpenLava",
+        "CreateDate": {
+            "seconds": 1691747462,
+            "nanoseconds": 862000000
+        },
+        "Logo": "/images/project/openlava_icon.png",
+        "Description": "NFT Selling Platform - Web",
+        "TechStack": [
+            "React",
+            "TypeScript",
+            "Tailwind CSS"
+        ],
+        "id": 4
+    },
+    {
+        "TechStack": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "PHP",
+            "SQL"
+        ],
+        "Logo": "/images/project/outventure_icon.png",
+        "Description": "Camping Gear Selling Platform - Web",
+        "ProjectName": "Outventure",
+        "CreateDate": {
+            "seconds": 1691747566,
+            "nanoseconds": 767000000
+        },
+        "Link": [
+            "https://github.com/BoGor918/Outventure"
+        ],
+        "id": 5
+    },
+    {
+        "TechStack": [
+            "React",
+            "TypeScript",
+            "Tailwind CSS",
+            "Mantine",
+            "MongoDB"
+        ],
+        "Logo": "/images/project/campify_icon.png",
+        "Description": "Camping Gear Selling and Renting Platform - Web",
+        "CreateDate": {
+            "seconds": 1691747812,
+            "nanoseconds": 514000000
+        },
+        "ProjectName": "Campify",
+        "Link": [
+            "https://github.com/BoGor918/Campify"
+        ],
+        "id": 6
+    },
+    {
+        "Logo": "/images/project/javascape_icon.png",
+        "Description": "Java Learning Tool - Web App",
+        "TechStack": [
+            "Node",
+            "React",
+            "JavaScript",
+            "Tailwind CSS",
+            "Firebase",
+            "Express",
+            "Unity",
+            "C#"
+        ],
+        "Link": [
+            "https://javascape.netlify.app/",
+            "https://github.com/BoGor918/JavaScape"
+        ],
+        "CreateDate": {
+            "seconds": 1691747934,
+            "nanoseconds": 773000000
+        },
+        "ProjectName": "JavaScape",
+        "id": 7
+    }
+]
