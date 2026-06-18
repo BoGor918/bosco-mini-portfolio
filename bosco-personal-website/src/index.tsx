@@ -1,6 +1,8 @@
 // others
+import '@mantine/core/styles.css';
 import './index.css';
 import ReactDOM from 'react-dom/client';
+import { MantineProvider } from '@mantine/core';
 // global components
 import MapperContextProvider from './globalVariable/MapperContextProvider';
 // page components
@@ -13,7 +15,9 @@ const root = ReactDOM.createRoot(
 
 // render
 root.render(
-  <MapperContextProvider>
-    <App />
-  </MapperContextProvider>
+  <MantineProvider>
+    <MapperContextProvider>
+      <App />
+    </MapperContextProvider>
+  </MantineProvider>
 );

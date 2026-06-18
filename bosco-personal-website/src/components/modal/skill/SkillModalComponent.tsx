@@ -20,8 +20,8 @@ export default function SkillModalComponent({
         {/* loading overlay */}
         {
           localStorage.getItem("theme") === "light" ?
-            <LoadingOverlay visible={visible} overlayBlur={2} /> :
-            <LoadingOverlay visible={visible} overlayBlur={2} overlayColor="#0B1A33" />
+            <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
+            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
         }
         {/* skill logo */}
         <div className='flex justify-center items-center bg-[#9a9a9a17] p-[2rem] rounded-lg'>
