@@ -1,6 +1,6 @@
 [
     {
-    "Logo": "/images/skill/corel_video_studio_icon.png",
+        "Logo": "/images/skill/corel_video_studio_icon.png",
         "CreateDate": {
             "seconds": 1691674959,
             "nanoseconds": 419000000
@@ -232,5 +232,14 @@
         },
         "Logo": "/images/skill/html_icon.png",
         "id": 26
+    },
+    {
+        "SkillName": "K6",
+        "CreateDate": {
+            "seconds": 1692166988,
+            "nanoseconds": 882000000
+        },
+        "Logo": "/images/skill/k6_icon.png",
+        "id": 27
     }
 ]
