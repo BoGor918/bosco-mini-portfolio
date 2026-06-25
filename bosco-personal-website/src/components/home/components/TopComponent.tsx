@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState, CSSProperties } from "react"
 import CountUp from "react-countup";
 // mantine
-import { Button, Modal } from "@mantine/core";
+import { Button, Loader, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import packageJson from "../../../../package.json"
 // files
@@ -29,15 +29,20 @@ export default function TopComponent() {
     const totalYear = currentDate.getFullYear() - workStartDate.getFullYear();
     // color theme
     const [theme, setTheme] = useState(localStorage.getItem(colorTheme.theme) || colorTheme.light);
+    // personal icon loading status
+    const [isPersonalIconLoaded, setIsPersonalIconLoaded] = useState(false);
+    const [isPersonalIconFailed, setIsPersonalIconFailed] = useState(false);
     // model hook
     const [opened, { open, close }] = useDisclosure(false);
     const modalTitle = `About This Website - ${packageJson.version}`;
     // style list
     const mainDivStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-between items-center mt-[5rem] px-[4rem] self-center w-full max-w-[365px] sm:max-w-[365px] md:max-w-[365px] lg:max-w-[910px] font-light`;
     const personalIconDivStyle = `flex flex-col items-center animate-fade-up animate-delay-0 animate-once`;
-    const personalIconStyle = `flex border-[3px] border-[#0000] rounded-full cursor-pointer [background:padding-box_var(--bg-color),border-box_var(--border-color)]`
-    const lazyLoadImageStyle = `p-[4px] rounded-full`;
-    const viewInfoButtonStyle = `mt-[-2.2rem] px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#000000] text-[#FFFFFF]`);
+    const personalIconStyle = `relative flex justify-center items-center w-[198px] h-[198px] border-[3px] border-[#0000] rounded-full cursor-pointer overflow-hidden [background:padding-box_var(--bg-color),border-box_var(--border-color)]`
+    const lazyLoadImageStyle = `w-full h-full object-cover p-[4px] rounded-full transition-opacity duration-300`;
+    const personalIconLoaderStyle = `absolute inset-0 flex justify-center items-center`;
+    const personalIconFallbackStyle = `w-full h-full flex justify-center items-center text-[42px] font-extrabold rounded-full ` + (theme === colorTheme.dark ? `text-[#21D4F7] bg-[#0F274A]` : `text-[#0B1A33] bg-[#E5E7EB]`);
+    const viewInfoButtonStyle = `relative z-20 mt-[-2.2rem] px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#000000] text-[#FFFFFF]`);
     const infoDivStyle = `animate-fade-up animate-delay-100 animate-once`;
     const labelStyle = `flex mt-5 lg:mt-0 mx-auto lg:mx-0 mb-4 px-2.5 py-1 w-fit rounded-full border text-[10px] font-semibold tracking-[0.22em] uppercase` + (theme === colorTheme.dark ? ` border-[#21D4F7]/60 bg-[#21D4F7]/12 text-[#21D4F7]` : ` border-[#0B1A33]/60 bg-[#21D4F7]/12 text-[#0B1A33]`);
     const columnOneStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center items-center mb-4`;
@@ -128,7 +133,30 @@ export default function TopComponent() {
                     }
                     className={personalIconStyle}
                 >
-                    <LazyLoadImage src={PersonalIcon} className={lazyLoadImageStyle} alt={PersonalIconName} width={190} />
+                    {!isPersonalIconFailed && (
+                        <LazyLoadImage
+                            src={PersonalIcon}
+                            className={`${lazyLoadImageStyle} ${isPersonalIconLoaded ? `opacity-100` : `opacity-0`}`}
+                            alt={PersonalIconName}
+                            width={190}
+                            height={190}
+                            onLoad={() => setIsPersonalIconLoaded(true)}
+                            onError={() => {
+                                setIsPersonalIconFailed(true);
+                                setIsPersonalIconLoaded(false);
+                            }}
+                        />
+                    )}
+                    {!isPersonalIconLoaded && !isPersonalIconFailed && (
+                        <div className={personalIconLoaderStyle}>
+                            <Loader type="bars" color="blue" />
+                        </div>
+                    )}
+                    {isPersonalIconFailed && (
+                        <div className={personalIconFallbackStyle}>
+                            B
+                        </div>
+                    )}
                 </div>
                 {/* pasted image-style intro button under the personal icon */}
                 <button

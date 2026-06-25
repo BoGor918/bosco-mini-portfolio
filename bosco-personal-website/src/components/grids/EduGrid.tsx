@@ -25,6 +25,8 @@ export default function EduGrid() {
     const [opened, { open, close }] = useDisclosure(false);
     // selected school
     const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
+    // loaded logo ids
+    const [loadedLogoIds, setLoadedLogoIds] = useState<Set<SchoolData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<SchoolData['id']>>(new Set());
 
@@ -39,6 +41,11 @@ export default function EduGrid() {
         setFailedLogoIds((prev) => new Set(prev).add(schoolId));
     };
 
+    // mark logo as loaded so we can hide loader overlay
+    const onLogoLoad = (schoolId: SchoolData['id']) => {
+        setLoadedLogoIds((prev) => new Set(prev).add(schoolId));
+    };
+
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* school grid */}
@@ -46,19 +53,22 @@ export default function EduGrid() {
                 {schoolData.map((school: SchoolData, i: number) => {
                     const hasLogoUrl = Boolean(school.Logo?.URL);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(school.id);
+                    const isLogoLoaded = loadedLogoIds.has(school.id);
                     return (
                         <div key={i} onClick={() => openModal(school)} className={gridStyles.gridLazyLoadImageDivStyle}>
-                            {showLogoFallback ? (
-                                <div className="flex justify-center w-[295.33px]">
-                                    <Loader type="bars" color="blue" />
-                                </div>
-                            ) : (
+                            {!showLogoFallback && (
                                 <LazyLoadImage
-                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     src={school.Logo.URL}
                                     alt={school.SchoolName}
+                                    onLoad={() => onLogoLoad(school.id)}
                                     onError={() => onLogoError(school.id)}
                                 />
+                            )}
+                            {(!isLogoLoaded || showLogoFallback) && (
+                                <div className={gridStyles.gridLazyLoaderDivStyle}>
+                                    <Loader type="bars" color="blue" />
+                                </div>
                             )}
                         </div>
                     );

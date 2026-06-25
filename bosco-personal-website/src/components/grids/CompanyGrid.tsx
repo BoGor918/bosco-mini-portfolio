@@ -25,6 +25,8 @@ export default function CompanyGrid() {
     const [opened, { open, close }] = useDisclosure(false);
     // selected company
     const [selectedCompany, setSelectedCompany] = useState<CompanyData | null>(null);
+    // loaded logo ids
+    const [loadedLogoIds, setLoadedLogoIds] = useState<Set<CompanyData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<CompanyData['id']>>(new Set());
 
@@ -39,6 +41,11 @@ export default function CompanyGrid() {
         setFailedLogoIds((prev) => new Set(prev).add(companyId));
     };
 
+    // mark logo as loaded so we can hide loader overlay
+    const onLogoLoad = (companyId: CompanyData['id']) => {
+        setLoadedLogoIds((prev) => new Set(prev).add(companyId));
+    };
+
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* company grids */}
@@ -46,19 +53,22 @@ export default function CompanyGrid() {
                 {companyData.map((company: CompanyData, i: number) => {
                     const hasLogoUrl = Boolean(company.Logo?.URL);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(company.id);
+                    const isLogoLoaded = loadedLogoIds.has(company.id);
                     return (
                         <div key={i} onClick={() => openModal(company)} className={gridStyles.gridLazyLoadImageDivStyle}>
-                            {showLogoFallback ? (
-                                <div className="flex justify-center w-[295.33px]">
-                                    <Loader type="bars" color="blue" />
-                                </div>
-                            ) : (
+                            {!showLogoFallback && (
                                 <LazyLoadImage
-                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     src={company.Logo.URL}
                                     alt={company.CompanyName}
+                                    onLoad={() => onLogoLoad(company.id)}
                                     onError={() => onLogoError(company.id)}
                                 />
+                            )}
+                            {(!isLogoLoaded || showLogoFallback) && (
+                                <div className={gridStyles.gridLazyLoaderDivStyle}>
+                                    <Loader type="bars" color="blue" />
+                                </div>
                             )}
                         </div>
                     );

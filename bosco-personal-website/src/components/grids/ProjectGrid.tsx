@@ -25,6 +25,8 @@ export default function ProjectGrid() {
     const [opened, { open, close }] = useDisclosure(false);
     // selected project
     const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+    // loaded logo ids
+    const [loadedLogoIds, setLoadedLogoIds] = useState<Set<ProjectData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<ProjectData['id']>>(new Set());
 
@@ -39,6 +41,11 @@ export default function ProjectGrid() {
         setFailedLogoIds((prev) => new Set(prev).add(projectId));
     };
 
+    // mark logo as loaded so we can hide loader overlay
+    const onLogoLoad = (projectId: ProjectData['id']) => {
+        setLoadedLogoIds((prev) => new Set(prev).add(projectId));
+    };
+
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* project grid */}
@@ -46,19 +53,22 @@ export default function ProjectGrid() {
                 {projectData.map((project: ProjectData, i: number) => {
                     const hasLogoUrl = Boolean(project.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(project.id);
+                    const isLogoLoaded = loadedLogoIds.has(project.id);
                     return (
                         <div key={i} onClick={() => openModal(project)} className={gridStyles.gridLazyLoadImageDivStyle}>
-                            {showLogoFallback ? (
-                                <div className="flex justify-center w-[295.33px]">
-                                    <Loader type="bars" color="blue" />
-                                </div>
-                            ) : (
+                            {!showLogoFallback && (
                                 <LazyLoadImage
-                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     src={project.Logo}
                                     alt={project.ProjectName}
+                                    onLoad={() => onLogoLoad(project.id)}
                                     onError={() => onLogoError(project.id)}
                                 />
+                            )}
+                            {(!isLogoLoaded || showLogoFallback) && (
+                                <div className={gridStyles.gridLazyLoaderDivStyle}>
+                                    <Loader type="bars" color="blue" />
+                                </div>
                             )}
                         </div>
                     );

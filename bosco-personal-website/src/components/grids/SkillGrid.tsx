@@ -25,6 +25,8 @@ export default function SkillGrid() {
     const [opened, { open, close }] = useDisclosure(false);
     // selected skill
     const [selectedSkill, setSelectedSkill] = useState<SkillData | null>(null);
+    // loaded logo ids
+    const [loadedLogoIds, setLoadedLogoIds] = useState<Set<SkillData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<SkillData['id']>>(new Set());
 
@@ -39,6 +41,11 @@ export default function SkillGrid() {
         setFailedLogoIds((prev) => new Set(prev).add(skillId));
     };
 
+    // mark logo as loaded so we can hide loader overlay
+    const onLogoLoad = (skillId: SkillData['id']) => {
+        setLoadedLogoIds((prev) => new Set(prev).add(skillId));
+    };
+
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* skill grid */}
@@ -46,19 +53,22 @@ export default function SkillGrid() {
                 {skillData.map((skill: SkillData, i: number) => {
                     const hasLogoUrl = Boolean(skill.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(skill.id);
+                    const isLogoLoaded = loadedLogoIds.has(skill.id);
                     return (
                         <div key={i} onClick={() => openModal(skill)} className={gridStyles.gridLazyLoadImageSmallDivStyle}>
-                            {showLogoFallback ? (
-                                <div className="flex justify-center w-[295.33px]">
-                                    <Loader type="bars" color="blue" />
-                                </div>
-                            ) : (
+                            {!showLogoFallback && (
                                 <LazyLoadImage
-                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     src={skill.Logo}
                                     alt={skill.SkillName}
+                                    onLoad={() => onLogoLoad(skill.id)}
                                     onError={() => onLogoError(skill.id)}
                                 />
+                            )}
+                            {(!isLogoLoaded || showLogoFallback) && (
+                                <div className={gridStyles.gridLazyLoaderDivStyle}>
+                                    <Loader type="bars" color="blue" />
+                                </div>
                             )}
                         </div>
                     );
