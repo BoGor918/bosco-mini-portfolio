@@ -6,7 +6,7 @@ export default function IntroductionModalComponent() {
     <div className='flex flex-col font-light p-3'>
       {/* headline */}
       <span className='text-center font-medium text-black dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px]'>
-        Welcome To My Mini Portfolio Website
+        Welcome to My Mini Portfolio Website
       </span>
       {/* description */}
       <span className={textStyle}>

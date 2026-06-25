@@ -48,7 +48,7 @@ Built with Node.js, React, TypeScript, Tailwind CSS, and Mantine, the applicatio
    npm start
    ```
 
-5. Open http://localhost:3000 in your browser.
+5. Open http://localhost:{port} in your browser.
 
 ## Available Scripts
 
