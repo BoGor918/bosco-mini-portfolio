@@ -18,8 +18,8 @@ export default function ProjectModalComponent({
   logo }: {
     projectName: string,
     description: string,
-    techStack: [],
-    link: [],
+    techStack: string[],
+    link: string[],
     logo: string,
   }) {
   // tech stack list

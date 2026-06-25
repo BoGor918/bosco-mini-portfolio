@@ -61,7 +61,7 @@ Inside `bosco-personal-website`, you can run:
 ## Project Structure
 
 ```text
-Bosco-Mini-Portfolio/
+root/
 |-- README.md
 |-- netlify.toml
 `-- bosco-personal-website/

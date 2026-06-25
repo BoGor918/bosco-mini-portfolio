@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { MapperContext } from '../../globalVariable/MapperContextProvider';
 import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
-import { Modal } from '@mantine/core';
+import { Loader, Modal } from '@mantine/core';
 // page components
 import EducationModalComponent from '../modal/education/EducationModalComponent';
 // react lazy load image
@@ -25,6 +25,8 @@ export default function EduGrid() {
     const [opened, { open, close }] = useDisclosure(false);
     // selected school
     const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
+    // failed logo ids
+    const [failedLogoIds, setFailedLogoIds] = useState<Set<SchoolData['id']>>(new Set());
 
     // open modal with set selected school
     const openModal = (school: SchoolData) => {
@@ -32,19 +34,35 @@ export default function EduGrid() {
         open();
     };
 
+    // mark failed logo so we can render a loader fallback for that item
+    const onLogoError = (schoolId: SchoolData['id']) => {
+        setFailedLogoIds((prev) => new Set(prev).add(schoolId));
+    };
+
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* school grid */}
             <div className={gridStyles.gridDivThreeColStyle}>
-                {schoolData.map((school: SchoolData, i: number) => (
-                    <div key={i} onClick={() => openModal(school)} className={gridStyles.gridLazyLoadImageDivStyle}>
-                        <LazyLoadImage
-                            className={gridStyles.gridLazyLoadImageStyle}
-                            src={school.Logo.URL}
-                            alt={school.SchoolName}
-                        />
-                    </div>
-                ))}
+                {schoolData.map((school: SchoolData, i: number) => {
+                    const hasLogoUrl = Boolean(school.Logo?.URL);
+                    const showLogoFallback = !hasLogoUrl || failedLogoIds.has(school.id);
+                    return (
+                        <div key={i} onClick={() => openModal(school)} className={gridStyles.gridLazyLoadImageDivStyle}>
+                            {showLogoFallback ? (
+                                <div className="flex justify-center w-[295.33px]">
+                                    <Loader type="bars" color="blue" />
+                                </div>
+                            ) : (
+                                <LazyLoadImage
+                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    src={school.Logo.URL}
+                                    alt={school.SchoolName}
+                                    onError={() => onLogoError(school.id)}
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             </div>
             {/* modal components */}
             {

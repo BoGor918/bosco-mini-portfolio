@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { MapperContext } from '../../globalVariable/MapperContextProvider';
 import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
-import { Modal } from '@mantine/core';
+import { Loader, Modal } from '@mantine/core';
 // page components
 import SkillModalComponent from '../modal/skill/SkillModalComponent';
 // react lazy load image
@@ -25,6 +25,8 @@ export default function SkillGrid() {
     const [opened, { open, close }] = useDisclosure(false);
     // selected skill
     const [selectedSkill, setSelectedSkill] = useState<SkillData | null>(null);
+    // failed logo ids
+    const [failedLogoIds, setFailedLogoIds] = useState<Set<SkillData['id']>>(new Set());
 
     // open modal with set selected skill
     const openModal = (skill: SkillData) => {
@@ -32,19 +34,35 @@ export default function SkillGrid() {
         open();
     };
 
+    // mark failed logo so we can render a loader fallback for that item
+    const onLogoError = (skillId: SkillData['id']) => {
+        setFailedLogoIds((prev) => new Set(prev).add(skillId));
+    };
+
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* skill grid */}
             <div className={gridStyles.gridDivFiveColStyle}>
-                {skillData.map((skill: any, i: any) => (
-                    <div key={i} onClick={() => openModal(skill)} className={gridStyles.gridLazyLoadImageSmallDivStyle}>
-                        <LazyLoadImage
-                            className={gridStyles.gridLazyLoadImageStyle}
-                            src={skill.Logo}
-                            alt={skill.SkillName}
-                        />
-                    </div>
-                ))}
+                {skillData.map((skill: SkillData, i: number) => {
+                    const hasLogoUrl = Boolean(skill.Logo);
+                    const showLogoFallback = !hasLogoUrl || failedLogoIds.has(skill.id);
+                    return (
+                        <div key={i} onClick={() => openModal(skill)} className={gridStyles.gridLazyLoadImageSmallDivStyle}>
+                            {showLogoFallback ? (
+                                <div className="flex justify-center w-[295.33px]">
+                                    <Loader type="bars" color="blue" />
+                                </div>
+                            ) : (
+                                <LazyLoadImage
+                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    src={skill.Logo}
+                                    alt={skill.SkillName}
+                                    onError={() => onLogoError(skill.id)}
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             </div>
             {/* modal components */}
             {

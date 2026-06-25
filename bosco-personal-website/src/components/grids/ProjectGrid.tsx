@@ -5,24 +5,15 @@ import { useDisclosure } from '@mantine/hooks';
 import { MapperContext } from '../../globalVariable/MapperContextProvider';
 import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
-import { Modal } from '@mantine/core';
+import { Loader, Modal } from '@mantine/core';
 // page components
 import ProjectModalComponent from '../modal/project/ProjectModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+// type
+import { ProjectData } from '../../types/type';
 // util
 import { gridStyles } from './util';
-
-// project interface
-interface Project {
-    id: string;
-    ProjectName: string;
-    TechStack: [];
-    Description: string;
-    Link: []
-    Logo: string;
-    CreateDate: Date;
-}
 
 export default function ProjectGrid() {
     // global variable
@@ -33,27 +24,45 @@ export default function ProjectGrid() {
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected project
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+    // failed logo ids
+    const [failedLogoIds, setFailedLogoIds] = useState<Set<ProjectData['id']>>(new Set());
 
     // open modal with set selected project
-    const openModal = (project: Project) => {
+    const openModal = (project: ProjectData) => {
         setSelectedProject(project);
         open();
+    };
+
+    // mark failed logo so we can render a loader fallback for that item
+    const onLogoError = (projectId: ProjectData['id']) => {
+        setFailedLogoIds((prev) => new Set(prev).add(projectId));
     };
 
     return (
         <div className={gridStyles.gridMainDivStyle}>
             {/* project grid */}
             <div className={gridStyles.gridDivThreeColStyle}>
-                {projectData.map((project: any, i: any) => (
-                    <div key={i} onClick={() => openModal(project)} className={gridStyles.gridLazyLoadImageDivStyle}>
-                        <LazyLoadImage
-                            className={gridStyles.gridLazyLoadImageStyle}
-                            src={project.Logo}
-                            alt={project.ProjectName}
-                        />
-                    </div>
-                ))}
+                {projectData.map((project: ProjectData, i: number) => {
+                    const hasLogoUrl = Boolean(project.Logo);
+                    const showLogoFallback = !hasLogoUrl || failedLogoIds.has(project.id);
+                    return (
+                        <div key={i} onClick={() => openModal(project)} className={gridStyles.gridLazyLoadImageDivStyle}>
+                            {showLogoFallback ? (
+                                <div className="flex justify-center w-[295.33px]">
+                                    <Loader type="bars" color="blue" />
+                                </div>
+                            ) : (
+                                <LazyLoadImage
+                                    className={gridStyles.gridLazyLoadImageStyle}
+                                    src={project.Logo}
+                                    alt={project.ProjectName}
+                                    onError={() => onLogoError(project.id)}
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             </div>
             {/* modal components */}
             {
