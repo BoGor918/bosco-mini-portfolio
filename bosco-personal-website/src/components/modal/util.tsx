@@ -28,5 +28,5 @@ export const getDetailStyles = (isDarkTheme: boolean) => ({
         (isDarkTheme
             ? "bg-[#21D4F7]/10 text-[#21D4F7]"
             : "bg-[#0B1A33]/10 text-[#0B1A33]"),
-    durationDivStyle: "mt-1 flex flex-wrap items-center gap-2",
+    durationDivStyle: "mt-1 flex flex-col lg:flex-row items-start gap-2",
 });
