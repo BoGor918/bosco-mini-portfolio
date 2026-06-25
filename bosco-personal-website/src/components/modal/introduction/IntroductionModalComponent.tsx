@@ -1,11 +1,15 @@
+// util
+import { modalStyles } from "../util"
+
 export default function IntroductionModalComponent() {
   // style variable
+  const headlineStyle = 'text-center font-medium text-black dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px]'
   const textStyle = 'mt-[0.5rem] text-justify text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-[#9A9A9A] dark:text-[#94A3B8]'
 
   return (
-    <div className='flex flex-col font-light p-3'>
+    <div className={modalStyles.modalMainDiv}>
       {/* headline */}
-      <span className='text-center font-medium text-black dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px]'>
+      <span className={headlineStyle}>
         Welcome to My Mini Portfolio Website
       </span>
       {/* description */}

@@ -5,6 +5,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { LoadingOverlay, Box } from "@mantine/core";
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+// util
+import { getDetailStyles, modalStyles } from '../util';
+// global variable
+import { colorTheme } from "../../../globalVariable/GlobalVariable";
 
 export default function ProjectModalComponent({
   projectName,
@@ -22,6 +26,18 @@ export default function ProjectModalComponent({
   const [techStackList, setTechStackList] = useState('')
   // loading overlay hook
   const [visible] = useDisclosure(false);
+  // theme
+  const isDarkTheme = localStorage.getItem(colorTheme.theme) === colorTheme.dark;
+  // styles
+  const {
+    detailGridStyle,
+    detailCardStyle,
+    detailLabelStyle,
+    detailValueStyle,
+    durationPillLowerCaseStyle,
+  } = getDetailStyles(isDarkTheme);
+  const linkStyle = "block max-w-full break-all leading-[1.45] text-[#9A9A9A] dark:text-[#94A3B8] hover:underline";
+  const linkPillStyle = durationPillLowerCaseStyle + ' w-full sm:w-fit max-w-full';
 
   // tech stack function
   useEffect(() => {
@@ -36,45 +52,49 @@ export default function ProjectModalComponent({
     }
 
     setTechStackList(tempTechStackList)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // style variable
-  const textStyle = 'text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-[#9A9A9A] dark:text-[#94A3B8]'
 
   return (
     <Box pos="relative">
-      <div className='flex flex-col font-light p-3'>
+      <div className={modalStyles.modalMainDiv}>
         {/* loading overlay */}
         {
-          localStorage.getItem("theme") === "light" ?
+          localStorage.getItem(colorTheme.theme) === colorTheme.light ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
         }
         {/* project logo */}
-        <div className='flex justify-center items-center bg-[#9a9a9a17] p-[2rem] rounded-lg'>
+        <div className={modalStyles.modalLogoStyle}>
           <LazyLoadImage src={logo} alt={projectName} />
         </div>
         {/* project name */}
-        <span className='text-black dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px] font-medium mt-5 mb-1'>{projectName}</span>
-        {/* description */}
-        <span className={textStyle}><span className='font-medium'>Description: </span>{description}</span>
-        {/* tech stack */}
-        <span className={textStyle}><span className='font-medium'>Tech Stack(s): </span>{techStackList}</span>
-        {/* link */}
-        <span className={textStyle}><span className='font-medium'>Link(s):<br /></span>
-          <span>
-            {
-              link.map((link: any, i: number) => {
-                return (
-                  <span key={i}>
-                    <a href={link} target='_blank' rel='noreferrer' className='text-[#9A9A9A] dark:text-[#94A3B8] hover:underline'>{link}<br /></a>
-                  </span>
-                )
-              })
-            }
-          </span>
-        </span>
+        <span className={modalStyles.modalNameStyle}>{projectName}</span>
+        {/* detail */}
+        <div className={detailGridStyle}>
+          <div className={detailCardStyle}>
+            <div className={detailLabelStyle}>Description</div>
+            <div className={detailValueStyle}>{description}</div>
+          </div>
+          <div className={detailCardStyle}>
+            <div className={detailLabelStyle}>Tech Stack(s)</div>
+            <div className={detailValueStyle}>{techStackList}</div>
+          </div>
+          <div className={detailCardStyle + ' sm:col-span-2'}>
+            <div className={detailLabelStyle}>Link(s)</div>
+            <div className='mt-1 flex flex-col items-stretch gap-2'>
+              {
+                link.map((link: any, i: number) => {
+                  return (
+                    <span key={i} className={linkPillStyle}>
+                      <a href={link} target='_blank' rel='noreferrer' className={linkStyle}>{link}</a>
+                    </span>
+                  )
+                })
+              }
+            </div>
+          </div>
+        </div>
       </div>
     </Box>
   )

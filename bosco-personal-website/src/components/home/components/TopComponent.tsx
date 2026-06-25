@@ -16,7 +16,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
 
-const PersonalIcon = `/images/personal_icon_1.png`;
+const PersonalIcon = `/images/personal_icon.png`;
 const PersonalIconName = `personal_icon.png`;
 const CVName = `CHEUNG_Tsz_Lai_Bosco_CV.pdf`;
 

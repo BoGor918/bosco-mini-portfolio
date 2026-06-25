@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 // global variable
 import { MapperContext } from '../../globalVariable/MapperContextProvider';
+import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
 import { Modal } from '@mantine/core';
 // page components
@@ -11,6 +12,8 @@ import CompanyModalComponent from '../modal/company/CompanyModalComponent';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
 import { CompanyData } from '../../types/type';
+// util
+import { gridStyles } from './util';
 
 export default function CompanyGrid() {
     // global variable
@@ -30,13 +33,13 @@ export default function CompanyGrid() {
     };
 
     return (
-        <div className='animate-fade animate-delay-0 animate-once flex justify-center items-center mt-[1rem] sm:mt-[1rem] md:mt-[1rem] lg:mt-[2rem]'>
+        <div className={gridStyles.gridMainDivStyle}>
             {/* company grids */}
-            <div className='mx-0 sm:mx-0 md:mx-0 lg:mx-2 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-1'>
+            <div className={gridStyles.gridDivThreeColStyle}>
                 {companyData.map((company: any, i: any) => (
-                    <div key={i} onClick={() => openModal(company)} className='bg-white shadow-md rounded-sm flex justify-center items-center h-[115.66px] sm:h-[115.66px] md:h-[115.66px] lg:h-[298px] cursor-pointer'>
+                    <div key={i} onClick={() => openModal(company)} className={gridStyles.gridLazyLoadImageDivStyle}>
                         <LazyLoadImage
-                            className='p-2 sm:p-2 md:p-2 lg:p-5'
+                            className={gridStyles.gridLazyLoadImageStyle}
                             src={company.Logo.URL}
                             alt={company.CompanyName}
                         />
@@ -45,7 +48,7 @@ export default function CompanyGrid() {
             </div>
             {/* modal components */}
             {
-                localStorage.getItem('theme') === "light" ?
+                localStorage.getItem(colorTheme.theme) === colorTheme.light ?
                     <Modal opened={opened} onClose={close} size="lg" centered>
                         {selectedCompany && (
                             <CompanyModalComponent

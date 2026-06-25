@@ -1,11 +1,14 @@
 // others
 import { useState, useEffect } from "react";
 // Mantine
-import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { LoadingOverlay, Box } from "@mantine/core";
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+// util
+import { getDetailStyles, modalStyles } from '../util';
+// global variable
+import { colorTheme } from "../../../globalVariable/GlobalVariable";
 
 const toDateValue = (value: any) => {
   if (!value) {
@@ -52,25 +55,18 @@ export default function EducationModalComponent({
   const [resultDate, setResultDate] = useState('')
   // loading overlay hook
   const [visible] = useDisclosure(false);
-
-  // form hook
-  const form = useForm({
-    initialValues: {
-      startDate: toDateValue(startDate),
-      endDate: endDate === '' ? '' : toDateValue(endDate),
-      schoolName: schoolName,
-      type: type,
-      title: title,
-      gpa: gpa,
-      logo: '',
-      present: present,
-    },
-  });
-
-  // set end date to empty string if present is true
-  if (form.values.present === true) {
-    form.values.endDate = ""
-  }
+  // theme
+  const isDarkTheme = localStorage.getItem(colorTheme.theme) === colorTheme.dark;
+  // styles
+  // styles
+  const {
+    detailGridStyle,
+    detailCardStyle,
+    detailLabelStyle,
+    detailValueStyle,
+    durationPillStyle,
+    durationDivStyle
+  } = getDetailStyles(isDarkTheme);
 
   // date function
   useEffect(() => {
@@ -162,39 +158,46 @@ export default function EducationModalComponent({
 
       setResultDate(result.trim())
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // style variable
-  const textStyle = 'text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-[#9A9A9A] dark:text-[#94A3B8]'
 
   return (
     <Box pos="relative">
-      <div className='flex flex-col font-light p-3'>
+      <div className={modalStyles.modalMainDiv}>
         {/* loading overlay */}
         {
-          localStorage.getItem("theme") === "light" ?
+          !isDarkTheme ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
         }
         {/* school logo */}
-        <div className='flex justify-center items-center bg-[#9a9a9a17] p-[2rem] rounded-lg'>
+        <div className={modalStyles.modalLogoStyle}>
           <LazyLoadImage src={logo} alt={schoolName} />
         </div>
         {/* school name */}
-        <span className='text-black dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px] font-medium mt-5 mb-1'>{schoolName}</span>
-        {/* type */}
-        <span className={textStyle}><span className='font-medium'>Type: </span>{type}</span>
-        {/* title */}
-        <span className={textStyle}><span className='font-medium'>Title: </span>{title}</span>
-        {/* gpa */}
-        <span className={textStyle}><span className='font-medium'>CGPA / WGPA / Best Five: </span>{gpa}</span>
-        {/* period */}
-        <span className={textStyle}>
-          <span className='font-medium'>Period: </span>
-          <span>{resultDate}, </span>
-          <span>{toStartDate} - {toEndDate}</span>
-        </span>
+        <span className={modalStyles.modalNameStyle}>{schoolName}</span>
+        {/* detail */}
+        <div className={detailGridStyle}>
+          <div className={detailCardStyle}>
+            <div className={detailLabelStyle}>Type</div>
+            <div className={detailValueStyle}>{type}</div>
+          </div>
+          <div className={detailCardStyle}>
+            <div className={detailLabelStyle}>Title</div>
+            <div className={detailValueStyle}>{title}</div>
+          </div>
+          <div className={detailCardStyle + ' sm:col-span-2'}>
+            <div className={detailLabelStyle}>CGPA / WGPA / Best Five</div>
+            <div className={detailValueStyle}>{gpa}</div>
+          </div>
+          <div className={detailCardStyle + ' sm:col-span-2'}>
+            <div className={detailLabelStyle}>Period</div>
+            <div className={durationDivStyle}>
+              <span className={durationPillStyle}>{resultDate}</span>
+              <span className={detailValueStyle + ' mt-0'}>{toStartDate} - {toEndDate}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </Box>
   )

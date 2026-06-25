@@ -3,6 +3,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { LoadingOverlay, Box } from "@mantine/core";
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+// util
+import { modalStyles } from '../util';
+// global variable
+import { colorTheme } from "../../../globalVariable/GlobalVariable";
 
 export default function SkillModalComponent({
   skillName,
@@ -16,19 +20,19 @@ export default function SkillModalComponent({
 
   return (
     <Box pos="relative">
-      <div className='flex flex-col font-light p-3'>
+      <div className={modalStyles.modalMainDiv}>
         {/* loading overlay */}
         {
-          localStorage.getItem("theme") === "light" ?
+          localStorage.getItem(colorTheme.theme) === colorTheme.light ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
         }
         {/* skill logo */}
-        <div className='flex justify-center items-center bg-[#9a9a9a17] p-[2rem] rounded-lg'>
+        <div className={modalStyles.modalLogoStyle}>
           <LazyLoadImage src={logo} alt={skillName} width={150} />
         </div>
         {/* skill name */}
-        <span className='text-black dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px] font-medium mt-5 mb-1'>{skillName}</span>
+        <span className={modalStyles.modalNameStyle}>{skillName}</span>
       </div>
     </Box>
   )
