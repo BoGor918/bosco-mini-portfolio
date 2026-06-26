@@ -47,7 +47,7 @@ export default function TopComponent() {
     const lazyLoadImageStyle = `w-full h-full object-cover p-[4px] rounded-full transition-opacity duration-300`;
     const personalIconLoaderStyle = `absolute inset-0 flex justify-center items-center`;
     const personalIconFallbackStyle = `w-full h-full flex justify-center items-center text-[42px] font-extrabold rounded-full ` + (theme === colorTheme.dark ? `text-[#21D4F7] bg-[#0F274A]` : `text-[#0B1A33] bg-[#E5E7EB]`);
-    const viewInfoButtonMarginTop = language === languageSetting.english ? `mt-[-2.2rem]` : `mt-[-1.46rem]`;
+    const viewInfoButtonMarginTop = language === languageSetting.english ? `mt-[-2.2rem]` : `mt-[-1.4rem]`;
     const viewInfoButtonStyle = `relative z-20 ${viewInfoButtonMarginTop} px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition uppercase ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#0B1A33] text-[#FFFFFF]`);
     const infoDivStyle = `animate-fade-up animate-delay-100 animate-once`;
     const labelAndLanguageSwitchDivStyle = `flex flex-col lg:flex-row items-center mb-4 gap-0 lg:gap-2`;
