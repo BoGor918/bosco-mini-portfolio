@@ -42,11 +42,11 @@ export default function TopComponent() {
     const lazyLoadImageStyle = `w-full h-full object-cover p-[4px] rounded-full transition-opacity duration-300`;
     const personalIconLoaderStyle = `absolute inset-0 flex justify-center items-center`;
     const personalIconFallbackStyle = `w-full h-full flex justify-center items-center text-[42px] font-extrabold rounded-full ` + (theme === colorTheme.dark ? `text-[#21D4F7] bg-[#0F274A]` : `text-[#0B1A33] bg-[#E5E7EB]`);
-    const viewInfoButtonStyle = `relative z-20 mt-[-2.2rem] px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#000000] text-[#FFFFFF]`);
+    const viewInfoButtonStyle = `relative z-20 mt-[-2.2rem] px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#0B1A33] text-[#FFFFFF]`);
     const infoDivStyle = `animate-fade-up animate-delay-100 animate-once`;
     const labelStyle = `flex mt-5 lg:mt-0 mx-auto lg:mx-0 mb-4 px-2.5 py-1 w-fit rounded-full border text-[10px] font-semibold tracking-[0.22em] uppercase` + (theme === colorTheme.dark ? ` border-[#21D4F7]/60 bg-[#21D4F7]/12 text-[#21D4F7]` : ` border-[#0B1A33]/60 bg-[#21D4F7]/12 text-[#0B1A33]`);
     const columnOneStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center items-center mb-4`;
-    const nameStyle = `text-[#000000] dark:text-[#FFFFFF] text-[33px] sm:text-[33px] md:text-[33px] lg:text-[36px] font-extrabold`;
+    const nameStyle = `text-[#0B1A33] dark:text-[#FFFFFF] text-[33px] sm:text-[33px] md:text-[33px] lg:text-[36px] font-extrabold`;
     const cvButtonDivStyle = `flex justify-center items-center lg:mb-0 my-3 lg:my-0`;
     const cvButtonStyle = `ml-0 lg:ml-5 mr-5 text-[#FFFFFF] rounded-md` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
     const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme === colorTheme.light ? ` border-[#0B1A33] hover:bg-[#0B1A33]/10` : ` border-[#FFFFFF] hover:bg-[#FFFFFF]/10`);
@@ -126,7 +126,7 @@ export default function TopComponent() {
                         {
                             "--angle": "0deg",
                             "--border-color": theme === colorTheme.light
-                                ? `linear-gradient(var(--angle), #000000, #A0A8B0)`
+                                ? `linear-gradient(var(--angle), #0B1A33, #A0A8B0)`
                                 : "linear-gradient(var(--angle), #00A3FF, #21FAC6)",
                             "--bg-color": theme === colorTheme.light ? `linear-gradient(#FFFFFF, #FFFFFF)` : `linear-gradient(#0B1A33, #0B1A33)`,
                         } as CSSProperties
