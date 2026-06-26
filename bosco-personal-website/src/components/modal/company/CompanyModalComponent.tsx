@@ -7,32 +7,12 @@ import { LoadingOverlay, Box } from "@mantine/core";
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
-import { modalStyles, getDetailStyles } from '../util';
+import { modalStyles, getDetailStyles, calculateDuration } from '../util';
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 // translation
 import { translationKeys } from "../../../globalVariable/Translation";
-
-const toDateValue = (value: any) => {
-  if (!value) {
-    return '';
-  }
-
-  if (value instanceof Date) {
-    return value;
-  }
-
-  if (typeof value.toDate === 'function') {
-    return value.toDate();
-  }
-
-  if (typeof value.seconds === 'number') {
-    return new Date(value.seconds * 1000);
-  }
-
-  return new Date(value);
-};
 
 export default function CompanyModalComponent({
   companyName,
@@ -85,94 +65,17 @@ export default function CompanyModalComponent({
 
   // date function
   useEffect(() => {
-    if (present === true) {
-      setToStartDate(new Date(startDate.seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }))
-      setToEndDate(t(translationKeys.present))
-      // New date instances
-      const dt_date1 = new Date(toDateValue(startDate));
-      const dt_date2 = new Date();
+    const duration = calculateDuration({
+      startDate,
+      endDate,
+      present,
+      t,
+      translationKeys,
+    });
 
-      // Get the Timestamp
-      const date1_time_stamp = dt_date1.getTime();
-      const date2_time_stamp = dt_date2.getTime();
-
-      let calc: Date;
-
-      // Check which timestamp is greater
-      if (date1_time_stamp > date2_time_stamp) {
-        calc = new Date(date1_time_stamp - date2_time_stamp);
-      } else {
-        calc = new Date(date2_time_stamp - date1_time_stamp);
-      }
-
-      // Retrieve the date, month, and year
-      const calcFormatTmp = calc.getDate() + '-' + (calc.getMonth() + 1) + '-' + calc.getFullYear();
-      // Convert to an array and store
-      const calcFormat = calcFormatTmp.split("-");
-      // Subtract each member of our array from the default date
-      const days_passed = Math.abs(Number(calcFormat[0]) - 1);
-      const months_passed = Math.abs(Number(calcFormat[1]) - 1);
-      const years_passed = Math.abs(Number(calcFormat[2]) - 1970);
-
-      // Set up custom text
-      const yrsTxt = [t(translationKeys.year), t(translationKeys.years)];
-      const mnthsTxt = [t(translationKeys.month), t(translationKeys.months)];
-      const daysTxt = [t(translationKeys.day), t(translationKeys.days)];
-
-      // Display the result with custom text
-      const result = ((years_passed === 1) ? years_passed + ' ' + yrsTxt[0] + ' ' : (years_passed > 1) ?
-        years_passed + ' ' + yrsTxt[1] + ' ' : '') +
-        ((months_passed === 1) ? months_passed + ' ' + mnthsTxt[0] + ' ' : (months_passed > 1) ?
-          months_passed + ' ' + mnthsTxt[1] + ' ' : '') +
-        ((days_passed === 1) ? days_passed + ' ' + daysTxt[0] : (days_passed > 1) ?
-          days_passed + ' ' + daysTxt[1] : '');
-
-      setResultDate(result.trim())
-    } else {
-      setToStartDate(new Date(startDate.seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }));
-      setToEndDate(new Date(endDate.seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }));
-
-      // New date instances
-      const dt_date1 = new Date(toDateValue(startDate));
-      const dt_date2 = new Date(toDateValue(endDate));
-
-      // Get the Timestamp
-      const date1_time_stamp = dt_date1.getTime();
-      const date2_time_stamp = dt_date2.getTime();
-
-      let calc: Date;
-
-      // Check which timestamp is greater
-      if (date1_time_stamp > date2_time_stamp) {
-        calc = new Date(date1_time_stamp - date2_time_stamp);
-      } else {
-        calc = new Date(date2_time_stamp - date1_time_stamp);
-      }
-
-      // Retrieve the date, month, and year
-      const calcFormatTmp = calc.getDate() + '-' + (calc.getMonth() + 1) + '-' + calc.getFullYear();
-      // Convert to an array and store
-      const calcFormat = calcFormatTmp.split("-");
-      // Subtract each member of our array from the default date
-      const days_passed = Math.abs(Number(calcFormat[0]) - 2);
-      const months_passed = Math.abs(Number(calcFormat[1]) - 1);
-      const years_passed = Math.abs(Number(calcFormat[2]) - 1970);
-
-      // Set up custom text
-      const yrsTxt = [t(translationKeys.year), t(translationKeys.years)];
-      const mnthsTxt = [t(translationKeys.month), t(translationKeys.months)];
-      const daysTxt = [t(translationKeys.day), t(translationKeys.days)];
-
-      // Display the result with custom text
-      const result = ((years_passed === 1) ? years_passed + ' ' + yrsTxt[0] + ' ' : (years_passed > 1) ?
-        years_passed + ' ' + yrsTxt[1] + ' ' : '') +
-        ((months_passed === 1) ? months_passed + ' ' + mnthsTxt[0] + ' ' : (months_passed > 1) ?
-          months_passed + ' ' + mnthsTxt[1] + ' ' : '') +
-        ((days_passed === 1) ? days_passed + ' ' + daysTxt[0] : (days_passed > 1) ?
-          days_passed + ' ' + daysTxt[1] : '');
-
-      setResultDate(result.trim())
-    }
+    setToStartDate(duration.toStartDate);
+    setToEndDate(duration.toEndDate);
+    setResultDate(duration.resultDate);
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [])
 
