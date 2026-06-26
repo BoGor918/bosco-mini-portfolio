@@ -52,7 +52,7 @@ export default function TopComponent() {
     const infoDivStyle = `animate-fade-up animate-delay-100 animate-once`;
     const labelAndLanguageSwitchDivStyle = `flex flex-col lg:flex-row items-center mb-4 gap-0 lg:gap-2`;
     const labelStyle = `flex mt-5 mb-4 lg:mb-0 lg:mt-0 mx-auto lg:mx-0 px-2.5 py-1 w-fit rounded-full border text-[10px] font-semibold tracking-[0.22em] uppercase` + (theme === colorTheme.dark ? ` border-[#21D4F7]/60 bg-[#21D4F7]/12 text-[#21D4F7]` : ` border-[#0B1A33]/60 bg-[#21D4F7]/12 text-[#0B1A33]`);
-    const languageSwitchDivStyle = `flex items-center gap-2 ml-2 uppercase`;
+    const languageSwitchDivStyle = `flex items-center gap-2 ml-0 lg:ml-2 uppercase`;
     const languageSwitchButtonStyle = (isActive: boolean) =>
         `px-2 py-1 border rounded-md text-[11px] font-semibold transition ` + (theme === colorTheme.dark
             ? isActive
