@@ -9,12 +9,20 @@
         },
         "ProjectName": "Trigove",
         "Logo": "/images/project/trigove_icon.png",
-        "Description": "Hong Kong Travel Application - Interface",
         "TechStack": [
             "Axure RP",
             "Figma"
         ],
-        "id": 1
+        "id": 1,
+        "en": {
+            "Description": "Hong Kong Travel Application - Interface"
+        },
+        "zh": {
+            "Description": "香港旅遊應用程式 - 介面"
+        },
+        "cn": {
+            "Description": "香港旅游应用程序 - 界面"
+        }
     },
     {
         "Link": [
@@ -25,18 +33,25 @@
             "nanoseconds": 839000000
         },
         "ProjectName": "Smart Math",
-        "Description": "Math Multiplication Learning Tools Platform - Web",
         "Logo": "/images/project/smart_math_icon.png",
         "TechStack": [
             "HTML",
             "CSS",
             "JavaScript"
         ],
-        "id": 2
+        "id": 2,
+        "en": {
+            "Description": "Math Multiplication Learning Tools Platform - Web"
+        },
+        "zh": {
+            "Description": "數學乘法學習工具平台 - 網頁"
+        },
+        "cn": {
+            "Description": "数学乘法学习工具平台 - 网页"
+        }
     },
     {
         "Logo": "/images/project/socave_icon.png",
-        "Description": "Social Media Platform - Web App",
         "TechStack": [
             "Vue",
             "JavaScript",
@@ -51,7 +66,16 @@
             "seconds": 1691747362,
             "nanoseconds": 294000000
         },
-        "id": 3
+        "id": 3,
+        "en": {
+            "Description": "Social Media Platform - Web App"
+        },
+        "zh": {
+            "Description": "社交媒體平台 - 網頁應用程式"
+        },
+        "cn": {
+            "Description": "社交媒体平台 - 网页应用程序"
+        }
     },
     {
         "Link": [
@@ -63,13 +87,21 @@
             "nanoseconds": 862000000
         },
         "Logo": "/images/project/openlava_icon.png",
-        "Description": "NFT Selling Platform - Web",
         "TechStack": [
             "React",
             "TypeScript",
             "Tailwind CSS"
         ],
-        "id": 4
+        "id": 4,
+        "en": {
+            "Description": "NFT Selling Platform - Web"
+        },
+        "zh": {
+            "Description": "NFT 銷售平台 - 網頁"
+        },
+        "cn": {
+            "Description": "NFT 销售平台 - 网页"
+        }
     },
     {
         "TechStack": [
@@ -80,7 +112,6 @@
             "SQL"
         ],
         "Logo": "/images/project/outventure_icon.png",
-        "Description": "Camping Gear Selling Platform - Web",
         "ProjectName": "Outventure",
         "CreateDate": {
             "seconds": 1691747566,
@@ -89,7 +120,16 @@
         "Link": [
             "https://github.com/BoGor918/Outventure"
         ],
-        "id": 5
+        "id": 5,
+        "en": {
+            "Description": "Camping Gear Selling Platform - Web"
+        },
+        "zh": {
+            "Description": "露營裝備銷售平台 - 網頁"
+        },
+        "cn": {
+            "Description": "露营装备销售平台 - 网页"
+        }
     },
     {
         "TechStack": [
@@ -100,7 +140,6 @@
             "MongoDB"
         ],
         "Logo": "/images/project/campify_icon.png",
-        "Description": "Camping Gear Selling and Renting Platform - Web",
         "CreateDate": {
             "seconds": 1691747812,
             "nanoseconds": 514000000
@@ -109,11 +148,19 @@
         "Link": [
             "https://github.com/BoGor918/Campify"
         ],
-        "id": 6
+        "id": 6,
+        "en": {
+            "Description": "Camping Gear Selling and Renting Platform - Web"
+        },
+        "zh": {
+            "Description": "露營裝備銷售與租賃平台 - 網頁"
+        },
+        "cn": {
+            "Description": "露营装备销售与租赁平台 - 网页"
+        }
     },
     {
         "Logo": "/images/project/javascape_icon.png",
-        "Description": "Java Learning Tool - Web App",
         "TechStack": [
             "Node",
             "React",
@@ -133,6 +180,15 @@
             "nanoseconds": 773000000
         },
         "ProjectName": "JavaScape",
-        "id": 7
+        "id": 7,
+        "en": {
+            "Description": "Java Learning Tool - Web App"
+        },
+        "zh": {
+            "Description": "Java 學習工具 - 網頁應用程式"
+        },
+        "cn": {
+            "Description": "Java 学习工具 - 网页应用程序"
+        }
     }
 ]

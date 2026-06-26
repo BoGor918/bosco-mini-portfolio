@@ -1,7 +1,15 @@
+// other
+import { useContext } from "react";
 // icons
 import { BsInstagram, BsLinkedin, BsGithub, BsWhatsapp, BsEnvelope } from "react-icons/bs";
+// global variable
+import { MapperContext } from "../../../globalVariable/MapperContextProvider";
+import { translationKeys } from "../../../globalVariable/Translation";
+
 
 export default function MiddleComponent() {
+    // translation
+    const { t } = useContext(MapperContext)
     // style variable
     const parentStyle = "self-center w-full max-w-[415px] sm:max-w-[415px] md:max-w-[415px] lg:max-w-[910px] animate-fade-up animate-delay-150 animate-once ml-[0px] sm:md:ml-[0px] md:ml-[0px] lg:ml-[30px] mt-[2rem] sm:mt-[2rem] md:mt-[2rem] lg:mt-[4rem] mb-[1.5rem] sm:mb-[1.5rem] md:mb-[1.5rem] lg:mb-[3rem]"
     const subParentStyle = "flex overflow-x-scroll scroll-smooth no-scrollbar"
@@ -46,7 +54,7 @@ export default function MiddleComponent() {
                     <button type="button" title="Email" onClick={() => window.open("mailto:cheungtszlai@gmail.com", "_blank")} className={buttonStyle}>
                         <BsEnvelope className={iconStyle} />
                     </button>
-                    <span className={textStyle}>Email</span>
+                    <span className={textStyle}>{t(translationKeys.email)}</span>
                 </div>
             </div>
         </div>

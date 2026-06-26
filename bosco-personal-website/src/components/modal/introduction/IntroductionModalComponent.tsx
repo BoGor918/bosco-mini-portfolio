@@ -1,20 +1,25 @@
 // util
+import { useContext } from "react"
 import { modalStyles } from "../util"
+import { MapperContext } from "../../../globalVariable/MapperContextProvider"
+import { translationKeys } from "../../../globalVariable/Translation"
 
 export default function IntroductionModalComponent() {
   // style variable
   const headlineStyle = 'text-center font-medium text-[#0B1A33] dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px]'
   const textStyle = 'mt-[0.5rem] text-justify text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-[#9A9A9A] dark:text-[#94A3B8]'
+  // translation
+  const { t } = useContext(MapperContext)
 
   return (
     <div className={modalStyles.modalMainDiv}>
       {/* headline */}
       <span className={headlineStyle}>
-        Welcome to My Mini Portfolio Website
+        {t(translationKeys.introModalTitle)}
       </span>
       {/* description */}
       <span className={textStyle}>
-        This Mini Portfolio Website is a dynamic and efficient web application built using a powerful stack consisting of <b>Node</b>, <b>React</b>, <b>TypeScript</b>, <b>Tailwind CSS</b>, and <b>Mantine</b>. This combination of cutting-edge technologies forms a solid foundation for showcasing my information in an effective way. With its responsive design, the website presents my work experience, education, projects, and skills visually engaging and user-friendly, ensuring visitors have an enjoyable and informative experience while exploring my portfolio.
+        {t(translationKeys.introModalDescription)}
       </span>
     </div>
   )

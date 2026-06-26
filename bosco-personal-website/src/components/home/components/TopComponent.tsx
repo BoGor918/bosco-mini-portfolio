@@ -1,5 +1,5 @@
 // others
-import { useRef, useEffect, useState, CSSProperties } from "react"
+import { useRef, useEffect, useState, CSSProperties, useContext } from "react"
 import CountUp from "react-countup";
 // mantine
 import { Button, Loader, Modal } from "@mantine/core";
@@ -15,6 +15,8 @@ import IntroductionModalComponent from "../../modal/introduction/IntroductionMod
 import { LazyLoadImage } from "react-lazy-load-image-component";
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { languageSetting, translationKeys } from "../../../globalVariable/Translation";
+import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 
 const PersonalIcon = `/images/personal_icon.png`;
 const PersonalIconName = `personal_icon.png`;
@@ -29,23 +31,37 @@ export default function TopComponent() {
     const totalYear = currentDate.getFullYear() - workStartDate.getFullYear();
     // color theme
     const [theme, setTheme] = useState(localStorage.getItem(colorTheme.theme) || colorTheme.light);
+    // translation
+    const { t, language, setLanguage } = useContext(MapperContext)
     // personal icon loading status
     const [isPersonalIconLoaded, setIsPersonalIconLoaded] = useState(false);
     const [isPersonalIconFailed, setIsPersonalIconFailed] = useState(false);
     // model hook
     const [opened, { open, close }] = useDisclosure(false);
-    const modalTitle = `About This Website - ${packageJson.version}`;
+    const modalTitle = `${t(translationKeys.aboutThisWebsite)} - ${packageJson.version}`;
     // style list
-    const mainDivStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-between items-center mt-[5rem] px-[4rem] self-center w-full max-w-[365px] sm:max-w-[365px] md:max-w-[365px] lg:max-w-[910px] font-light`;
+    const mainDivPaddingXStyle = language === languageSetting.english ? `px-[4rem]` : `px-[6rem]`;
+    const mainDivStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-between items-center mt-[5rem] ${mainDivPaddingXStyle} self-center w-full max-w-[365px] sm:max-w-[365px] md:max-w-[365px] lg:max-w-[910px] font-light`;
     const personalIconDivStyle = `flex flex-col items-center animate-fade-up animate-delay-0 animate-once`;
     const personalIconStyle = `relative flex justify-center items-center w-[198px] h-[198px] border-[3px] border-[#0000] rounded-full cursor-pointer overflow-hidden [background:padding-box_var(--bg-color),border-box_var(--border-color)]`
     const lazyLoadImageStyle = `w-full h-full object-cover p-[4px] rounded-full transition-opacity duration-300`;
     const personalIconLoaderStyle = `absolute inset-0 flex justify-center items-center`;
     const personalIconFallbackStyle = `w-full h-full flex justify-center items-center text-[42px] font-extrabold rounded-full ` + (theme === colorTheme.dark ? `text-[#21D4F7] bg-[#0F274A]` : `text-[#0B1A33] bg-[#E5E7EB]`);
-    const viewInfoButtonStyle = `relative z-20 mt-[-2.2rem] px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#0B1A33] text-[#FFFFFF]`);
+    const viewInfoButtonMarginTop = language === languageSetting.english ? `mt-[-2.2rem]` : `mt-[-1.46rem]`;
+    const viewInfoButtonStyle = `relative z-20 ${viewInfoButtonMarginTop} px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition uppercase ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#0B1A33] text-[#FFFFFF]`);
     const infoDivStyle = `animate-fade-up animate-delay-100 animate-once`;
-    const labelStyle = `flex mt-5 lg:mt-0 mx-auto lg:mx-0 mb-4 px-2.5 py-1 w-fit rounded-full border text-[10px] font-semibold tracking-[0.22em] uppercase` + (theme === colorTheme.dark ? ` border-[#21D4F7]/60 bg-[#21D4F7]/12 text-[#21D4F7]` : ` border-[#0B1A33]/60 bg-[#21D4F7]/12 text-[#0B1A33]`);
-    const columnOneStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center items-center mb-4`;
+    const labelAndLanguageSwitchDivStyle = `flex flex-col lg:flex-row items-center mb-4 gap-0 lg:gap-2`;
+    const labelStyle = `flex mt-5 mb-4 lg:mb-0 lg:mt-0 mx-auto lg:mx-0 px-2.5 py-1 w-fit rounded-full border text-[10px] font-semibold tracking-[0.22em] uppercase` + (theme === colorTheme.dark ? ` border-[#21D4F7]/60 bg-[#21D4F7]/12 text-[#21D4F7]` : ` border-[#0B1A33]/60 bg-[#21D4F7]/12 text-[#0B1A33]`);
+    const languageSwitchDivStyle = `flex items-center gap-2 ml-2 uppercase`;
+    const languageSwitchButtonStyle = (isActive: boolean) =>
+        `px-2 py-1 border rounded-md text-[11px] font-semibold transition ` + (theme === colorTheme.dark
+            ? isActive
+                ? `border-[#21D4F7] bg-[#21D4F7] text-[#0B1A33]`
+                : `border-white/45 text-white hover:bg-white/10`
+            : isActive
+                ? `border-[#0B1A33] bg-[#0B1A33] text-white`
+                : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
+    const columnOneStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-start items-center mb-4`;
     const nameStyle = `text-[#0B1A33] dark:text-[#FFFFFF] text-[33px] sm:text-[33px] md:text-[33px] lg:text-[36px] font-extrabold`;
     const cvButtonDivStyle = `flex justify-center items-center lg:mb-0 my-3 lg:my-0`;
     const cvButtonStyle = `ml-0 lg:ml-5 mr-5 text-[#FFFFFF] rounded-md` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
@@ -115,6 +131,15 @@ export default function TopComponent() {
         setTheme(theme === colorTheme.dark ? colorTheme.light : colorTheme.dark);
     };
 
+    const renderTextWithBreaks = (value: string) => {
+        return value.split(/<br\s*\/?>/gi).map((text, index) => (
+            <span key={`${text}-${index}`}>
+                {index > 0 && <br />}
+                {text}
+            </span>
+        ));
+    };
+
     return (
         <div className={mainDivStyle}>
             {/* personal icon */}
@@ -163,24 +188,48 @@ export default function TopComponent() {
                     onClick={() => open()}
                     className={viewInfoButtonStyle}
                 >
-                    VIEW<br />INTRO
+                    {renderTextWithBreaks(t(translationKeys.viewIntro))}
                 </button>
             </div>
             {/* info */}
             <div className={infoDivStyle}>
-                {/* bosco portfolio label */}
-                <div className={labelStyle}>
-                    Bosco Portfolio
+                {/* label and language switch */}
+                <div className={labelAndLanguageSwitchDivStyle}>
+                    {/* bosco portfolio label */}
+                    <div className={labelStyle}>
+                        {t(translationKeys.boscoPortfolio)}
+                    </div>
+                    {/* language switch */}
+                    <div className={languageSwitchDivStyle}>
+                        <button
+                            onClick={() => setLanguage(languageSetting.english)}
+                            className={languageSwitchButtonStyle(language === languageSetting.english)}
+                        >
+                            {t(translationKeys.englishLanguage)}
+                        </button>
+                        <button
+                            onClick={() => setLanguage(languageSetting.traditionalChinese)}
+                            className={languageSwitchButtonStyle(language === languageSetting.traditionalChinese)}
+                        >
+                            {t(translationKeys.tranditionalChineseLanguage)}
+                        </button>
+                        <button
+                            onClick={() => setLanguage(languageSetting.simplifiedChinese)}
+                            className={languageSwitchButtonStyle(language === languageSetting.simplifiedChinese)}
+                        >
+                            {t(translationKeys.simplifiedChineseLanguage)}
+                        </button>
+                    </div>
                 </div>
                 {/* name cv with theme switch column */}
                 <div className={columnOneStyle}>
                     <span className={nameStyle}>
-                        CHEUNG Tsz Lai
+                        {t(translationKeys.cheungTszLai)}
                     </span>
                     <div className={cvButtonDivStyle}>
                         <a href={CV} download={CVName}>
                             <Button className={cvButtonStyle}>
-                                Download CV
+                                {t(translationKeys.downloadCv)}
                             </Button>
                         </a>
                         <button onClick={handleThemeSwitch} className={themeSwitchButtonStyle}>
@@ -200,7 +249,7 @@ export default function TopComponent() {
                             <span>+</span>
                         </div>
                         <div className={expTitleStyle}>
-                            Yrs Exp
+                            {t(translationKeys.yearExperience)}
                         </div>
                     </div>
                     <div className={expDivStyle}>
@@ -209,7 +258,7 @@ export default function TopComponent() {
                             <span>+</span>
                         </div>
                         <div className={expTitleStyle}>
-                            Projects
+                            {t(translationKeys.project)}
                         </div>
                     </div>
                     <div className={expDivStyle}>
@@ -218,7 +267,7 @@ export default function TopComponent() {
                             <span>+</span>
                         </div>
                         <div className={expTitleStyle}>
-                            Skills
+                            {t(translationKeys.skill)}
                         </div>
                     </div>
                 </div>
@@ -228,17 +277,17 @@ export default function TopComponent() {
                     <div className={focusContactDivStyle}>
                         <div className={focusBoxStyle}>
                             <div className={focusTitleStyle}>
-                                Focus
+                                {t(translationKeys.focus)}
                             </div>
                             <div className={focusContentDivStyle}>
                                 <div className={focusItemStyle}>
-                                    Full Stack Development
+                                    {t(translationKeys.fullStackDevelopment)}
                                 </div>
                                 <div className={focusItemStyle}>
-                                    Web / App Design + Development
+                                    {t(translationKeys.webAppDesignDevelopment)}
                                 </div>
                                 <div className={focusItemStyle}>
-                                    Photo / Video Editing
+                                    {t(translationKeys.photoVideoEditing)}
                                 </div>
                             </div>
                         </div>
@@ -247,7 +296,7 @@ export default function TopComponent() {
                     <div className={focusContactDivStyle}>
                         <div className={focusBoxStyle}>
                             <div className={focusTitleStyle}>
-                                Contact - Bosco
+                                {t(translationKeys.contactBosco)}
                             </div>
                             <div className={focusContentDivStyle}>
                                 <div className={focusItemStyle}>

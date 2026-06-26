@@ -14,10 +14,13 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { CompanyData } from '../../types/type';
 // util
 import { gridStyles } from './util';
+// global variable
+import { languageSetting } from '../../globalVariable/Translation';
 
 export default function CompanyGrid() {
     // global variable
     const {
+        language,
         companyData
     } = useContext(MapperContext);
 
@@ -60,7 +63,7 @@ export default function CompanyGrid() {
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     src={company.Logo.URL}
-                                    alt={company.CompanyName}
+                                    alt={language === languageSetting.english ? company.en.CompanyName : language === languageSetting.traditionalChinese ? company.zh.CompanyName : company.cn.CompanyName}
                                     onLoad={() => onLogoLoad(company.id)}
                                     onError={() => onLogoError(company.id)}
                                 />
@@ -81,11 +84,11 @@ export default function CompanyGrid() {
                         {selectedCompany && (
                             <CompanyModalComponent
                                 docID={selectedCompany.id}
-                                companyName={selectedCompany.CompanyName}
-                                team={selectedCompany.Team}
-                                position={selectedCompany.Position}
-                                jobDuties={selectedCompany.JobDuties}
-                                projects={selectedCompany.Projects}
+                                companyName={language === languageSetting.english ? selectedCompany.en.CompanyName : language === languageSetting.traditionalChinese ? selectedCompany.zh.CompanyName : selectedCompany.cn.CompanyName}
+                                team={language === languageSetting.english ? selectedCompany.en.Team : language === languageSetting.traditionalChinese ? selectedCompany.zh.Team : selectedCompany.cn.Team}
+                                position={language === languageSetting.english ? selectedCompany.en.Position : language === languageSetting.traditionalChinese ? selectedCompany.zh.Position : selectedCompany.cn.Position}
+                                jobDuties={language === languageSetting.english ? selectedCompany.en.JobDuties : language === languageSetting.traditionalChinese ? selectedCompany.zh.JobDuties : selectedCompany.cn.JobDuties}
+                                projects={language === languageSetting.english ? selectedCompany.en.Projects : language === languageSetting.traditionalChinese ? selectedCompany.zh.Projects : selectedCompany.cn.Projects}
                                 skillSets={selectedCompany.SkillSets}
                                 startDate={selectedCompany.StartDate}
                                 endDate={selectedCompany.EndDate}
@@ -108,11 +111,11 @@ export default function CompanyGrid() {
                         {selectedCompany && (
                             <CompanyModalComponent
                                 docID={selectedCompany.id}
-                                companyName={selectedCompany.CompanyName}
-                                team={selectedCompany.Team}
-                                position={selectedCompany.Position}
-                                jobDuties={selectedCompany.JobDuties}
-                                projects={selectedCompany.Projects}
+                                companyName={language === languageSetting.english ? selectedCompany.en.CompanyName : language === languageSetting.traditionalChinese ? selectedCompany.zh.CompanyName : selectedCompany.cn.CompanyName}
+                                team={language === languageSetting.english ? selectedCompany.en.Team : language === languageSetting.traditionalChinese ? selectedCompany.zh.Team : selectedCompany.cn.Team}
+                                position={language === languageSetting.english ? selectedCompany.en.Position : language === languageSetting.traditionalChinese ? selectedCompany.zh.Position : selectedCompany.cn.Position}
+                                jobDuties={language === languageSetting.english ? selectedCompany.en.JobDuties : language === languageSetting.traditionalChinese ? selectedCompany.zh.JobDuties : selectedCompany.cn.JobDuties}
+                                projects={language === languageSetting.english ? selectedCompany.en.Projects : language === languageSetting.traditionalChinese ? selectedCompany.zh.Projects : selectedCompany.cn.Projects}
                                 skillSets={selectedCompany.SkillSets}
                                 startDate={selectedCompany.StartDate}
                                 endDate={selectedCompany.EndDate}

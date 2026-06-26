@@ -1,5 +1,5 @@
 // others
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 // Mantine
 import { useDisclosure } from "@mantine/hooks";
 import { LoadingOverlay, Box } from "@mantine/core";
@@ -9,6 +9,9 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { getDetailStyles, modalStyles } from '../util';
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { MapperContext } from "../../../globalVariable/MapperContextProvider";
+// translation
+import { translationKeys } from "../../../globalVariable/Translation"
 
 export default function ProjectModalComponent({
   projectName,
@@ -22,6 +25,8 @@ export default function ProjectModalComponent({
     link: string[],
     logo: string,
   }) {
+  // translation
+  const { t } = useContext(MapperContext)
   // tech stack list
   const [techStackList, setTechStackList] = useState('')
   // loading overlay hook
@@ -73,15 +78,15 @@ export default function ProjectModalComponent({
         {/* detail */}
         <div className={detailGridStyle}>
           <div className={detailCardStyle}>
-            <div className={detailLabelStyle}>Description</div>
+            <div className={detailLabelStyle}>{t(translationKeys.description)}</div>
             <div className={detailValueStyle}>{description}</div>
           </div>
           <div className={detailCardStyle}>
-            <div className={detailLabelStyle}>Tech Stack(s)</div>
+            <div className={detailLabelStyle}>{t(translationKeys.techStack)}</div>
             <div className={detailValueStyle}>{techStackList}</div>
           </div>
           <div className={detailCardStyle + ' sm:col-span-2'}>
-            <div className={detailLabelStyle}>Link(s)</div>
+            <div className={detailLabelStyle}>{t(translationKeys.link)}</div>
             <div className='mt-1 flex flex-col items-stretch gap-2'>
               {
                 link.map((link: any, i: number) => {

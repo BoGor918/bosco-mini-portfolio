@@ -1,5 +1,5 @@
 // others
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 // Mantine
 import { useDisclosure } from '@mantine/hooks';
 import { LoadingOverlay, Box } from "@mantine/core";
@@ -9,6 +9,9 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { getDetailStyles, modalStyles } from '../util';
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { MapperContext } from "../../../globalVariable/MapperContextProvider";
+// translation
+import { translationKeys } from "../../../globalVariable/Translation";
 
 const toDateValue = (value: any) => {
   if (!value) {
@@ -49,6 +52,8 @@ export default function EducationModalComponent({
     present: boolean;
     logo: string;
   }) {
+  // translation
+  const { t } = useContext(MapperContext)
   // date variable
   const [toStartDate, setToStartDate] = useState('')
   const [toEndDate, setToEndDate] = useState('')
@@ -72,7 +77,7 @@ export default function EducationModalComponent({
   useEffect(() => {
     if (present === true) {
       setToStartDate(new Date(startDate.seconds * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }))
-      setToEndDate("Present")
+      setToEndDate(t(translationKeys.present))
       // New date instances
       const dt_date1 = new Date(toDateValue(startDate));
       const dt_date2 = new Date();
@@ -100,9 +105,9 @@ export default function EducationModalComponent({
       const years_passed = Math.abs(Number(calcFormat[2]) - 1970);
 
       // Set up custom text
-      const yrsTxt = ["Year", "Years"];
-      const mnthsTxt = ["Month", "Months"];
-      const daysTxt = ["Day", "Days"];
+      const yrsTxt = [t(translationKeys.year), t(translationKeys.years)];
+      const mnthsTxt = [t(translationKeys.month), t(translationKeys.months)];
+      const daysTxt = [t(translationKeys.day), t(translationKeys.days)];
 
       // Display the result with custom text
       const result = ((years_passed === 1) ? years_passed + ' ' + yrsTxt[0] + ' ' : (years_passed > 1) ?
@@ -144,9 +149,9 @@ export default function EducationModalComponent({
       const years_passed = Math.abs(Number(calcFormat[2]) - 1970);
 
       // Set up custom text
-      const yrsTxt = ["Year", "Years"];
-      const mnthsTxt = ["Month", "Months"];
-      const daysTxt = ["Day", "Days"];
+      const yrsTxt = [t(translationKeys.year), t(translationKeys.years)];
+      const mnthsTxt = [t(translationKeys.month), t(translationKeys.months)];
+      const daysTxt = [t(translationKeys.day), t(translationKeys.days)];
 
       // Display the result with custom text
       const result = ((years_passed === 1) ? years_passed + ' ' + yrsTxt[0] + ' ' : (years_passed > 1) ?
@@ -179,19 +184,19 @@ export default function EducationModalComponent({
         {/* detail */}
         <div className={detailGridStyle}>
           <div className={detailCardStyle}>
-            <div className={detailLabelStyle}>Type</div>
+            <div className={detailLabelStyle}>{t(translationKeys.type)}</div>
             <div className={detailValueStyle}>{type}</div>
           </div>
           <div className={detailCardStyle}>
-            <div className={detailLabelStyle}>Title</div>
+            <div className={detailLabelStyle}>{t(translationKeys.education)}</div>
             <div className={detailValueStyle}>{title}</div>
           </div>
           <div className={detailCardStyle + ' sm:col-span-2'}>
-            <div className={detailLabelStyle}>CGPA / WGPA / Best Five</div>
+            <div className={detailLabelStyle}>{t(translationKeys.score)}</div>
             <div className={detailValueStyle}>{gpa}</div>
           </div>
           <div className={detailCardStyle + ' sm:col-span-2'}>
-            <div className={detailLabelStyle}>Period</div>
+            <div className={detailLabelStyle}>{t(translationKeys.period)}</div>
             <div className={durationDivStyle}>
               <span className={durationPillStyle}>{resultDate}</span>
               <span className={detailValueStyle + ' mt-0'}>{toStartDate} - {toEndDate}</span>

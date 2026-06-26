@@ -14,10 +14,13 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { SchoolData } from '../../types/type';
 // util
 import { gridStyles } from './util';
+// global variable
+import { languageSetting } from '../../globalVariable/Translation';
 
-export default function EduGrid() {
+export default function CompanyGrid() {
     // global variable
     const {
+        language,
         schoolData
     } = useContext(MapperContext);
 
@@ -60,7 +63,7 @@ export default function EduGrid() {
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
                                     src={school.Logo.URL}
-                                    alt={school.SchoolName}
+                                    alt={language === languageSetting.english ? school.en.SchoolName : language === languageSetting.traditionalChinese ? school.zh.SchoolName : school.cn.SchoolName}
                                     onLoad={() => onLogoLoad(school.id)}
                                     onError={() => onLogoError(school.id)}
                                 />
@@ -81,9 +84,9 @@ export default function EduGrid() {
                         {selectedSchool && (
                             <EducationModalComponent
                                 docID={selectedSchool.id}
-                                schoolName={selectedSchool.SchoolName}
-                                type={selectedSchool.Type}
-                                title={selectedSchool.Title}
+                                schoolName={language === languageSetting.english ? selectedSchool.en.SchoolName : language === languageSetting.traditionalChinese ? selectedSchool.zh.SchoolName : selectedSchool.cn.SchoolName}
+                                type={language === languageSetting.english ? selectedSchool.en.Type : language === languageSetting.traditionalChinese ? selectedSchool.zh.Type : selectedSchool.cn.Type}
+                                title={language === languageSetting.english ? selectedSchool.en.Title : language === languageSetting.traditionalChinese ? selectedSchool.zh.Title : selectedSchool.cn.Title}
                                 gpa={selectedSchool.GPA}
                                 startDate={selectedSchool.StartDate}
                                 endDate={selectedSchool.EndDate}
@@ -105,9 +108,9 @@ export default function EduGrid() {
                         {selectedSchool && (
                             <EducationModalComponent
                                 docID={selectedSchool.id}
-                                schoolName={selectedSchool.SchoolName}
-                                type={selectedSchool.Type}
-                                title={selectedSchool.Title}
+                                schoolName={language === languageSetting.english ? selectedSchool.en.SchoolName : language === languageSetting.traditionalChinese ? selectedSchool.zh.SchoolName : selectedSchool.cn.SchoolName}
+                                type={language === languageSetting.english ? selectedSchool.en.Type : language === languageSetting.traditionalChinese ? selectedSchool.zh.Type : selectedSchool.cn.Type}
+                                title={language === languageSetting.english ? selectedSchool.en.Title : language === languageSetting.traditionalChinese ? selectedSchool.zh.Title : selectedSchool.cn.Title}
                                 gpa={selectedSchool.GPA}
                                 startDate={selectedSchool.StartDate}
                                 endDate={selectedSchool.EndDate}

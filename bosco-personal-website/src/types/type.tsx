@@ -12,31 +12,45 @@ export type CompanyData = {
         seconds: number,
         nanoseconds: number
     },
-    Position: string,
     Present: boolean,
-    JobDuties: string,
     Logo: {
         URL: string,
         FileName: string
     },
-    Projects: string,
-    Team: string,
-    CompanyName: string,
-    id: number
+    id: number,
+    en: {
+        CompanyName: string,
+        Team: string,
+        Position: string,
+        Projects: string,
+        JobDuties: string,
+    },
+    zh: {
+        CompanyName: string,
+        Team: string,
+        Position: string,
+        Projects: string,
+        JobDuties: string,
+    },
+    cn: {
+        CompanyName: string,
+        Team: string,
+        Position: string,
+        Projects: string,
+        JobDuties: string,
+    }
 }
+
 
 export type SchoolData = {
     Logo: {
         URL: string,
         FileName: string
     },
-    Type: string,
     EndDate: {
         seconds: number,
         nanoseconds: number
     },
-    SchoolName: string,
-    Title: string,
     StartDate: {
         seconds: number,
         nanoseconds: number
@@ -47,7 +61,22 @@ export type SchoolData = {
         seconds: number,
         nanoseconds: number
     },
-    id: number
+    id: number,
+    en: {
+        SchoolName: string,
+        Type: string,
+        Title: string,
+    },
+    zh: {
+        SchoolName: string,
+        Type: string,
+        Title: string,
+    },
+    cn: {
+        SchoolName: string,
+        Type: string,
+        Title: string,
+    }
 }
 
 export type ProjectData = {
@@ -58,9 +87,17 @@ export type ProjectData = {
     },
     ProjectName: string,
     Logo: string,
-    Description: string,
     TechStack: string[],
-    id: number
+    id: number,
+    en: {
+        Description: string
+    },
+    zh: {
+        Description: string
+    },
+    cn: {
+        Description: string
+    }
 }
 
 export type SkillData = {

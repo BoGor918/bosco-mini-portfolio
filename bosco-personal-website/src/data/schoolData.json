@@ -4,13 +4,10 @@
             "URL": "/images/school/shun_tak_fraternal_association_cheng_yu_tung_secondary_school_icon.png",
             "FileName": "shun_tak_fraternal_association_cheng_yu_tung_secondary_school_icon.png"
         },
-        "Type": "Secondary",
         "EndDate": {
             "seconds": 1567180898,
             "nanoseconds": 0
         },
-        "SchoolName": "Shun Tak Fraternal Association Cheng Yu Tung Secondary School",
-        "Title": "Hong Kong Diploma of Secondary Education",
         "StartDate": {
             "seconds": 1378051200,
             "nanoseconds": 0
@@ -21,11 +18,25 @@
             "seconds": 1691546764,
             "nanoseconds": 575000000
         },
-        "id": 1
+        "id": 1,
+        "en": {
+            "SchoolName": "Shun Tak Fraternal Association Cheng Yu Tung Secondary School",
+            "Type": "Secondary",
+            "Title": "Hong Kong Diploma of Secondary Education"
+        },
+        "zh": {
+            "SchoolName": "順德聯誼總會鄭裕彤中學",
+            "Type": "中學",
+            "Title": "香港中學文憑"
+        },
+        "cn": {
+            "SchoolName": "顺德联谊总会郑裕彤中学",
+            "Type": "中学",
+            "Title": "香港中学文凭"
+        }
     },
     {
         "Present": false,
-        "Title": "Associate in Information Technology",
         "StartDate": {
             "seconds": 1567353600,
             "nanoseconds": 0
@@ -45,7 +56,22 @@
             "nanoseconds": 408000000
         },
         "GPA": 3.88,
-        "id": 2
+        "id": 2,
+        "en": {
+            "SchoolName": "Hong Kong Community College",
+            "Type": "Associate Degree",
+            "Title": "Associate in Information Technology"
+        },
+        "zh": {
+            "SchoolName": "香港專上學院",
+            "Type": "副學士",
+            "Title": "資訊科技副學士"
+        },
+        "cn": {
+            "SchoolName": "香港专上学院",
+            "Type": "副学士",
+            "Title": "资讯科技副学士"
+        }
     },
     {
         "CreateDate": {
@@ -54,8 +80,6 @@
         },
         "GPA": 3.49,
         "Present": false,
-        "SchoolName": "The Hong Kong Polytechnic University",
-        "Title": "Bachelor of Science (Hons) Scheme in Computing / Computer Science",
         "StartDate": {
             "seconds": 1630252800,
             "nanoseconds": 0
@@ -69,6 +93,21 @@
             "URL": "/images/school/the_hong_kong_polytechnic_university_icon.png",
             "FileName": "the_hong_kong_polytechnic_university_icon.png"
         },
-        "id": 3
+        "id": 3,
+        "en": {
+            "SchoolName": "The Hong Kong Polytechnic University",
+            "Type": "Bachelor Degree",
+            "Title": "Bachelor of Science (Hons) Scheme in Computing / Computer Science"
+        },
+        "zh": {
+            "SchoolName": "香港理工大學",
+            "Type": "學士學位",
+            "Title": "計算機科學榮譽理學士"
+        },
+        "cn": {
+            "SchoolName": "香港理工大学",
+            "Type": "学士学位",
+            "Title": "计算机科学荣誉理学士"
+        }
     }
 ]

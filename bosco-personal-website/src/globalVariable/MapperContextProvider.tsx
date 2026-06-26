@@ -5,6 +5,7 @@ import companyJSON from '../data/companyData.json';
 import schoolJSON from '../data/schoolData.json';
 import projectJSON from '../data/projectData.json';
 import SkillJSON from '../data/skillData.json';
+import { LanguageType, TranslationKey, languageSetting, translations } from "./Translation";
 // types
 import { CompanyData, ProjectData, SchoolData, SkillData } from "../types/type";
 
@@ -14,6 +15,9 @@ interface MapperContextType {
     schoolData: SchoolData[];
     projectData: ProjectData[];
     skillData: SkillData[];
+    language: LanguageType;
+    setLanguage: (language: LanguageType) => void;
+    t: (key: TranslationKey) => string;
 }
 
 // create context
@@ -22,6 +26,9 @@ export const MapperContext = createContext<MapperContextType>({
     schoolData: [],
     projectData: [],
     skillData: [],
+    language: languageSetting.english,
+    setLanguage: () => { },
+    t: (key) => translations.en[key],
 });
 
 export default function MapperContextProvider(props: any) {
@@ -33,9 +40,29 @@ export default function MapperContextProvider(props: any) {
     const [projectData, setProjectData] = useState<ProjectData[]>([]);
     // skill data
     const [skillData, setSkillData] = useState<SkillData[]>([]);
+    // language
+    const [language, setLanguage] = useState<LanguageType>(languageSetting.english);
 
     // get company, school, project, and skill data from JSON
     useEffect(() => {
+        const storedLanguage = localStorage.getItem(languageSetting.key) as LanguageType | null;
+
+        if (
+            storedLanguage === languageSetting.english ||
+            storedLanguage === languageSetting.traditionalChinese ||
+            storedLanguage === languageSetting.simplifiedChinese
+        ) {
+            setLanguage(storedLanguage);
+        } else {
+            const browserLanguage = navigator.language.toLowerCase();
+
+            if (browserLanguage.includes('zh-tw') || browserLanguage.includes('zh-hk') || browserLanguage.includes('hant')) {
+                setLanguage(languageSetting.traditionalChinese);
+            } else if (browserLanguage.includes('zh')) {
+                setLanguage(languageSetting.simplifiedChinese);
+            }
+        }
+
         // load company data from JSON
         setCompanyData(
             companyJSON
@@ -62,6 +89,14 @@ export default function MapperContextProvider(props: any) {
         );
     }, []);
 
+    useEffect(() => {
+        localStorage.setItem(languageSetting.key, language);
+    }, [language]);
+
+    const t = (key: TranslationKey) => {
+        return translations[language][key];
+    };
+
     return (
         // pass the value in provider and return
         <MapperContext.Provider value={{
@@ -69,6 +104,9 @@ export default function MapperContextProvider(props: any) {
             schoolData,
             projectData,
             skillData,
+            language,
+            setLanguage,
+            t,
         }}>
             {props.children}
         </MapperContext.Provider>

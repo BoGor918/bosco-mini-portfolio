@@ -1,11 +1,15 @@
 // others
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 // global components
+import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 // mantine components
 import { Loader } from '@mantine/core';
 // icons
 import { BiGrid, BiObjectsVerticalBottom, BiBookContent, BiCalendarCheck } from "react-icons/bi";
+// translation
+import { translationKeys } from '../../../globalVariable/Translation';
+
 // lazy load component
 const CompanyGrid = lazy(() => {
     return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
@@ -29,6 +33,8 @@ const SkillGrid = lazy(() => {
 })
 
 export default function BottomComponent() {
+    // translation
+    const { t } = useContext(MapperContext)
     // navigate hook
     const navigate = useNavigate();
     // url parameter
@@ -48,13 +54,13 @@ export default function BottomComponent() {
     const navButtonDivStyle = "flex animate-fade-up animate-delay-200 animate-once";
     const navButtonStyle = "flex flex-col items-center content-center mx-5 sm:mx-5 md:mx-5 lg:mx-12";
     const navIconDivStyle = "flex items-center mt-[8px] mr-[0rem] sm:mr-[0rem] md:mr-[0rem] lg:mr-[0.4rem]";
-    const selectedStyle = "opacity-100 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[125px] h-[2px] bg-[#9a9a9a] dark:bg-white mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
-    const unSelectedStyle = "opacity-0 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[125px] h-[2px] bg-[#9a9a9a] dark:bg-[#94A3B8] mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
-    const selected3Style = "opacity-100 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[150px] h-[2px] bg-[#9a9a9a] dark:bg-white mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
-    const unSelected3Style = "opacity-0 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[150px] h-[2px] bg-[#9a9a9a] dark:bg-[#94A3B8] mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
-    const iconStyleSelected = "text-[#9A9A9A] dark:text-white";
+    const selectedStyle = "opacity-100 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[125px] h-[2px] bg-[#334155] dark:bg-white mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
+    const unSelectedStyle = "opacity-0 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[125px] h-[2px] bg-[#9A9A9A] dark:bg-[#94A3B8] mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
+    const selected3Style = "opacity-100 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[150px] h-[2px] bg-[#334155] dark:bg-white mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
+    const unSelected3Style = "opacity-0 w-[50px] sm:w-[50px] md:w-[50px] lg:w-[150px] h-[2px] bg-[#9A9A9A] dark:bg-[#94A3B8] mt-[-0.76px] rounded-full transition duration-500 ease-in-out";
+    const iconStyleSelected = "text-[#334155)] dark:text-white";
     const iconStyleUnSelected = "text-[#9A9A9A] dark:text-[#94A3B8]";
-    const textSytleSelected = "ml-1 mt-[0.3rem] hidden sm:hidden md:hidden lg:block text-[#9A9A9A] dark:text-white";
+    const textSytleSelected = "ml-1 mt-[0.3rem] hidden sm:hidden md:hidden lg:block text-[#334155] dark:text-white";
     const textSytleUnSelected = "ml-1 mt-[0.3rem] hidden sm:hidden md:hidden lg:block text-[#9A9A9A] dark:text-[#94A3B8]";
     const displayGridDivStyle = "flex flex-col justify-center items-center animate-fade-up animate-delay-300 animate-once w-full max-w-[355px] sm:max-w-[355px] md:max-w-[355px] lg:max-w-[910px]";
 
@@ -72,7 +78,7 @@ export default function BottomComponent() {
                         <div className={widget === "1" || widget === null ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
                             <BiGrid className={widget === "1" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "1" ? textSytleSelected : textSytleUnSelected}>WORKS</span>
+                            <span className={widget === "1" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.work)}</span>
                         </div>
                     </button>
                     {/* option 2 */}
@@ -80,7 +86,7 @@ export default function BottomComponent() {
                         <div className={widget === "2" ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
                             <BiObjectsVerticalBottom className={widget === "2" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "2" ? textSytleSelected : textSytleUnSelected}>EDUS</span>
+                            <span className={widget === "2" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.education)}</span>
                         </div>
                     </button>
                     {/* option 3 */}
@@ -88,7 +94,7 @@ export default function BottomComponent() {
                         <div className={widget === "3" ? selected3Style : unSelected3Style} />
                         <div className={navIconDivStyle}>
                             <BiBookContent className={widget === "3" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "3" ? textSytleSelected : textSytleUnSelected}>PROJECTS</span>
+                            <span className={widget === "3" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.project)}</span>
                         </div>
                     </button>
                     {/* option 4 */}
@@ -96,7 +102,7 @@ export default function BottomComponent() {
                         <div className={widget === "4" ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
                             <BiCalendarCheck className={widget === "4" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "4" ? textSytleSelected : textSytleUnSelected}>SKILLS</span>
+                            <span className={widget === "4" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.skill)}</span>
                         </div>
                     </button>
                 </div>

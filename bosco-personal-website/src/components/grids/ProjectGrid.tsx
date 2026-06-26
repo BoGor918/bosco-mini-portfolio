@@ -14,10 +14,13 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ProjectData } from '../../types/type';
 // util
 import { gridStyles } from './util';
+// global variable
+import { languageSetting } from '../../globalVariable/Translation';
 
-export default function ProjectGrid() {
+export default function CompanyGrid() {
     // global variable
     const {
+        language,
         projectData
     } = useContext(MapperContext);
 
@@ -81,7 +84,7 @@ export default function ProjectGrid() {
                         {selectedProject && (
                             <ProjectModalComponent
                                 projectName={selectedProject.ProjectName}
-                                description={selectedProject.Description}
+                                description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
                                 techStack={selectedProject.TechStack}
                                 link={selectedProject.Link}
                                 logo={selectedProject.Logo}
@@ -101,7 +104,7 @@ export default function ProjectGrid() {
                         {selectedProject && (
                             <ProjectModalComponent
                                 projectName={selectedProject.ProjectName}
-                                description={selectedProject.Description}
+                                description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
                                 techStack={selectedProject.TechStack}
                                 link={selectedProject.Link}
                                 logo={selectedProject.Logo}

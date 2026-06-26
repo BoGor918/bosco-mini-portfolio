@@ -1,5 +1,6 @@
 [
     {
+        "id": 1,
         "SkillSets": [
             "HTML",
             "CSS",
@@ -14,23 +15,39 @@
             "seconds": 1691552850,
             "nanoseconds": 649000000
         },
-        "Team": "Project Team",
-        "CompanyName": "Sisters Pro AI Solutions Limited",
         "StartDate": {
             "seconds": 1619971200,
             "nanoseconds": 0
         },
-        "Position": "Web Developer",
         "Logo": {
             "URL": "/images/company/sister_pro_ai_solution_limited_icon.png",
             "FileName": "sister_pro_ai_solution_limited_icon.png"
         },
-        "JobDuties": "Web Development & Customer Management",
         "Present": false,
-        "Projects": "Vendor Web Projects",
-        "id": 1
+        "en": {
+            "CompanyName": "Sisters Pro AI Solutions Limited",
+            "Team": "Project Team",
+            "Position": "Web Developer",
+            "JobDuties": "Web Development & Customer Management",
+            "Projects": "Vendor Web Projects"
+        },
+        "zh": {
+            "CompanyName": "S姊妹圖人工智能有限公司",
+            "Team": "專案團隊",
+            "Position": "網頁開發人員",
+            "JobDuties": "網頁開發及客戶管理",
+            "Projects": "供應商網頁專案"
+        },
+        "cn": {
+            "CompanyName": "姊妹图人工智能有限公司",
+            "Team": "项目团队",
+            "Position": "网页开发人员",
+            "JobDuties": "网页开发及客户管理",
+            "Projects": "供应商网页项目"
+        }
     },
     {
+        "id": 2,
         "SkillSets": [
             "Node",
             "React",
@@ -50,23 +67,39 @@
             "seconds": 1691552950,
             "nanoseconds": 120000000
         },
-        "CompanyName": "Sisters Pro AI Solutions Limited",
-        "Team": "Project Team",
         "Logo": {
             "URL": "/images/company/sister_pro_ai_solution_limited_icon.png",
             "FileName": "sister_pro_ai_solution_limited_icon.png"
         },
-        "JobDuties": "Web / App Development & Customer Management",
         "Present": false,
-        "Projects": "Vendor Web / App Projects",
         "StartDate": {
             "seconds": 1651420800,
             "nanoseconds": 0
         },
-        "Position": "Project Developer",
-        "id": 2
+        "en": {
+            "CompanyName": "Sisters Pro AI Solutions Limited",
+            "Team": "Project Team",
+            "Position": "Project Developer",
+            "JobDuties": "Web / App Development & Customer Management",
+            "Projects": "Vendor Web / App Projects"
+        },
+        "zh": {
+            "CompanyName": "姊妹圖人工智能有限公司",
+            "Team": "專案團隊",
+            "Position": "專案開發人員",
+            "JobDuties": "網頁 / 應用程式開發及客戶管理",
+            "Projects": "供應商網頁 / 應用程式專案"
+        },
+        "cn": {
+            "CompanyName": "姊妹图人工智能有限公司",
+            "Team": "项目团队",
+            "Position": "项目开发人员",
+            "JobDuties": "网页 / 应用程序开发及客户管理",
+            "Projects": "供应商网页 / 应用程序项目"
+        }
     },
     {
+        "id": 3,
         "SkillSets": [
             "React",
             "TypeScript",
@@ -91,6 +124,26 @@
         "Projects": "Clinical IT Product Development",
         "Team": "Clinical IT Product Development",
         "CompanyName": "Hospital Authority",
-        "id": 3
+        "en": {
+            "CompanyName": "Hospital Authority",
+            "Team": "Clinical IT Product Development",
+            "Position": "Programmer",
+            "JobDuties": "Clinical IT Product Development",
+            "Projects": "Clinical IT Product Development"
+        },
+        "zh": {
+            "CompanyName": "醫院管理局",
+            "Team": "臨床資訊科技產品開發",
+            "Position": "程式設計師",
+            "JobDuties": "臨床資訊科技產品開發",
+            "Projects": "臨床資訊科技產品開發"
+        },
+        "cn": {
+            "CompanyName": "医院管理局",
+            "Team": "临床信息技术产品开发",
+            "Position": "程序员",
+            "JobDuties": "临床信息技术产品开发",
+            "Projects": "临床信息技术产品开发"
+        }
     }
 ]
