@@ -52,7 +52,7 @@ Built with Node.js, React, TypeScript, Tailwind CSS, and Mantine, the applicatio
 
 ## Available Scripts
 
-Inside `bosco-personal-website`, you can run:
+Inside `bosco-mini-portfolio`, you can run:
 
 - `npm start` - Runs the app in development mode
 - `npm run build` - Builds the app for production
@@ -64,7 +64,7 @@ Inside `bosco-personal-website`, you can run:
 root/
 |-- README.md
 |-- netlify.toml
-`-- bosco-personal-website/
+`-- bosco-mini-portfolio/
     |-- public/
     |-- src/
     |   |-- components/
