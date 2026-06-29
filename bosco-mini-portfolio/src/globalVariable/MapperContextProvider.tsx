@@ -54,13 +54,7 @@ export default function MapperContextProvider(props: any) {
         ) {
             setLanguage(storedLanguage);
         } else {
-            const browserLanguage = navigator.language.toLowerCase();
-
-            if (browserLanguage.includes('zh-tw') || browserLanguage.includes('zh-hk') || browserLanguage.includes('hant')) {
-                setLanguage(languageSetting.traditionalChinese);
-            } else if (browserLanguage.includes('zh')) {
-                setLanguage(languageSetting.simplifiedChinese);
-            }
+            setLanguage(languageSetting.english);
         }
 
         // load company data from JSON
