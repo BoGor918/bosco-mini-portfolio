@@ -1,5 +1,5 @@
 [build]
-  base = "bosco-personal-website"
+  base = "bosco-mini-portfolio"
   command = "npm run build"
   publish = "build"
 

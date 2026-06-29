@@ -33,7 +33,7 @@ Built with Node.js, React, TypeScript, Tailwind CSS, and Mantine, the applicatio
 2. Move into the application folder:
 
    ```bash
-   cd bosco-personal-website
+   cd bosco-mini-portfolio
    ```
 
 3. Install dependencies:
