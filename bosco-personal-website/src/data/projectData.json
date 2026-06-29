@@ -190,5 +190,34 @@
         "cn": {
             "Description": "Java 学习工具 - 网页应用程序"
         }
+    },
+    {
+        "Logo": "/images/project/bosco-mini-portfolio_icon.png",
+        "TechStack": [
+            "Node",
+            "React",
+            "TypeScript",
+            "Tailwind CSS",
+            "Mantine"
+        ],
+        "Link": [
+            "https://cheungtszlai.netlify.app/",
+            "https://github.com/BoGor918/bosco-mini-portfolio"
+        ],
+        "CreateDate": {
+            "seconds": 1691747934,
+            "nanoseconds": 773000000
+        },
+        "ProjectName": "Bosco Mini Portfolio",
+        "id": 8,
+        "en": {
+            "Description": "Personal Portfolio - Web App"
+        },
+        "zh": {
+            "Description": "個人作品集 - 網頁應用程式"
+        },
+        "cn": {
+            "Description": "个人作品集 - 网页应用程序"
+        }
     }
 ]
