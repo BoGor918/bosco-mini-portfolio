@@ -1,9 +1,11 @@
 
 // others
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // page components
 import MainLoading from "./components/loading/MainLoading";
+import { MapperContext } from "./globalVariable/MapperContextProvider";
+import { translationKeys } from "./globalVariable/Translation";
 // lazy load components
 const Home = lazy(() => {
   return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
@@ -11,28 +13,31 @@ const Home = lazy(() => {
   });
 });
 
-function App() {
-  // url parameter
-  const queryParameters = new URLSearchParams(window.location.search)
-  const widget = queryParameters.get("w")
+function AppContent() {
+  const { t } = useContext(MapperContext);
 
   useEffect(() => {
-    if (window.location.pathname === "/") {
-      if (widget !== "1" && widget !== "2" && widget !== "3" && widget !== "4") {
-        window.location.href = "/?w=1";
-      }
+    document.title = t(translationKeys.boscoPortfolio);
+
+    const description = document.querySelector('meta[name="description"]');
+    if (description) {
+      description.setAttribute("content", t(translationKeys.introModalDescription));
     }
-  }, [widget]);
+  }, [t]);
 
   return (
+    <Suspense fallback={<MainLoading />}>
+      <Routes>
+        <Route path="*" element={<Home />} />
+      </Routes>
+    </Suspense>
+  );
+}
+
+function App() {
+  return (
     <Router>
-      <Suspense fallback={<MainLoading />}>
-        <Routes>
-          {/* link setup */}
-          <Route path="/?w=1" element={<Home />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
-      </Suspense>
+      <AppContent />
     </Router>
   );
 }

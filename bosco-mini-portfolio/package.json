@@ -1,6 +1,6 @@
 {
   "name": "bosco-mini-portfolio",
-  "version": "1.4.2",
+  "version": "1.4.5",
   "private": true,
   "dependencies": {
     "@mantine/core": "^8.3.18",

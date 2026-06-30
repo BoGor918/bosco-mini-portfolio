@@ -55,7 +55,13 @@ export default function SkillGrid() {
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(skill.id);
                     const isLogoLoaded = loadedLogoIds.has(skill.id);
                     return (
-                        <div key={i} onClick={() => openModal(skill)} className={gridStyles.gridLazyLoadImageSmallDivStyle}>
+                        <button
+                            key={i}
+                            type="button"
+                            onClick={() => openModal(skill)}
+                            className={gridStyles.gridLazyLoadImageSmallDivStyle}
+                            aria-label={`Open ${skill.SkillName}`}
+                        >
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -70,7 +76,7 @@ export default function SkillGrid() {
                                     <Loader type="bars" color="blue" />
                                 </div>
                             )}
-                        </div>
+                        </button>
                     );
                 })}
             </div>

@@ -58,7 +58,13 @@ export default function CompanyGrid() {
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(school.id);
                     const isLogoLoaded = loadedLogoIds.has(school.id);
                     return (
-                        <div key={i} onClick={() => openModal(school)} className={gridStyles.gridLazyLoadImageDivStyle}>
+                        <button
+                            key={i}
+                            type="button"
+                            onClick={() => openModal(school)}
+                            className={gridStyles.gridLazyLoadImageDivStyle}
+                            aria-label={`Open ${language === languageSetting.english ? school.en.SchoolName : language === languageSetting.traditionalChinese ? school.zh.SchoolName : school.cn.SchoolName}`}
+                        >
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -73,7 +79,7 @@ export default function CompanyGrid() {
                                     <Loader type="bars" color="blue" />
                                 </div>
                             )}
-                        </div>
+                        </button>
                     );
                 })}
             </div>

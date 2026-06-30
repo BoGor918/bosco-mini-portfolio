@@ -1,6 +1,6 @@
 // others
-import { lazy, Suspense, useContext } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { lazy, Suspense, useContext, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom';
 // global components
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 // mantine components
@@ -32,18 +32,23 @@ const SkillGrid = lazy(() => {
     });
 })
 
+const validWidgets = new Set(["1", "2", "3", "4"]);
+
 export default function BottomComponent() {
     // translation
     const { t } = useContext(MapperContext)
-    // navigate hook
-    const navigate = useNavigate();
-    // url parameter
-    const queryParameters = new URLSearchParams(window.location.search)
-    const widget = queryParameters.get("w")
+    const [searchParams, setSearchParams] = useSearchParams();
+    const widget = searchParams.get("w") ?? "1";
+
+    useEffect(() => {
+        if (!validWidgets.has(widget)) {
+            setSearchParams({ w: "1" }, { replace: true });
+        }
+    }, [setSearchParams, widget]);
 
     // set nav function
-    const navClicked = (e: any) => {
-        navigate(`?w=${e}`)
+    const navClicked = (value: "1" | "2" | "3" | "4") => {
+        setSearchParams({ w: value });
     }
 
     // style variable
@@ -74,7 +79,7 @@ export default function BottomComponent() {
                 {/* nav button */}
                 <div className={navButtonDivStyle}>
                     {/* option 1 */}
-                    <button onClick={() => navClicked("1")} className={navButtonStyle}>
+                    <button type="button" onClick={() => navClicked("1")} className={navButtonStyle}>
                         <div className={widget === "1" || widget === null ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
                             <BiGrid className={widget === "1" ? iconStyleSelected : iconStyleUnSelected} size={30} />
@@ -82,7 +87,7 @@ export default function BottomComponent() {
                         </div>
                     </button>
                     {/* option 2 */}
-                    <button onClick={() => navClicked("2")} className={navButtonStyle}>
+                    <button type="button" onClick={() => navClicked("2")} className={navButtonStyle}>
                         <div className={widget === "2" ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
                             <BiObjectsVerticalBottom className={widget === "2" ? iconStyleSelected : iconStyleUnSelected} size={30} />
@@ -90,7 +95,7 @@ export default function BottomComponent() {
                         </div>
                     </button>
                     {/* option 3 */}
-                    <button onClick={() => navClicked("3")} className={navButtonStyle}>
+                    <button type="button" onClick={() => navClicked("3")} className={navButtonStyle}>
                         <div className={widget === "3" ? selected3Style : unSelected3Style} />
                         <div className={navIconDivStyle}>
                             <BiBookContent className={widget === "3" ? iconStyleSelected : iconStyleUnSelected} size={30} />
@@ -98,7 +103,7 @@ export default function BottomComponent() {
                         </div>
                     </button>
                     {/* option 4 */}
-                    <button onClick={() => navClicked("4")} className={navButtonStyle}>
+                    <button type="button" onClick={() => navClicked("4")} className={navButtonStyle}>
                         <div className={widget === "4" ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
                             <BiCalendarCheck className={widget === "4" ? iconStyleSelected : iconStyleUnSelected} size={30} />

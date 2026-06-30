@@ -1,5 +1,5 @@
 // others
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 // Mantine
 import { useDisclosure } from "@mantine/hooks";
 import { LoadingOverlay, Box } from "@mantine/core";
@@ -27,8 +27,6 @@ export default function ProjectModalComponent({
   }) {
   // translation
   const { t } = useContext(MapperContext)
-  // tech stack list
-  const [techStackList, setTechStackList] = useState('')
   // loading overlay hook
   const [visible] = useDisclosure(false);
   // theme
@@ -43,22 +41,11 @@ export default function ProjectModalComponent({
   } = getDetailStyles(isDarkTheme);
   const linkStyle = "block max-w-full break-all leading-[1.45] text-[#9A9A9A] dark:text-[#94A3B8] hover:underline";
   const linkPillStyle = durationPillLowerCaseStyle + ' w-full sm:w-fit max-w-full';
+  const techStackList = techStack.join(' / ');
 
-  // tech stack function
-  useEffect(() => {
-    var tempTechStackList = ''
-
-    for (let i = 0; i < techStack.length; i++) {
-      if (i === techStack.length - 1) {
-        tempTechStackList += techStack[i]
-      } else {
-        tempTechStackList += techStack[i] + ' / '
-      }
-    }
-
-    setTechStackList(tempTechStackList)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const getLinkLabel = (projectLink: string) => {
+    return projectLink.includes('github.com') ? t(translationKeys.sourceCode) : t(translationKeys.liveDemo);
+  };
 
   return (
     <Box pos="relative">
@@ -89,10 +76,12 @@ export default function ProjectModalComponent({
             <div className={detailLabelStyle}>{t(translationKeys.link)}</div>
             <div className='mt-1 flex flex-col items-stretch gap-2'>
               {
-                link.map((link: any, i: number) => {
+                link.map((projectLink: string, i: number) => {
                   return (
                     <span key={i} className={linkPillStyle}>
-                      <a href={link} target='_blank' rel='noreferrer' className={linkStyle}>{link}</a>
+                      <a href={projectLink} target='_blank' rel='noreferrer' className={linkStyle}>
+                        {getLinkLabel(projectLink)}: {projectLink}
+                      </a>
                     </span>
                   )
                 })

@@ -1,5 +1,5 @@
 // others
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, type PropsWithChildren } from "react";
 // data
 import companyJSON from '../data/companyData.json';
 import schoolJSON from '../data/schoolData.json';
@@ -31,57 +31,32 @@ export const MapperContext = createContext<MapperContextType>({
     t: (key) => translations.en[key],
 });
 
-export default function MapperContextProvider(props: any) {
-    // company data
-    const [companyData, setCompanyData] = useState<CompanyData[]>([]);
-    // school data
-    const [schoolData, setSchoolData] = useState<SchoolData[]>([]);
-    // project data
-    const [projectData, setProjectData] = useState<ProjectData[]>([]);
-    // skill data
-    const [skillData, setSkillData] = useState<SkillData[]>([]);
+const sortByDescendingId = <T extends { id: string | number }>(items: T[]) => {
+    return [...items].sort((a, b) => String(b.id).localeCompare(String(a.id), undefined, { numeric: true }));
+};
+
+const companyDataSource = sortByDescendingId(companyJSON as CompanyData[]);
+const schoolDataSource = sortByDescendingId(schoolJSON as SchoolData[]);
+const projectDataSource = sortByDescendingId(projectJSON as ProjectData[]);
+const skillDataSource = sortByDescendingId(SkillJSON as SkillData[]);
+
+const getInitialLanguage = (): LanguageType => {
+    const storedLanguage = localStorage.getItem(languageSetting.key) as LanguageType | null;
+
+    if (
+        storedLanguage === languageSetting.english ||
+        storedLanguage === languageSetting.traditionalChinese ||
+        storedLanguage === languageSetting.simplifiedChinese
+    ) {
+        return storedLanguage;
+    }
+
+    return languageSetting.english;
+};
+
+export default function MapperContextProvider({ children }: PropsWithChildren) {
     // language
-    const [language, setLanguage] = useState<LanguageType>(languageSetting.english);
-
-    // get company, school, project, and skill data from JSON
-    useEffect(() => {
-        const storedLanguage = localStorage.getItem(languageSetting.key) as LanguageType | null;
-
-        if (
-            storedLanguage === languageSetting.english ||
-            storedLanguage === languageSetting.traditionalChinese ||
-            storedLanguage === languageSetting.simplifiedChinese
-        ) {
-            setLanguage(storedLanguage);
-        } else {
-            setLanguage(languageSetting.english);
-        }
-
-        // load company data from JSON
-        setCompanyData(
-            companyJSON
-                .map((item: CompanyData) => ({ ...item, id: item.id }))
-                .sort((a, b) => String(b.id).localeCompare(String(a.id), undefined, { numeric: true }))
-        );
-        // load school data from JSON
-        setSchoolData(
-            schoolJSON
-                .map((item: SchoolData) => ({ ...item, id: item.id }))
-                .sort((a, b) => String(b.id).localeCompare(String(a.id), undefined, { numeric: true }))
-        );
-        // load project data from JSON
-        setProjectData(
-            projectJSON
-                .map((item: ProjectData) => ({ ...item, id: item.id }))
-                .sort((a, b) => String(b.id).localeCompare(String(a.id), undefined, { numeric: true }))
-        );
-        // load skill data from JSON
-        setSkillData(
-            SkillJSON
-                .map((item: SkillData) => ({ ...item, id: item.id }))
-                .sort((a, b) => String(b.id).localeCompare(String(a.id), undefined, { numeric: true }))
-        );
-    }, []);
+    const [language, setLanguage] = useState<LanguageType>(getInitialLanguage);
 
     useEffect(() => {
         localStorage.setItem(languageSetting.key, language);
@@ -94,15 +69,15 @@ export default function MapperContextProvider(props: any) {
     return (
         // pass the value in provider and return
         <MapperContext.Provider value={{
-            companyData,
-            schoolData,
-            projectData,
-            skillData,
+            companyData: companyDataSource,
+            schoolData: schoolDataSource,
+            projectData: projectDataSource,
+            skillData: skillDataSource,
             language,
             setLanguage,
             t,
         }}>
-            {props.children}
+            {children}
         </MapperContext.Provider>
     )
 }
