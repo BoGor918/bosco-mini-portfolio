@@ -320,6 +320,7 @@ export default function TopComponent() {
                         <IntroductionModalComponent />
                     </Modal> :
                     <Modal opened={opened} onClose={close} size="lg" title={modalTitle} centered
+                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
                         styles={{
                             header: {
                                 backgroundColor: "#0B1A33",
@@ -329,7 +330,7 @@ export default function TopComponent() {
                             },
                             title: {
                                 color: "#94A3B8",
-                            }
+                            },
                         }}
                     >
                         <IntroductionModalComponent />

@@ -105,6 +105,7 @@ export default function CompanyGrid() {
                         )}
                     </Modal> :
                     <Modal opened={opened} onClose={close} size="lg" centered
+                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
                         styles={{
                             header: {
                                 backgroundColor: "#0B1A33",

@@ -92,6 +92,7 @@ export default function SkillGrid() {
                         )}
                     </Modal> :
                     <Modal opened={opened} onClose={close} size="md" centered
+                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
                         styles={{
                             header: {
                                 backgroundColor: "#0B1A33",
