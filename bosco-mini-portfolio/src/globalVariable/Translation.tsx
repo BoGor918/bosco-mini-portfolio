@@ -15,7 +15,7 @@ const en = {
     introModalDescription: 'This Mini Portfolio Website is a dynamic and efficient web application built using a powerful stack consisting of Node, React, TypeScript, Tailwind CSS, and Mantine. This combination of cutting-edge technologies forms a solid foundation for showcasing my information in an effective way. With its responsive design, the website presents my work experience, education, projects, and skills visually engaging and user-friendly, ensuring visitors have an enjoyable and informative experience while exploring my portfolio.',
     aboutThisWebsite: 'About This Website',
     viewIntro: "View<br/>Intro",
-    boscoPortfolio: 'Bosco Portfolio',
+    boscoPortfolio: 'Bosco Mini Portfolio',
     englishLanguage: 'EN',
     tranditionalChineseLanguage: '繁',
     simplifiedChineseLanguage: '简',
