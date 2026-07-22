@@ -1,8 +1,11 @@
 // others
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 import './index.css';
 import ReactDOM from 'react-dom/client';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 // global components
 import MapperContextProvider from './globalVariable/MapperContextProvider';
 // page components
@@ -16,6 +19,7 @@ const root = ReactDOM.createRoot(
 // render
 root.render(
   <MantineProvider>
+    <Notifications />
     <MapperContextProvider>
       <App />
     </MapperContextProvider>

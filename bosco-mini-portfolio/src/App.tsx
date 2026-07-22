@@ -12,6 +12,16 @@ const Home = lazy(() => {
     resolve(import('./components/home/Home'));
   });
 });
+const Login = lazy(() => {
+  return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
+    resolve(import('./pages/Login'));
+  });
+});
+const Dashboard = lazy(() => {
+  return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
+    resolve(import('./pages/Dashboard'));
+  });
+});
 
 function AppContent() {
   const { t } = useContext(MapperContext);
@@ -29,6 +39,8 @@ function AppContent() {
     <Suspense fallback={<MainLoading />}>
       <Routes>
         <Route path="*" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Suspense>
   );

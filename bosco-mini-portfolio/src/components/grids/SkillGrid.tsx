@@ -14,6 +14,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { SkillData } from '../../types/type';
 // util
 import { gridStyles } from './util';
+import { normalizeImageSource } from '../dashboard/util';
 
 export default function SkillGrid() {
     // global variable
@@ -65,7 +66,7 @@ export default function SkillGrid() {
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                    src={skill.Logo}
+                                    src={normalizeImageSource(skill.Logo)}
                                     alt={skill.SkillName}
                                     onLoad={() => onLogoLoad(skill.id)}
                                     onError={() => onLogoError(skill.id)}

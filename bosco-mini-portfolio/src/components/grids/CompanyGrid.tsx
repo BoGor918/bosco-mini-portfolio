@@ -16,6 +16,7 @@ import { CompanyData } from '../../types/type';
 import { gridStyles } from './util';
 // global variable
 import { languageSetting } from '../../globalVariable/Translation';
+import { normalizeImageSource } from '../dashboard/util';
 
 export default function CompanyGrid() {
     // global variable
@@ -54,7 +55,7 @@ export default function CompanyGrid() {
             {/* company grids */}
             <div className={gridStyles.gridDivThreeColStyle}>
                 {companyData.map((company: CompanyData, i: number) => {
-                    const hasLogoUrl = Boolean(company.Logo?.URL);
+                    const hasLogoUrl = Boolean(company.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(company.id);
                     const isLogoLoaded = loadedLogoIds.has(company.id);
                     return (
@@ -68,7 +69,7 @@ export default function CompanyGrid() {
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                    src={company.Logo.URL}
+                                    src={normalizeImageSource(company.Logo)}
                                     alt={language === languageSetting.english ? company.en.CompanyName : language === languageSetting.traditionalChinese ? company.zh.CompanyName : company.cn.CompanyName}
                                     onLoad={() => onLogoLoad(company.id)}
                                     onError={() => onLogoError(company.id)}
@@ -99,7 +100,7 @@ export default function CompanyGrid() {
                                 startDate={selectedCompany.StartDate}
                                 endDate={selectedCompany.EndDate}
                                 present={selectedCompany.Present}
-                                logo={selectedCompany.Logo.URL}
+                                logo={normalizeImageSource(selectedCompany.Logo)}
                                 createDate={selectedCompany.CreateDate}
                             />
                         )}
@@ -127,7 +128,7 @@ export default function CompanyGrid() {
                                 startDate={selectedCompany.StartDate}
                                 endDate={selectedCompany.EndDate}
                                 present={selectedCompany.Present}
-                                logo={selectedCompany.Logo.URL}
+                                logo={normalizeImageSource(selectedCompany.Logo)}
                                 createDate={selectedCompany.CreateDate}
                             />
                         )}

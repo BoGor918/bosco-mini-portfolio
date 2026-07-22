@@ -25,7 +25,7 @@ export default function CompanyModalComponent({
   endDate,
   present,
   logo }: {
-    docID: number;
+    docID: string;
     companyName: string;
     team: string;
     position: string;

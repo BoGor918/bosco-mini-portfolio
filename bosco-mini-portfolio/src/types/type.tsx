@@ -13,11 +13,8 @@ export type CompanyData = {
         nanoseconds: number
     },
     Present: boolean,
-    Logo: {
-        URL: string,
-        FileName: string
-    },
-    id: number,
+    Logo: string,
+    id: string,
     en: {
         CompanyName: string,
         Team: string,
@@ -107,5 +104,11 @@ export type SkillData = {
         nanoseconds: number
     },
     SkillName: string,
-    id: number
+    id: string | number
+}
+
+export type UserProfile = {
+    Email?: string,
+    Username?: string,
+    UID?: string,
 }
