@@ -1,3 +1,4 @@
+// normalize image source to be used in <img> tag
 export const normalizeImageSource = (logoSource: string) => {
     const source = logoSource.trim();
 
@@ -26,6 +27,7 @@ export const normalizeImageSource = (logoSource: string) => {
     return `data:image/png;base64,${source}`;
 };
 
+// convert base64 string to File object
 export const convertFileToBase64 = (file: File) =>
     new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -51,6 +53,7 @@ export const convertFileToBase64 = (file: File) =>
         reader.readAsDataURL(file);
     });
 
+// generate unique ID based on data name and current date/time
 export const generateId = (dataName: string) => {
     const today = new Date();
     const id = `${dataName.replace(/\s+/g, '-')}-${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}-${today.getHours()}-${today.getMinutes()}-${today.getSeconds()}`;
@@ -58,6 +61,7 @@ export const generateId = (dataName: string) => {
     return id;
 };
 
+// to date or null
 export const toDateOrNull = (value: Date | string | null): Date | null => {
     if (value instanceof Date) {
         return value;

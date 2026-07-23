@@ -13,22 +13,22 @@ import { translationKeys } from '../../../globalVariable/Translation';
 // lazy load component
 const CompanyGrid = lazy(() => {
     return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-        resolve(import('../../grids/CompanyGrid'));
+        resolve(import('../grids/CompanyGrid'));
     });
 });
 const EduGrid = lazy(() => {
     return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-        resolve(import('../../grids/EduGrid'));
+        resolve(import('../grids/EduGrid'));
     });
 })
 const ProjectGrid = lazy(() => {
     return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-        resolve(import('../../grids/ProjectGrid'));
+        resolve(import('../grids/ProjectGrid'));
     });
 })
 const SkillGrid = lazy(() => {
     return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-        resolve(import('../../grids/SkillGrid'));
+        resolve(import('../grids/SkillGrid'));
     });
 })
 

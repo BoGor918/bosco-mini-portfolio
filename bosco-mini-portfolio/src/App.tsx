@@ -1,7 +1,7 @@
 
 // others
 import { lazy, Suspense, useContext, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 // page components
 import MainLoading from "./components/loading/MainLoading";
 import { MapperContext } from "./globalVariable/MapperContextProvider";
@@ -24,7 +24,7 @@ const Dashboard = lazy(() => {
 });
 
 function AppContent() {
-  const { t } = useContext(MapperContext);
+  const { t, user } = useContext(MapperContext);
 
   useEffect(() => {
     document.title = t(translationKeys.boscoPortfolio);
@@ -39,8 +39,8 @@ function AppContent() {
     <Suspense fallback={<MainLoading />}>
       <Routes>
         <Route path="*" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" replace />} />
       </Routes>
     </Suspense>
   );

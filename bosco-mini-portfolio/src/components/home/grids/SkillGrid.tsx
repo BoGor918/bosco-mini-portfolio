@@ -2,19 +2,19 @@
 import { useState, useContext } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 // global variable
-import { MapperContext } from '../../globalVariable/MapperContextProvider';
-import { colorTheme } from '../../globalVariable/GlobalVariable';
+import { MapperContext } from '../../../globalVariable/MapperContextProvider';
+import { colorTheme } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import SkillModalComponent from '../home/modals/SkillModalComponent';
+import SkillModalComponent from '../modals/SkillModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
-import { SkillData } from '../../types/type';
+import { SkillData } from '../../../types/type';
 // util
 import { gridStyles } from './util';
-import { normalizeImageSource } from '../util';
+import { normalizeImageSource } from '../../util';
 
 export default function SkillGrid() {
     // global variable
@@ -88,7 +88,7 @@ export default function SkillGrid() {
                         {selectedSkill && (
                             <SkillModalComponent
                                 skillName={selectedSkill.SkillName}
-                                logo={selectedSkill.Logo}
+                                logo={normalizeImageSource(selectedSkill.Logo)}
                             />
                         )}
                     </Modal> :
@@ -106,7 +106,7 @@ export default function SkillGrid() {
                         {selectedSkill && (
                             <SkillModalComponent
                                 skillName={selectedSkill.SkillName}
-                                logo={selectedSkill.Logo}
+                                logo={normalizeImageSource(selectedSkill.Logo)}
                             />
                         )}
                     </Modal>

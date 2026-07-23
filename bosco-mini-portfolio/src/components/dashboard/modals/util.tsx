@@ -4,15 +4,20 @@ import type { ReactNode } from 'react';
 // mantine
 import { Button, Checkbox, FileInput, Group, Tabs, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
+import { translationKeys } from '../../../globalVariable/Translation';
 
+// notification
 export const SuccessNotificationType = "success";
 export const ErrorNotificationType = "error";
 
+// dashboard modal type
 export type DashboardModalType = {
     closeModal: () => void;
     onSavingChange?: (isSaving: boolean) => void;
+    onDirtyChange?: (isDirty: boolean) => void;
 };
 
+// dashboard submit button type
 type DashboardSubmitButtonProps = {
     isSaving: boolean;
     showLoading?: boolean;
@@ -20,8 +25,10 @@ type DashboardSubmitButtonProps = {
     savingText?: string;
 };
 
+// dashboard locale text tabs type
 type DashboardLocaleTextTabsProps = {
     tabsStyles: any;
+    t: (key: keyof typeof translationKeys) => string;
     fieldKeys: string[];
     inputStyles: any;
     disabled: boolean;
@@ -29,6 +36,7 @@ type DashboardLocaleTextTabsProps = {
     getFieldLabel: (fieldKey: string, locale: Locale) => string;
 };
 
+// dashboard image file input type
 type DashboardImageFileInputProps = {
     inputStyles: any;
     disabled: boolean;
@@ -39,8 +47,20 @@ type DashboardImageFileInputProps = {
     placeholder?: string;
 };
 
+// dashboard existing image preview type
+type DashboardExistingImagePreviewProps = {
+    imageSource: string | File;
+    alt: string;
+    label?: string;
+    isDarkTheme: boolean;
+    className?: string;
+    imageClassName?: string;
+};
+
+// dashboard present checkbox type
 type DashboardPresentCheckboxProps = {
     inputStyles: any;
+    isDarkTheme: boolean;
     disabled: boolean;
     inputProps: any;
     componentKey?: string;
@@ -48,6 +68,7 @@ type DashboardPresentCheckboxProps = {
     label?: string;
 };
 
+// dashboard date range fields type
 type DashboardDateRangeFieldsProps = {
     inputStyles: any;
     isSaving: boolean;
@@ -64,17 +85,18 @@ type DashboardDateRangeFieldsProps = {
     endDateLabel?: string;
 };
 
+// locale type and tab values
 export type Locale = 'en' | 'zh' | 'cn';
-
-export const localeTabs: Array<{ value: Locale; label: string }> = [
-    { value: 'en', label: 'English' },
-    { value: 'zh', label: 'Traditional Chinese' },
-    { value: 'cn', label: 'Simplified Chinese' },
+export const getLocaleTabs = (t: (key: keyof typeof translationKeys) => string): Array<{ value: Locale; label: string }> => [
+    { value: 'en', label: t(translationKeys.english) },
+    { value: 'zh', label: t(translationKeys.tranditionalChinese) },
+    { value: 'cn', label: t(translationKeys.simplifiedChinese) },
 ];
 
+// dashboard input styles and tabs styles
 export const getDashboardInputStyles = (isDarkTheme: boolean) => ({
     label: {
-        color: isDarkTheme ? '#FFFFFF' : '#334155',
+        color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
         fontWeight: 600,
         fontSize: '14px',
     },
@@ -86,12 +108,14 @@ export const getDashboardInputStyles = (isDarkTheme: boolean) => ({
     },
 });
 
+// dashboard tabs styles
 export const getDashboardTabsStyles = (isDarkTheme: boolean) => ({
     tab: {
-        color: isDarkTheme ? '#FFFFFF' : '#334155',
+        color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
     },
 });
 
+// dashboard saving effect hook
 export const useDashboardSavingEffect = (
     isSaving: boolean,
     onSavingChange?: (isSaving: boolean) => void,
@@ -101,6 +125,7 @@ export const useDashboardSavingEffect = (
     }, [isSaving, onSavingChange]);
 };
 
+// dashboard submit button
 export function DashboardSubmitButton({
     isSaving,
     showLoading = false,
@@ -116,24 +141,27 @@ export function DashboardSubmitButton({
     );
 }
 
+// dashboard locale text tabs
 export function DashboardLocaleTextTabs({
     tabsStyles,
+    t,
     fieldKeys,
     inputStyles,
     disabled,
     getInputProps,
     getFieldLabel,
 }: DashboardLocaleTextTabsProps) {
+    const localeTabs = getLocaleTabs(t);
+
     return (
         <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>
             <Tabs.List>
                 {localeTabs.map(({ value, label }) => (
                     <Tabs.Tab key={value} value={value}>
-                        {label}
+                        <span className="text-[14px] font-bold">{label}</span>
                     </Tabs.Tab>
                 ))}
             </Tabs.List>
-
             {localeTabs.map(({ value: locale }) => (
                 <Tabs.Panel key={locale} value={locale}>
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2 mt-2">
@@ -160,6 +188,7 @@ export function DashboardLocaleTextTabs({
     );
 }
 
+// dashboard image file input
 export function DashboardImageFileInput({
     inputStyles,
     disabled,
@@ -169,21 +198,47 @@ export function DashboardImageFileInput({
     label = 'Upload file',
 }: DashboardImageFileInputProps) {
     return (
-        <FileInput
-            withAsterisk
-            accept="image/png,image/jpeg"
-            label={label}
-            styles={inputStyles}
-            key={componentKey}
-            className={className}
-            disabled={disabled}
-            {...inputProps}
-        />
+        <div>
+            <FileInput
+                withAsterisk
+                accept="image/png,image/jpeg"
+                label={label}
+                styles={inputStyles}
+                key={componentKey}
+                className={className}
+                disabled={disabled}
+                {...inputProps}
+            />
+        </div>
     );
 }
 
+// dashboard existing image preview
+export function DashboardExistingImagePreview({
+    imageSource,
+    alt,
+    label = 'Image',
+    isDarkTheme,
+    className = 'mt-2',
+    imageClassName = 'max-w-full max-h-48 object-contain',
+}: DashboardExistingImagePreviewProps) {
+    return (
+        <div className={className}>
+            <span className={`text-[14px] font-bold ${isDarkTheme ? 'text-[#FFFFFF]' : 'text-[#0B1A33]'}`}>
+                {label}
+            </span>
+            <img
+                src={typeof imageSource === 'string' ? imageSource : URL.createObjectURL(imageSource)}
+                alt={alt}
+                className={imageClassName}
+            />
+        </div>
+    );
+}
+// dashboard present checkbox
 export function DashboardPresentCheckbox({
     inputStyles,
+    isDarkTheme,
     disabled,
     inputProps,
     componentKey,
@@ -194,7 +249,12 @@ export function DashboardPresentCheckbox({
         <Checkbox
             label={label}
             className={className}
-            styles={inputStyles}
+            styles={{
+                ...inputStyles,
+                icon: {
+                    color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
+                },
+            }}
             key={componentKey}
             disabled={disabled}
             {...inputProps}
@@ -202,6 +262,7 @@ export function DashboardPresentCheckbox({
     );
 }
 
+// dashboard date range fields
 export function DashboardDateRangeFields({
     inputStyles,
     isSaving,
@@ -247,3 +308,14 @@ export function DashboardDateRangeFields({
         </div>
     );
 }
+
+// to convert timestamp to date
+export const toDateFromTimestamp = (
+    timestamp?: { seconds: number; nanoseconds: number } | null,
+): Date | null => {
+    if (!timestamp) {
+        return null;
+    }
+
+    return new Date(timestamp.seconds * 1000);
+};

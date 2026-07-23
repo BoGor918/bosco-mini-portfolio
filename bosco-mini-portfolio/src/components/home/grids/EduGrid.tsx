@@ -2,23 +2,23 @@
 import { useState, useContext } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 // global variable
-import { MapperContext } from '../../globalVariable/MapperContextProvider';
-import { colorTheme } from '../../globalVariable/GlobalVariable';
+import { MapperContext } from '../../../globalVariable/MapperContextProvider';
+import { colorTheme } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import EducationModalComponent from '../home/modals/EducationModalComponent';
+import EducationModalComponent from '../modals/EducationModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
-import { SchoolData } from '../../types/type';
+import { SchoolData } from '../../../types/type';
 // util
 import { gridStyles } from './util';
+import { normalizeImageSource } from '../../util';
 // global variable
-import { languageSetting } from '../../globalVariable/Translation';
-import { normalizeImageSource } from '../util';
+import { languageSetting } from '../../../globalVariable/Translation';
 
-export default function CompanyGrid() {
+export default function EduGrid() {
     // global variable
     const {
         language,
@@ -69,7 +69,7 @@ export default function CompanyGrid() {
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                    logo={normalizeImageSource(school.Logo)}
+                                    src={normalizeImageSource(school.Logo)}
                                     alt={language === languageSetting.english ? school.en.SchoolName : language === languageSetting.traditionalChinese ? school.zh.SchoolName : school.cn.SchoolName}
                                     onLoad={() => onLogoLoad(school.id)}
                                     onError={() => onLogoError(school.id)}

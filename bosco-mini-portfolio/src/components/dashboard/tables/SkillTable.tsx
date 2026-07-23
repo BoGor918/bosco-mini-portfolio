@@ -6,37 +6,31 @@ import { Table } from '@mantine/core';
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
+import { SkillData } from '../../../types/type';
 // icon
 import { MdEdit } from "react-icons/md";
+// util
 import { normalizeImageSource } from '../../util';
+import { getDashboardTableStyles } from './util';
 
-// date helper function
-const toDisplayDate = (seconds: number) => {
-    return new Date(seconds * 1000).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
+type SkillTableProps = {
+    onEditSkill?: (skill: SkillData) => void;
 };
 
-export default function SkillTable() {
+export default function SkillTable({ onEditSkill }: SkillTableProps) {
     // context
     const { t, skillData, theme } = useContext(MapperContext);
-    // theme
-    const isDarkTheme = theme === colorTheme.dark;
-
     // style list
-    const tableWrapperStyle = `w-full max-w-7xl rounded-xl border shadow-sm ${isDarkTheme
-        ? 'border-[#21D4F7]/25 bg-[#102340]'
-        : 'border-[#0B1A33]/15 bg-white'
-        }`;
-    const tableScrollStyle = 'max-h-[30rem] overflow-auto';
-    const headCellStyle = `text-[13px] font-semibold uppercase tracking-[0.12em] ${isDarkTheme
-        ? 'text-[#A5D8FF]'
-        : 'text-[#334155]'
-        } ${isDarkTheme ? 'bg-[#102340]' : 'bg-[#F8FAFC]'}`;
-    const bodyCellStyle = `text-[14px] ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`;
-    const rowStyle = isDarkTheme ? 'hover:bg-[#1B365D]' : 'hover:bg-[#F8FAFC]';
+    const {
+        tableMainStyle,
+        tableScrollStyle,
+        tableWrapperStyle,
+        headCellStyle,
+        bodyCellStyle,
+        editIconStyle,
+        rowStyle,
+        rowImageStyle,
+    } = getDashboardTableStyles(theme === colorTheme.dark);
 
     const rows = skillData.map((skill) => (
         <Table.Tr key={skill.id} className={rowStyle}>
@@ -44,14 +38,15 @@ export default function SkillTable() {
                 <img
                     src={normalizeImageSource(skill.Logo)}
                     alt={skill.SkillName}
-                    className="h-10 w-10 rounded-md object-contain"
+                    className={rowImageStyle}
                 />
             </Table.Td>
             <Table.Td className={bodyCellStyle}>{skill.SkillName}</Table.Td>
-            <Table.Td className={bodyCellStyle}>{toDisplayDate(skill.CreateDate.seconds)}</Table.Td>
-            <Table.Td className={bodyCellStyle}>{String(skill.id)}</Table.Td>
             <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>
-                <MdEdit className="cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]" />
+                <MdEdit
+                    className={editIconStyle}
+                    onClick={() => onEditSkill?.(skill)}
+                />
             </Table.Td>
         </Table.Tr>
     ));
@@ -59,13 +54,11 @@ export default function SkillTable() {
     return (
         <div className={tableWrapperStyle}>
             <div className={tableScrollStyle}>
-                <Table horizontalSpacing="lg" verticalSpacing="lg" stickyHeader stickyHeaderOffset={0} className="min-w-[980px]">
+                <Table horizontalSpacing="lg" verticalSpacing="lg" stickyHeader stickyHeaderOffset={0} className={tableMainStyle}>
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th className={headCellStyle}>{t(translationKeys.logo)}</Table.Th>
                             <Table.Th className={headCellStyle}>{t(translationKeys.skill)}</Table.Th>
-                            <Table.Th className={headCellStyle}>{t(translationKeys.period)}</Table.Th>
-                            <Table.Th className={headCellStyle}>{t(translationKeys.id)}</Table.Th>
                             <Table.Th className={headCellStyle}></Table.Th>
                         </Table.Tr>
                     </Table.Thead>

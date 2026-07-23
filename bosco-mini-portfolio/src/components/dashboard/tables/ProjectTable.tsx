@@ -6,28 +6,31 @@ import { Table } from '@mantine/core';
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
+import { ProjectData } from '../../../types/type';
 // icon
 import { MdEdit } from 'react-icons/md';
+// util
 import { normalizeImageSource } from '../../util';
+import { getDashboardTableStyles } from './util';
 
-export default function ProjectTable() {
+type ProjectTableProps = {
+    onEditProject?: (project: ProjectData) => void;
+};
+
+export default function ProjectTable({ onEditProject }: ProjectTableProps) {
     // context
     const { t, projectData, language, theme } = useContext(MapperContext);
-    // theme
-    const isDarkTheme = theme === colorTheme.dark;
-
     // style list
-    const tableWrapperStyle = `w-full max-w-7xl rounded-xl border shadow-sm ${isDarkTheme
-        ? 'border-[#21D4F7]/25 bg-[#102340]'
-        : 'border-[#0B1A33]/15 bg-white'
-        }`;
-    const tableScrollStyle = 'max-h-[30rem] overflow-auto';
-    const headCellStyle = `text-[13px] font-semibold uppercase tracking-[0.12em] ${isDarkTheme
-        ? 'text-[#A5D8FF]'
-        : 'text-[#334155]'
-        } ${isDarkTheme ? 'bg-[#102340]' : 'bg-[#F8FAFC]'}`;
-    const bodyCellStyle = `text-[14px] ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`;
-    const rowStyle = isDarkTheme ? 'hover:bg-[#1B365D]' : 'hover:bg-[#F8FAFC]';
+    const {
+        tableMainStyle,
+        tableScrollStyle,
+        tableWrapperStyle,
+        headCellStyle,
+        bodyCellStyle,
+        editIconStyle,
+        rowStyle,
+        rowImageStyle,
+    } = getDashboardTableStyles(theme === colorTheme.dark);
 
     const rows = projectData.map((project) => {
         const description =
@@ -43,15 +46,16 @@ export default function ProjectTable() {
                     <img
                         src={normalizeImageSource(project.Logo)}
                         alt={project.ProjectName}
-                        className="h-10 w-10 rounded-md object-contain"
+                        className={rowImageStyle}
                     />
                 </Table.Td>
                 <Table.Td className={bodyCellStyle}>{project.ProjectName}</Table.Td>
                 <Table.Td className={`${bodyCellStyle} whitespace-normal break-words max-w-[18rem]`}>{description}</Table.Td>
-                <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>{project.TechStack.join(', ')}</Table.Td>
-                <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>{project.Link.join(', ')}</Table.Td>
                 <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>
-                    <MdEdit className="cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]" />
+                    <MdEdit
+                        className={editIconStyle}
+                        onClick={() => onEditProject?.(project)}
+                    />
                 </Table.Td>
             </Table.Tr>
         );
@@ -60,14 +64,12 @@ export default function ProjectTable() {
     return (
         <div className={tableWrapperStyle}>
             <div className={tableScrollStyle}>
-                <Table horizontalSpacing="lg" verticalSpacing="lg" stickyHeader stickyHeaderOffset={0} className="min-w-[980px]">
+                <Table horizontalSpacing="lg" verticalSpacing="lg" stickyHeader stickyHeaderOffset={0} className={tableMainStyle}>
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th className={headCellStyle}>{t(translationKeys.logo)}</Table.Th>
                             <Table.Th className={headCellStyle}>{t(translationKeys.projectName)}</Table.Th>
                             <Table.Th className={headCellStyle}>{t(translationKeys.description)}</Table.Th>
-                            <Table.Th className={headCellStyle}>{t(translationKeys.techStack)}</Table.Th>
-                            <Table.Th className={headCellStyle}>{t(translationKeys.link)}</Table.Th>
                             <Table.Th className={headCellStyle}></Table.Th>
                         </Table.Tr>
                     </Table.Thead>

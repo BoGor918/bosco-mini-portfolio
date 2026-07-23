@@ -2,20 +2,21 @@
 import { useState, useContext } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 // global variable
-import { MapperContext } from '../../globalVariable/MapperContextProvider';
-import { colorTheme } from '../../globalVariable/GlobalVariable';
+import { MapperContext } from '../../../globalVariable/MapperContextProvider';
+import { colorTheme } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import ProjectModalComponent from '../home/modals/ProjectModalComponent';
+import ProjectModalComponent from '../modals/ProjectModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // type
-import { ProjectData } from '../../types/type';
+import { ProjectData } from '../../../types/type';
 // util
 import { gridStyles } from './util';
+import { normalizeImageSource } from '../../util';
 // global variable
-import { languageSetting } from '../../globalVariable/Translation';
+import { languageSetting } from '../../../globalVariable/Translation';
 
 export default function CompanyGrid() {
     // global variable
@@ -68,7 +69,7 @@ export default function CompanyGrid() {
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                    src={project.Logo}
+                                    src={normalizeImageSource(project.Logo)}
                                     alt={project.ProjectName}
                                     onLoad={() => onLogoLoad(project.id)}
                                     onError={() => onLogoError(project.id)}
@@ -93,7 +94,7 @@ export default function CompanyGrid() {
                                 description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
                                 techStack={selectedProject.TechStack}
                                 link={selectedProject.Link}
-                                logo={selectedProject.Logo}
+                                logo={normalizeImageSource(selectedProject.Logo)}
                             />
                         )}
                     </Modal> :
@@ -114,7 +115,7 @@ export default function CompanyGrid() {
                                 description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
                                 techStack={selectedProject.TechStack}
                                 link={selectedProject.Link}
-                                logo={selectedProject.Logo}
+                                logo={normalizeImageSource(selectedProject.Logo)}
                             />
                         )}
                     </Modal>

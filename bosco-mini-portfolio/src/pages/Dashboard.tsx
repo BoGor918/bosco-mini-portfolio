@@ -1,102 +1,386 @@
-import React, { useContext, useEffect, useState } from 'react'
+// react
+import { useContext, useEffect, useMemo, useState } from 'react'
+// route
+import { useNavigate, useSearchParams } from 'react-router-dom';
+// mantine
+import { Button, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+// components
 import CompanyTable from '../components/dashboard/tables/CompanyTable';
 import SkillTable from '../components/dashboard/tables/SkillTable';
 import SchoolTable from '../components/dashboard/tables/SchoolTable';
 import ProjectTable from '../components/dashboard/tables/ProjectTable';
+import DashboardCompanyModalComponent from '../components/dashboard/modals/DashboardCompanyModalComponent';
+import DashboardSkillModalComponent from '../components/dashboard/modals/DashboardSkillModalComponent';
+import DashboardSchoolModalComponent from '../components/dashboard/modals/DashboardSchoolModalComponent';
+import DashboardProjectModalComponent from '../components/dashboard/modals/DashboardProjectModalComponent';
+// icon
 import { IoMdAddCircle } from "react-icons/io";
+import { BiMoon, BiSolidMoon } from 'react-icons/bi';
+// global variable
 import { MapperContext } from '../globalVariable/MapperContextProvider';
 import { colorTheme } from '../globalVariable/GlobalVariable';
-import { Modal } from '@mantine/core';
-import { useSearchParams } from 'react-router-dom';
-import AddCompanyModalContent from '../components/dashboard/modals/company/AddCompanyModalComponent';
-import AddSkillModalContent from '../components/dashboard/modals/skill/AddSkillModalComponent';
-import AddSchoolModalContent from '../components/dashboard/modals/school/AddSchoolModalComponent';
-import AddProjectModalContent from '../components/dashboard/modals/project/AddProjectModalComponent';
+import { languageSetting, translationKeys } from '../globalVariable/Translation';
+import { showNotification } from '../globalVariable/Notification';
+// type
+import { CompanyData, ProjectData, SchoolData, SkillData } from '../types/type';
+// util
+import { ErrorNotificationType, SuccessNotificationType } from '../components/dashboard/modals/util';
+// firebase
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
 
+// valid widgets for dashboard
 const validWidgets = new Set(["c", "e", "p", "s"]);
+
+// modal mode
+export type modalCreateModeType = "create";
+export type modalEditModeType = "edit";
+export const modalCreateMode = 'create';
+export const modalEditMode = 'edit';
 
 export default function Dashboard() {
     // context
-    const { theme } = useContext(MapperContext);
-    // theme
-    const isDarkTheme = theme === colorTheme.dark;
-    // modal hook
+    const { t, language, setLanguage, theme, setTheme } = useContext(MapperContext);
+    // hook
     const [opened, { open, close }] = useDisclosure(false);
     const [isModalSaving, setIsModalSaving] = useState(false);
+    const [isModalDirty, setIsModalDirty] = useState(false);
+    const [confirmCloseOpened, setConfirmCloseOpened] = useState(false);
+    const [companyModalMode, setCompanyModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
+    const [skillModalMode, setSkillModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
+    const [projectModalMode, setProjectModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
+    const [schoolModalMode, setSchoolModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
+    const [editingCompany, setEditingCompany] = useState<CompanyData | null>(null);
+    const [editingSkill, setEditingSkill] = useState<SkillData | null>(null);
+    const [editingProject, setEditingProject] = useState<ProjectData | null>(null);
+    const [editingSchool, setEditingSchool] = useState<SchoolData | null>(null);
+    const [signOutLoading, setSignOutLoading] = useState(false);
     // url param
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const widget = searchParams.get("d") ?? "1";
+    const widget = searchParams.get("d") ?? "c";
+    // dashboard navigation items
+    const dashboardNavItems = useMemo(() => [
+        { key: 'c', label: t(translationKeys.companys) },
+        { key: 'e', label: t(translationKeys.educations) },
+        { key: 'p', label: t(translationKeys.projects) },
+        { key: 's', label: t(translationKeys.skills) },
+    ], [t]);
     // modal title
-    const modalTitle = widget === "c" ? "Add Company" : widget === "s" ? "Add Skill" : widget === "p" ? "Add Project" : "Add Education";
+    const modalTitle = widget === dashboardNavItems[0].key
+        ? companyModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.company)}` : `${t(translationKeys.add)}${t(translationKeys.company)}`
+        : widget === dashboardNavItems[3].key
+            ? skillModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.skill)}` : `${t(translationKeys.add)}${t(translationKeys.skill)}`
+            : widget === dashboardNavItems[2].key
+                ? projectModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.project)}` : `${t(translationKeys.add)}${t(translationKeys.project)}`
+                : schoolModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.education)}` : `${t(translationKeys.add)}${t(translationKeys.education)}`;
     // dashboard title
-    const dashboardTitle = widget === "c" ? "Company(s)" : widget === "s" ? "Skill(s)" : widget === "p" ? "Project(s)" : "Education(s)";
+    const dashboardTitle = widget === "c" ? `${t(translationKeys.companys)}` : widget === "s" ? `${t(translationKeys.skills)}` : widget === "p" ? `${t(translationKeys.projects)}` : `${t(translationKeys.educations)}`;
+    // modal handle
+    const isEditModalOpen =
+        (widget === 'c' && companyModalMode === modalEditMode) ||
+        (widget === 's' && skillModalMode === modalEditMode) ||
+        (widget === 'p' && projectModalMode === modalEditMode) ||
+        (widget === 'e' && schoolModalMode === modalEditMode);
+    const shouldBlockCloseForUnsavedChanges = isEditModalOpen && isModalDirty;
+    const addEditModalStyles = theme === colorTheme.dark
+        ? {
+            header: {
+                backgroundColor: "#0B1A33",
+            },
+            content: {
+                backgroundColor: "#0B1A33",
+            },
+            title: {
+                color: "#94A3B8",
+            },
+        }
+        : undefined;
 
+    // style list
+    const dashboardContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen px-4`;
+    const languageSwitchAndThemeContainerStyle = `w-full mb-3 flex flex-wrap items-center gap-2`;
+    const languageSwitchContainerStyle = `flex items-center gap-2`;
+    const languageSwitchButtonStyle = (isActive: boolean) =>
+        `px-2 py-1 border rounded-md text-[11px] font-semibold transition ` + (theme === colorTheme.dark
+            ? isActive
+                ? `border-[#21D4F7] bg-[#21D4F7] text-[#0B1A33]`
+                : `border-white/45 text-white hover:bg-white/10`
+            : isActive
+                ? `border-[#0B1A33] bg-[#0B1A33] text-white`
+                : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
+    const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme !== colorTheme.dark ? ` border-[#0B1A33] hover:bg-[#0B1A33]/10` : ` border-[#FFFFFF] hover:bg-[#FFFFFF]/10`);
+    const biMoonIconStyle = `text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
+    const biSolidMoonIconStyle = `text-[#FFFFFF] text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
+    const navContainerStyle = `w-full mb-3 flex flex-wrap gap-2`;
+    const navButtonStyle = (isActive: boolean) =>
+        `px-2 py-1 border rounded-md text-[14px] font-semibold transition ` + (theme === colorTheme.dark
+            ? isActive
+                ? `border-[#21D4F7] bg-[#21D4F7] text-[#0B1A33]`
+                : `border-white/45 text-white hover:bg-white/10`
+            : isActive
+                ? `border-[#0B1A33] bg-[#0B1A33] text-white`
+                : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
+    const titleAndAddButtonContainerStyle = `flex justify-between items-center w-full mb-2`;
+    const titleStyle = `font-bold text-xl mr-auto ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
+    const addIconStyle = `cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${theme === colorTheme.dark ? 'text-white hover:text-white/70' : 'text-[#0B1A33] hover:text-[#0B1A33]/70'}`;
+    const unsavedChangesDescriptionStyle = `text-sm ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
+    const unsavedChangesButtonContainerStyle = `mt-4 flex justify-end gap-2`;
+    const keepEditingButtonStyle = `px-3 py-2 rounded border`;
+    const discardButtonStyle = `px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white`;
+    const footerActionsContainerStyle = 'w-full pt-3 mt-2 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
+    const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red-600 hover:bg-red-700 text-white mr-2`;
+    const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition`;
+
+    // effect to handle invalid widget in url param
     useEffect(() => {
         if (!validWidgets.has(widget)) {
-            setSearchParams({ d: "c" }, { replace: true });
+            setSearchParams({ d: dashboardNavItems[0].key }, { replace: true });
         }
-    }, [setSearchParams, widget]);
+    }, [setSearchParams, widget, dashboardNavItems]);
 
+    // handle modal open and close
     const handleOpenModal = () => {
+        setCompanyModalMode(modalCreateMode);
+        setSkillModalMode(modalCreateMode);
+        setProjectModalMode(modalCreateMode);
+        setSchoolModalMode(modalCreateMode);
+        setEditingCompany(null);
+        setEditingSkill(null);
+        setEditingProject(null);
+        setEditingSchool(null);
         setIsModalSaving(false);
+        setIsModalDirty(false);
+        setConfirmCloseOpened(false);
         open();
     };
 
+    // handle edit functions for each widget
+    const handleEditCompany = (company: CompanyData) => {
+        setCompanyModalMode(modalEditMode);
+        setEditingCompany(company);
+        setIsModalSaving(false);
+        setIsModalDirty(false);
+        setConfirmCloseOpened(false);
+        open();
+    };
+    const handleEditSchool = (school: SchoolData) => {
+        setSchoolModalMode(modalEditMode);
+        setEditingSchool(school);
+        setIsModalSaving(false);
+        setIsModalDirty(false);
+        setConfirmCloseOpened(false);
+        open();
+    };
+    const handleEditProject = (project: ProjectData) => {
+        setProjectModalMode(modalEditMode);
+        setEditingProject(project);
+        setIsModalSaving(false);
+        setIsModalDirty(false);
+        setConfirmCloseOpened(false);
+        open();
+    };
+    const handleEditSkill = (skill: SkillData) => {
+        setSkillModalMode(modalEditMode);
+        setEditingSkill(skill);
+        setIsModalSaving(false);
+        setIsModalDirty(false);
+        setConfirmCloseOpened(false);
+        open();
+    };
+
+    // handle modal close and reset modal state
+    const closeAndResetModalState = () => {
+        setIsModalSaving(false);
+        setIsModalDirty(false);
+        setConfirmCloseOpened(false);
+        close();
+        setCompanyModalMode(modalCreateMode);
+        setSkillModalMode(modalCreateMode);
+        setProjectModalMode(modalCreateMode);
+        setSchoolModalMode(modalCreateMode);
+        setEditingCompany(null);
+        setEditingSkill(null);
+        setEditingProject(null);
+        setEditingSchool(null);
+    };
+
+    // handle modal close with unsaved changes check
     const handleCloseModal = () => {
         if (isModalSaving) {
             return;
         }
 
-        setIsModalSaving(false);
-        close();
+        if (shouldBlockCloseForUnsavedChanges) {
+            setConfirmCloseOpened(true);
+            return;
+        }
+
+        closeAndResetModalState();
     };
 
-    // style list
-    const dashboardContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen px-4`;
+    // handle discard unsaved changes
+    const handleDiscardUnsavedChanges = () => {
+        closeAndResetModalState();
+    };
+
+    // handle navigate to different widget
+    const handleNavigateWidget = (nextWidget: string) => {
+        setSearchParams({ d: nextWidget });
+    };
+
+    // handle theme switch
+    const handleThemeSwitch = () => {
+        setTheme(theme === colorTheme.dark ? colorTheme.light : colorTheme.dark);
+    };
+
+    // sign out
+    const onSignOut = async () => {
+        setSignOutLoading(true);
+
+        try {
+            await signOut(auth);
+            showNotification(`${t(translationKeys.signOutMessage)}`, SuccessNotificationType);
+            navigate('/', { replace: true });
+        } catch {
+            showNotification(`${t(translationKeys.failedToSignOut)}`, ErrorNotificationType);
+        } finally {
+            setSignOutLoading(false);
+        }
+    };
 
     return (
         <div className={dashboardContainerStyle}>
-            <div className="flex space-between items-center w-full mb-2">
-                <span className={`text-xl mr-auto ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`}>{dashboardTitle}:</span>
-                <IoMdAddCircle onClick={handleOpenModal} className={`cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`} />
+            <div className={languageSwitchAndThemeContainerStyle}>
+                <div className={languageSwitchContainerStyle}>
+                    <button
+                        type="button"
+                        onClick={() => setLanguage(languageSetting.english)}
+                        className={languageSwitchButtonStyle(language === languageSetting.english)}
+                    >
+                        {t(translationKeys.englishLanguage)}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setLanguage(languageSetting.traditionalChinese)}
+                        className={languageSwitchButtonStyle(language === languageSetting.traditionalChinese)}
+                    >
+                        {t(translationKeys.tranditionalChineseLanguage)}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setLanguage(languageSetting.simplifiedChinese)}
+                        className={languageSwitchButtonStyle(language === languageSetting.simplifiedChinese)}
+                    >
+                        {t(translationKeys.simplifiedChineseLanguage)}
+                    </button>
+                </div>
+                <button type="button" onClick={handleThemeSwitch} className={themeSwitchButtonStyle}>
+                    {
+                        theme === colorTheme.light
+                            ? <BiMoon className={biMoonIconStyle} />
+                            : <BiSolidMoon className={biSolidMoonIconStyle} />
+                    }
+                </button>
             </div>
-            {widget === "s" ? <SkillTable /> : widget === "e" ? <SchoolTable /> : widget === "p" ? <ProjectTable /> : <CompanyTable />}
-            {/* modal components */}
-            {
-                theme === colorTheme.light ?
-                    <Modal
-                        opened={opened}
-                        onClose={handleCloseModal}
-                        size="lg"
-                        title={modalTitle}
-                        centered
-                        closeOnClickOutside={!isModalSaving}
-                        closeOnEscape={!isModalSaving}
-                        withCloseButton={!isModalSaving}
+            <nav className={navContainerStyle}>
+                {dashboardNavItems.map(({ key, label }) => {
+                    const isActive = widget === key;
+                    return (
+                        <button
+                            key={key}
+                            type="button"
+                            onClick={() => handleNavigateWidget(key)}
+                            className={navButtonStyle(isActive)}
+                        >
+                            {label}
+                        </button>
+                    );
+                })}
+            </nav>
+            <div className={titleAndAddButtonContainerStyle}>
+                <span className={titleStyle}>{dashboardTitle}:</span>
+                <IoMdAddCircle onClick={handleOpenModal} className={addIconStyle} />
+            </div>
+            {widget === dashboardNavItems[3].key
+                ? <SkillTable onEditSkill={handleEditSkill} />
+                : widget === dashboardNavItems[1].key
+                    ? <SchoolTable onEditSchool={handleEditSchool} />
+                    : widget === dashboardNavItems[2].key
+                        ? <ProjectTable onEditProject={handleEditProject} />
+                        : <CompanyTable onEditCompany={handleEditCompany} />}
+            <div className={footerActionsContainerStyle}>
+                <Button
+                    type="button"
+                    onClick={onSignOut}
+                    className={signOutButtonStyle}
+                    disabled={signOutLoading}
+                >
+                    {signOutLoading ? `${t(translationKeys.signOut)}...` : t(translationKeys.signOut)}
+                </Button>
+                <Button
+                    type="button"
+                    onClick={() => navigate('/')}
+                    className={backToHomeButtonStyle}
+                >
+                    {t(translationKeys.backToHome)}
+                </Button>
+            </div>
+            {/* add or edit modal */}
+            <Modal
+                opened={opened}
+                onClose={handleCloseModal}
+                size="lg"
+                title={modalTitle}
+                centered
+                closeOnClickOutside={!isModalSaving}
+                closeOnEscape={!isModalSaving}
+                withCloseButton={!isModalSaving}
+                closeButtonProps={theme === colorTheme.dark ? { className: 'intro-modal-close-btn' } : undefined}
+                styles={addEditModalStyles}
+            >
+                {widget === dashboardNavItems[0].key
+                    ? <DashboardCompanyModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={companyModalMode} initialCompany={editingCompany} />
+                    : widget === dashboardNavItems[3].key
+                        ? <DashboardSkillModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={skillModalMode} initialSkill={editingSkill} />
+                        : widget === dashboardNavItems[2].key
+                            ? <DashboardProjectModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={projectModalMode} initialProject={editingProject} />
+                            : <DashboardSchoolModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={schoolModalMode} initialSchool={editingSchool} />}
+            </Modal>
+            {/* discard modal */}
+            <Modal
+                opened={confirmCloseOpened}
+                onClose={() => setConfirmCloseOpened(false)}
+                size="lg"
+                title={t(translationKeys.unsavedChanges)}
+                centered
+                closeOnClickOutside={!isModalSaving}
+                closeOnEscape={!isModalSaving}
+                withCloseButton={!isModalSaving}
+                closeButtonProps={theme === colorTheme.dark ? { className: 'intro-modal-close-btn' } : undefined}
+                styles={addEditModalStyles}
+            >
+                <p className={unsavedChangesDescriptionStyle}>
+                    {t(translationKeys.unsavedChangesDescription)}
+                </p>
+                <div className={unsavedChangesButtonContainerStyle}>
+                    <Button
+                        type="button"
+                        className={keepEditingButtonStyle}
+                        onClick={() => setConfirmCloseOpened(false)}
                     >
-                        {widget === "c" ? <AddCompanyModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "s" ? <AddSkillModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "p" ? <AddProjectModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : <AddSchoolModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} />}
-                    </Modal> :
-                    <Modal opened={opened} onClose={handleCloseModal} size="lg" title={modalTitle} centered
-                        closeOnClickOutside={!isModalSaving}
-                        closeOnEscape={!isModalSaving}
-                        withCloseButton={!isModalSaving}
-                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
-                        styles={{
-                            header: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            content: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            title: {
-                                color: "#94A3B8",
-                            },
-                        }}
+                        {t(translationKeys.keepEditing)}
+                    </Button>
+                    <Button
+                        type="button"
+                        className={discardButtonStyle}
+                        onClick={handleDiscardUnsavedChanges}
                     >
-                        {widget === "c" ? <AddCompanyModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "s" ? <AddSkillModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "p" ? <AddProjectModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : <AddSchoolModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} />}
-                    </Modal>
-            }
+                        {t(translationKeys.discard)}
+                    </Button>
+                </div>
+            </Modal>
         </div>
     )
 }

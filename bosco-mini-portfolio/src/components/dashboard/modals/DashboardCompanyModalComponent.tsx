@@ -1,18 +1,20 @@
 // react
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 // mantine
-import { MultiSelect } from '@mantine/core';
+import { LoadingOverlay, MultiSelect } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
-import { colorTheme } from '../../../../globalVariable/GlobalVariable';
-import { MapperContext } from '../../../../globalVariable/MapperContextProvider';
-import { translationKeys } from '../../../../globalVariable/Translation';
-import { showNotification } from '../../../../globalVariable/Notification';
+import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { MapperContext } from '../../../globalVariable/MapperContextProvider';
+import { translationKeys } from '../../../globalVariable/Translation';
+import { showNotification } from '../../../globalVariable/Notification';
 // util
-import { convertFileToBase64, generateId, toDateOrNull } from '../../../util';
-import { SuccessNotificationType, ErrorNotificationType, DashboardDateRangeFields, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardPresentCheckbox, DashboardSubmitButton, Locale, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect } from '../util';
+import { convertFileToBase64, generateId, normalizeImageSource, toDateOrNull } from '../../util';
+import { SuccessNotificationType, ErrorNotificationType, DashboardDateRangeFields, DashboardExistingImagePreview, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardPresentCheckbox, DashboardSubmitButton, Locale, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect, toDateFromTimestamp } from './util';
 // query
-import { saveCompanyDocument } from '../../../../query/CompanyQuery';
+import { saveCompanyDocument } from '../../../query/CompanyQuery';
+// type
+import { CompanyData } from '../../../types/type';
 
 type CompanyFormFields = {
     companyName: string;
@@ -38,40 +40,63 @@ const formWithLanguageFieldKeys: Array<keyof CompanyFormFields> = [
     'project',
 ];
 
-export default function AddCompanyModalComponent({ closeModal, onSavingChange }: DashboardModalType) {
+type CompanyModalMode = 'create' | 'edit';
+
+type CompanyModalProps = DashboardModalType & {
+    mode?: CompanyModalMode;
+    initialCompany?: CompanyData | null;
+};
+
+const getInitialValues = (): SubmitHandler => ({
+    en: {
+        companyName: '',
+        team: '',
+        position: '',
+        jobDutie: '',
+        project: '',
+    },
+    zh: {
+        companyName: '',
+        team: '',
+        position: '',
+        jobDutie: '',
+        project: '',
+    },
+    cn: {
+        companyName: '',
+        team: '',
+        position: '',
+        jobDutie: '',
+        project: '',
+    },
+    skillSets: [],
+    present: false,
+    logo: null,
+    startDate: null,
+    endDate: null,
+});
+
+export default function DashboardCompanyModalComponent({
+    closeModal,
+    onSavingChange,
+    onDirtyChange,
+    mode = 'create',
+    initialCompany = null,
+}: CompanyModalProps) {
     // context
     const { t, theme, skillData } = useContext(MapperContext);
+    // modal mode
+    const isEditMode = mode === 'edit' && initialCompany !== null;
+    // button text
+    const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
+    // saving state
+    const [isSaving, setIsSaving] = useState(false);
+    // hydrated form key ref
+    const hydratedFormKeyRef = useRef<string>('');
     // form
     const form = useForm<SubmitHandler>({
         mode: 'controlled',
-        initialValues: {
-            en: {
-                companyName: '',
-                team: '',
-                position: '',
-                jobDutie: '',
-                project: '',
-            },
-            zh: {
-                companyName: '',
-                team: '',
-                position: '',
-                jobDutie: '',
-                project: '',
-            },
-            cn: {
-                companyName: '',
-                team: '',
-                position: '',
-                jobDutie: '',
-                project: '',
-            },
-            skillSets: [],
-            present: false,
-            logo: null,
-            startDate: null,
-            endDate: null,
-        },
+        initialValues: getInitialValues(),
         validate: {
             en: {
                 companyName: (value) => (value.trim().length === 0 ? `${t(translationKeys.companyName)}${t(translationKeys.isRequired)}` : null),
@@ -95,7 +120,15 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
                 project: (value) => (value.trim().length === 0 ? `${t(translationKeys.projectName)}${t(translationKeys.isRequired)}` : null),
             },
             skillSets: (value) => (value.length === 0 ? `${t(translationKeys.atLeastOneSkill)}${t(translationKeys.isRequired)}` : null),
-            logo: (value) => (value === null ? `${t(translationKeys.logo)}${t(translationKeys.isRequired)}` : null),
+            logo: (value) => {
+                if (value !== null) {
+                    return null;
+                }
+                if (isEditMode && initialCompany?.Logo) {
+                    return null;
+                }
+                return `${t(translationKeys.logo)}${t(translationKeys.isRequired)}`;
+            },
             startDate: (value) => (value === null ? `${t(translationKeys.startDate)}${t(translationKeys.isRequired)}` : null),
             endDate: (value, values) => {
                 if (!values.present && value === null) {
@@ -105,17 +138,73 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
             },
         },
     });
-    // color theme
-    const isDarkTheme = theme === colorTheme.dark;
-    const [isSaving, setIsSaving] = useState(false);
 
     // style list
-    const inputStyles = getDashboardInputStyles(isDarkTheme);
-    const tabsStyles = getDashboardTabsStyles(isDarkTheme);
+    const inputStyles = getDashboardInputStyles(theme === colorTheme.dark);
+    const tabsStyles = getDashboardTabsStyles(theme === colorTheme.dark);
 
+    // saving effect
     useDashboardSavingEffect(isSaving, onSavingChange);
 
+    // dirty effect
+    useEffect(() => {
+        onDirtyChange?.(isEditMode ? form.isDirty() : false);
+    }, [form, form.values, isEditMode, onDirtyChange]);
+
+    // hydrate form values effect
+    useEffect(() => {
+        const hydrationKey = isEditMode && initialCompany ? `edit:${initialCompany.id}` : 'create';
+
+        if (hydratedFormKeyRef.current === hydrationKey) {
+            return;
+        }
+
+        hydratedFormKeyRef.current = hydrationKey;
+
+        if (isEditMode && initialCompany) {
+            form.setValues({
+                en: {
+                    companyName: initialCompany.en.CompanyName,
+                    team: initialCompany.en.Team,
+                    position: initialCompany.en.Position,
+                    jobDutie: initialCompany.en.JobDuties,
+                    project: initialCompany.en.Projects,
+                },
+                zh: {
+                    companyName: initialCompany.zh.CompanyName,
+                    team: initialCompany.zh.Team,
+                    position: initialCompany.zh.Position,
+                    jobDutie: initialCompany.zh.JobDuties,
+                    project: initialCompany.zh.Projects,
+                },
+                cn: {
+                    companyName: initialCompany.cn.CompanyName,
+                    team: initialCompany.cn.Team,
+                    position: initialCompany.cn.Position,
+                    jobDutie: initialCompany.cn.JobDuties,
+                    project: initialCompany.cn.Projects,
+                },
+                skillSets: initialCompany.SkillSets,
+                present: initialCompany.Present,
+                logo: null,
+                startDate: toDateFromTimestamp(initialCompany.StartDate),
+                endDate: toDateFromTimestamp(initialCompany.EndDate),
+            });
+            form.resetDirty();
+            form.clearErrors();
+            form.resetTouched();
+            return;
+        }
+
+        form.setValues(getInitialValues());
+        form.resetDirty();
+        form.clearErrors();
+        form.resetTouched();
+    }, [form, initialCompany, isEditMode]);
+
+    // submit handler
     const onSubmit = async (values: SubmitHandler) => {
+        console.log(values)
         if (isSaving) {
             return;
         }
@@ -123,9 +212,21 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
         setIsSaving(true);
 
         try {
-            const base64Logo = values.logo ? await convertFileToBase64(values.logo) : null;
+            const base64Logo = values.logo
+                ? await convertFileToBase64(values.logo)
+                : isEditMode
+                    ? initialCompany?.Logo ?? null
+                    : null;
 
-            await saveCompanyDocument(generateId(values.en.companyName), {
+            const targetDocumentId = isEditMode && initialCompany
+                ? initialCompany.id
+                : generateId(values.en.companyName);
+
+            const createDate = isEditMode && initialCompany
+                ? toDateFromTimestamp(initialCompany.CreateDate) ?? new Date()
+                : new Date();
+
+            await saveCompanyDocument(targetDocumentId, {
                 en: {
                     CompanyName: values.en.companyName,
                     Team: values.en.team,
@@ -152,7 +253,7 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
                 Present: values.present,
                 StartDate: values.startDate ?? new Date(),
                 EndDate: values.present ? null : values.endDate,
-                CreateDate: new Date(),
+                CreateDate: createDate,
             });
 
             form.reset();
@@ -167,11 +268,22 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
     };
 
     return (
-        <div>
+        <div className="relative">
+            <LoadingOverlay
+                visible={isSaving}
+                zIndex={1000}
+                overlayProps={{
+                    radius: 'sm',
+                    blur: 1.5,
+                    backgroundOpacity: 0.35,
+                    color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                }}
+            />
             {/* form */}
             <form key={"companyForm"} onSubmit={form.onSubmit(onSubmit)}>
                 <DashboardLocaleTextTabs
                     tabsStyles={tabsStyles}
+                    t={t}
                     fieldKeys={formWithLanguageFieldKeys as string[]}
                     inputStyles={inputStyles}
                     disabled={isSaving}
@@ -212,14 +324,24 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
                     inputProps={form.getInputProps('logo')}
                     label={t(translationKeys.uploadFile)}
                 />
+                {/* display image */}
+                {(initialCompany?.Logo || form.values.logo) && (
+                    <DashboardExistingImagePreview
+                        imageSource={form.values.logo ? form.values.logo : normalizeImageSource(initialCompany?.Logo ?? '')}
+                        alt="Company Logo"
+                        label="Logo"
+                        isDarkTheme={theme === colorTheme.dark}
+                    />
+                )}
                 <DashboardPresentCheckbox
                     inputStyles={inputStyles}
+                    isDarkTheme={theme === colorTheme.dark}
                     componentKey={form.key('present')}
                     disabled={isSaving}
-                    inputProps={form.getInputProps('present')}
+                    inputProps={form.getInputProps('present', { type: 'checkbox' })}
                     label={t(translationKeys.present)}
                 />
-                <DashboardSubmitButton isSaving={isSaving} />
+                <DashboardSubmitButton isSaving={isSaving} idleText={buttonText} />
             </form>
         </div>
     );

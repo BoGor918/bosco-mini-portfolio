@@ -1,59 +1,36 @@
 // react
 import { useContext } from 'react';
 // mantine
-import { Modal, Table } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Table } from '@mantine/core';
 // global variable
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
+import { CompanyData } from '../../../types/type';
 // icon
 import { MdEdit } from "react-icons/md";
+// util
 import { normalizeImageSource } from '../../util';
+import { getDashboardTableStyles, toPeriod } from './util';
 
-// date helper functions
-const toDisplayDate = (seconds: number) => {
-    return new Date(seconds * 1000).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
+type CompanyTableProps = {
+    onEditCompany?: (company: CompanyData) => void;
 };
 
-// period helper function
-const toPeriod = (
-    startDateSeconds: number,
-    endDateSeconds: number | null,
-    present: boolean,
-    presentLabel: string,
-) => {
-    const startDate = toDisplayDate(startDateSeconds);
-
-    if (present || endDateSeconds === null) {
-        return `${startDate} - ${presentLabel}`;
-    }
-
-    return `${startDate} - ${toDisplayDate(endDateSeconds)}`;
-};
-
-export default function CompanyTable() {
+export default function CompanyTable({ onEditCompany }: CompanyTableProps) {
     // context
     const { t, companyData, language, theme } = useContext(MapperContext);
-    // theme
-    const isDarkTheme = theme === colorTheme.dark;
-
     // style list
-    const tableWrapperStyle = `w-full max-w-7xl rounded-xl border shadow-sm ${isDarkTheme
-        ? 'border-[#21D4F7]/25 bg-[#102340]'
-        : 'border-[#0B1A33]/15 bg-white'
-        }`;
-    const tableScrollStyle = 'max-h-[30rem] overflow-auto';
-    const headCellStyle = `text-[13px] font-semibold uppercase tracking-[0.12em] ${isDarkTheme
-        ? 'text-[#A5D8FF]'
-        : 'text-[#334155]'
-        } ${isDarkTheme ? 'bg-[#102340]' : 'bg-[#F8FAFC]'}`;
-    const bodyCellStyle = `text-[14px] ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`;
-    const rowStyle = isDarkTheme ? 'hover:bg-[#1B365D]' : 'hover:bg-[#F8FAFC]';
+    const {
+        tableMainStyle,
+        tableScrollStyle,
+        tableWrapperStyle,
+        headCellStyle,
+        bodyCellStyle,
+        editIconStyle,
+        rowStyle,
+        rowImageStyle,
+    } = getDashboardTableStyles(theme === colorTheme.dark);
 
     const rows = companyData.map((company) => (
         <Table.Tr key={company.id} className={rowStyle}>
@@ -67,7 +44,7 @@ export default function CompanyTable() {
                                 ? company.zh.CompanyName
                                 : company.cn.CompanyName
                     }
-                    className="h-10 w-10 rounded-md object-contain"
+                    className={rowImageStyle}
                 />
             </Table.Td>
             <Table.Td className={bodyCellStyle}>
@@ -96,9 +73,11 @@ export default function CompanyTable() {
                     t(translationKeys.present),
                 )}
             </Table.Td>
-            <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>{company.SkillSets.join(', ')}</Table.Td>
-            <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>
-                <MdEdit className="cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]" />
+            <Table.Td className={`${bodyCellStyle} whitespace-normal break-words ml-auto`}>
+                <MdEdit
+                    className={editIconStyle}
+                    onClick={() => onEditCompany?.(company)}
+                />
             </Table.Td>
         </Table.Tr>
     ));
@@ -106,14 +85,13 @@ export default function CompanyTable() {
     return (
         <div className={tableWrapperStyle}>
             <div className={tableScrollStyle}>
-                <Table horizontalSpacing="lg" verticalSpacing="lg" stickyHeader stickyHeaderOffset={0} className="min-w-[980px]">
+                <Table horizontalSpacing="lg" verticalSpacing="lg" stickyHeader stickyHeaderOffset={0} className={tableMainStyle}>
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th className={headCellStyle}>{t(translationKeys.logo)}</Table.Th>
                             <Table.Th className={headCellStyle}>{t(translationKeys.companyName)}</Table.Th>
                             <Table.Th className={headCellStyle}>{t(translationKeys.position)}</Table.Th>
                             <Table.Th className={headCellStyle}>{t(translationKeys.period)}</Table.Th>
-                            <Table.Th className={headCellStyle}>{t(translationKeys.skillSets)}</Table.Th>
                             <Table.Th className={headCellStyle}></Table.Th>
                         </Table.Tr>
                     </Table.Thead>
@@ -122,7 +100,7 @@ export default function CompanyTable() {
                             rows
                         ) : (
                             <Table.Tr>
-                                <Table.Td className={bodyCellStyle} colSpan={6}>{t(translationKeys.empty)}</Table.Td>
+                                <Table.Td className={bodyCellStyle} colSpan={4}>{t(translationKeys.empty)}</Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>
