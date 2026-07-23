@@ -2,17 +2,17 @@
 import { useState, createContext, useEffect, type PropsWithChildren } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
 // data
-import companyJSON from '../data/companyData.json';
-import schoolJSON from '../data/schoolData.json';
 import projectJSON from '../data/projectData.json';
 import { LanguageType, TranslationKey, languageSetting, translations } from "./Translation";
 // types
 import { CompanyData, ProjectData, SchoolData, SkillData, UserProfile } from "../types/type";
 import { auth } from "../firebase";
 import { colorTheme } from "./GlobalVariable";
-import { fetchUserCollectionData } from "../query/user/UserQuery";
-import { fetchSkillCollectionData } from "../query/skill/SkillQuery";
-import { fetchCompanyCollectionData } from "../query/company/CompanyQuery";
+import { fetchUserCollectionData } from "../query/UserQuery";
+import { fetchSkillCollectionData } from "../query/SkillQuery";
+import { fetchCompanyCollectionData } from "../query/CompanyQuery";
+import { fetchSchoolCollectionData } from "../query/SchoolQuery";
+import { fetchProjectCollectionData } from "../query/ProjectQuery";
 
 // variable interface
 interface MapperContextType {
@@ -43,13 +43,6 @@ export const MapperContext = createContext<MapperContextType>({
     setLanguage: () => { },
     t: (key) => translations.en[key],
 });
-
-const sortByDescendingId = <T extends { id: string | number }>(items: T[]) => {
-    return [...items].sort((a, b) => String(b.id).localeCompare(String(a.id), undefined, { numeric: true }));
-};
-
-const schoolDataSource = sortByDescendingId(schoolJSON as SchoolData[]);
-const projectDataSource = sortByDescendingId(projectJSON as ProjectData[]);
 
 const getInitialLanguage = (): LanguageType => {
     const storedLanguage = localStorage.getItem(languageSetting.key) as LanguageType | null;
@@ -86,7 +79,10 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
     // data
     const [userData, setUserData] = useState<UserProfile[]>([]);
     const [companyData, setCompanyData] = useState<CompanyData[]>([]);
+    const [schoolData, setSchoolData] = useState<SchoolData[]>([]);
+    const [projectData, setProjectData] = useState<ProjectData[]>([]);
     const [skillData, setSkillData] = useState<SkillData[]>([]);
+
 
     // listen for authentication state changes
     useEffect(() => {
@@ -113,20 +109,32 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
 
         loadUsers();
 
-        const loadSkills = fetchSkillCollectionData(
-            (skills) => setSkillData(skills),
-            () => setSkillData([]),
-        );
-
         const loadCompanies = fetchCompanyCollectionData(
             (company) => setCompanyData(company),
             () => setCompanyData([]),
+        );
+
+        const loadSchools = fetchSchoolCollectionData(
+            (schools) => setSchoolData(schools),
+            () => setSchoolData([]),
+        );
+
+        const loadProjects = fetchProjectCollectionData(
+            (projects) => setProjectData(projects),
+            () => setProjectData([]),
+        );
+
+        const loadSkills = fetchSkillCollectionData(
+            (skills) => setSkillData(skills),
+            () => setSkillData([]),
         );
 
         return () => {
             isActive = false;
             loadSkills(); // This will unsubscribe from the skill snapshot
             loadCompanies(); // This will unsubscribe from the company snapshot
+            loadSchools(); // This will unsubscribe from the school snapshot
+            loadProjects(); // This will unsubscribe from the project snapshot
         };
     }, [user]);
 
@@ -158,8 +166,8 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
         // pass the value in provider and return
         <MapperContext.Provider value={{
             companyData,
-            schoolData: schoolDataSource,
-            projectData: projectDataSource,
+            schoolData,
+            projectData,
             skillData,
             user,
             userData,

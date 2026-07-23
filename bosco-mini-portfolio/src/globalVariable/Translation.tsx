@@ -59,12 +59,15 @@ const en = {
     id: 'ID',
     logo: 'Logo',
     companyName: 'Company Name',
+    schoolName: 'School Name',
     skillSets: 'Skill Sets',
     caption: 'Company experience list',
     empty: 'No company records found.',
     english: 'English',
     tranditionalChinese: 'Traditional Chinese',
     simplifiedChinese: 'Simplified Chinese',
+    title: 'Title',
+    projectName: 'Project Name',
 }
 
 const zhHK = {
@@ -116,12 +119,15 @@ const zhHK = {
     id: '編號',
     logo: '標誌',
     companyName: '公司名稱',
+    schoolName: '學校名稱',
     skillSets: '技術',
     caption: '工作經驗列表',
     empty: '目前沒有公司紀錄。',
     english: '英文',
     tranditionalChinese: '繁體中文',
     simplifiedChinese: '簡體中文',
+    title: '職稱',
+    projectName: '專案名稱',
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
@@ -172,12 +178,15 @@ const zhCN = {
     id: '编号',
     logo: '标志',
     companyName: '公司名称',
+    schoolName: '学校名称',
     skillSets: '技术',
     caption: '工作经验列表',
     empty: '目前没有公司记录。',
     english: '英文',
     tranditionalChinese: '繁体中文',
     simplifiedChinese: '简体中文',
+    title: '职称',
+    projectName: '专案名称',
 }
 
 export const translationKeys = {
@@ -229,12 +238,15 @@ export const translationKeys = {
     id: 'id',
     logo: 'logo',
     companyName: 'companyName',
+    schoolName: 'schoolName',
     skillSets: 'skillSets',
     caption: 'caption',
     empty: 'empty',
     english: 'english',
     tranditionalChinese: 'tranditionalChinese',
     simplifiedChinese: 'simplifiedChinese',
+    title: 'title',
+    projectName: 'projectName',
 } as const;
 
 export type TranslationKey = keyof typeof en;

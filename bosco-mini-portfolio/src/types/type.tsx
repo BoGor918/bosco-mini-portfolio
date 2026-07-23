@@ -40,10 +40,7 @@ export type CompanyData = {
 
 
 export type SchoolData = {
-    Logo: {
-        URL: string,
-        FileName: string
-    },
+    Logo: string
     EndDate: {
         seconds: number,
         nanoseconds: number
@@ -58,7 +55,7 @@ export type SchoolData = {
         seconds: number,
         nanoseconds: number
     },
-    id: number,
+    id: string,
     en: {
         SchoolName: string,
         Type: string,
@@ -85,7 +82,7 @@ export type ProjectData = {
     ProjectName: string,
     Logo: string,
     TechStack: string[],
-    id: number,
+    id: string,
     en: {
         Description: string
     },

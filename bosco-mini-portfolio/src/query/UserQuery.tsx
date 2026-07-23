@@ -6,8 +6,8 @@ import {
     type DocumentData,
     type QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { firestore } from '../../firebase';
-import { UserProfile } from '../../types/type';
+import { firestore } from '../firebase';
+import { UserProfile } from '../types/type';
 
 
 export const fetchUserCollectionData = async <T,>(

@@ -8,7 +8,7 @@ import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
 // icon
 import { MdEdit } from "react-icons/md";
-import { normalizeImageSource } from '../util';
+import { normalizeImageSource } from '../../util';
 
 // date helper function
 const toDisplayDate = (seconds: number) => {

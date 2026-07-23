@@ -6,8 +6,8 @@ import {
 	query,
 	setDoc,
 } from 'firebase/firestore';
-import { firestore } from '../../firebase';
-import { SkillData } from '../../types/type';
+import { firestore } from '../firebase';
+import { SkillData } from '../types/type';
 
 export const fetchSkillCollectionData = (
     onData: (skills: SkillData[]) => void,

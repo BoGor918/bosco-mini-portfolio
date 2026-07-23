@@ -6,8 +6,8 @@ import {
     query,
     setDoc,
 } from 'firebase/firestore';
-import { firestore } from '../../firebase';
-import { CompanyData } from '../../types/type';
+import { firestore } from '../firebase';
+import { CompanyData } from '../types/type';
 
 export const fetchCompanyCollectionData = (
     onData: (companies: CompanyData[]) => void,

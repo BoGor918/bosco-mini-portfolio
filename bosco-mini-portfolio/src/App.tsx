@@ -9,7 +9,7 @@ import { translationKeys } from "./globalVariable/Translation";
 // lazy load components
 const Home = lazy(() => {
   return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-    resolve(import('./components/home/Home'));
+    resolve(import('./pages/Home'));
   });
 });
 const Login = lazy(() => {

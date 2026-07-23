@@ -7,7 +7,7 @@ import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import EducationModalComponent from '../modal/education/EducationModalComponent';
+import EducationModalComponent from '../home/modals/EducationModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
@@ -16,6 +16,7 @@ import { SchoolData } from '../../types/type';
 import { gridStyles } from './util';
 // global variable
 import { languageSetting } from '../../globalVariable/Translation';
+import { normalizeImageSource } from '../util';
 
 export default function CompanyGrid() {
     // global variable
@@ -54,7 +55,7 @@ export default function CompanyGrid() {
             {/* school grid */}
             <div className={gridStyles.gridDivThreeColStyle}>
                 {schoolData.map((school: SchoolData, i: number) => {
-                    const hasLogoUrl = Boolean(school.Logo?.URL);
+                    const hasLogoUrl = Boolean(school.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(school.id);
                     const isLogoLoaded = loadedLogoIds.has(school.id);
                     return (
@@ -68,7 +69,7 @@ export default function CompanyGrid() {
                             {!showLogoFallback && (
                                 <LazyLoadImage
                                     className={`${gridStyles.gridLazyLoadImageStyle} ${isLogoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                    src={school.Logo.URL}
+                                    logo={normalizeImageSource(school.Logo)}
                                     alt={language === languageSetting.english ? school.en.SchoolName : language === languageSetting.traditionalChinese ? school.zh.SchoolName : school.cn.SchoolName}
                                     onLoad={() => onLogoLoad(school.id)}
                                     onError={() => onLogoError(school.id)}
@@ -97,7 +98,7 @@ export default function CompanyGrid() {
                                 startDate={selectedSchool.StartDate}
                                 endDate={selectedSchool.EndDate}
                                 present={selectedSchool.Present}
-                                logo={selectedSchool.Logo.URL}
+                                logo={normalizeImageSource(selectedSchool.Logo)}
                             />
                         )}
                     </Modal> :
@@ -122,7 +123,7 @@ export default function CompanyGrid() {
                                 startDate={selectedSchool.StartDate}
                                 endDate={selectedSchool.EndDate}
                                 present={selectedSchool.Present}
-                                logo={selectedSchool.Logo.URL}
+                                logo={normalizeImageSource(selectedSchool.Logo)}
                             />
                         )}
                     </Modal>

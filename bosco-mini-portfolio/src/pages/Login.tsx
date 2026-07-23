@@ -19,7 +19,7 @@ import {
     signOut,
 } from 'firebase/auth';
 import { translationKeys } from '../globalVariable/Translation';
-import { saveUserDocument } from '../query/user/UserQuery';
+import { saveUserDocument } from '../query/UserQuery';
 
 // form submit handler type
 type SubmitHandler = {

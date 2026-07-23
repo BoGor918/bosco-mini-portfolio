@@ -6,7 +6,7 @@ import { LoadingOverlay, Box } from "@mantine/core";
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
-import { getDetailStyles, modalStyles, calculateDuration } from '../util';
+import { getDetailStyles, modalStyles, calculateDuration } from './util';
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
@@ -22,7 +22,7 @@ export default function EducationModalComponent({
   endDate,
   present,
   logo }: {
-    docID: number;
+    docID: string;
     schoolName: string;
     type: string;
     title: string;

@@ -1,7 +1,7 @@
 // page components
-import TopComponent from "./components/TopComponent";
-import MiddleComponent from "./components/MiddleComponent";
-import BottomComponent from "./components/BottomComponent";
+import TopComponent from "../components/home/components/TopComponent";
+import MiddleComponent from "../components/home/components/MiddleComponent";
+import BottomComponent from "../components/home/components/BottomComponent";
 
 export default function Home() {
     // style list

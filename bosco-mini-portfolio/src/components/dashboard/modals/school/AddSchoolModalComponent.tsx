@@ -1,110 +1,90 @@
 // react
 import { useContext, useEffect, useState } from 'react';
 // mantine
-import { Button, Group, TextInput, Tabs, MultiSelect, Checkbox, FileInput } from '@mantine/core';
+import { Button, Group, TextInput, Tabs, Checkbox, FileInput, NumberInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 // global variable
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
-import { MapperContext } from '../../../globalVariable/MapperContextProvider';
-import { translationKeys } from '../../../globalVariable/Translation';
-import { showNotification } from '../../../globalVariable/Notification';
-import { convertFileToBase64, generateId, toDateOrNull } from '../util';
-import { saveCompanyDocument } from '../../../query/company/CompanyQuery';
-
-// form submit handler type
-type Locale = 'en' | 'zh' | 'cn';
-
-type CompanyFormFields = {
-    companyName: string;
-    team: string;
-    position: string;
-    jobDutie: string;
-    project: string;
+import { colorTheme } from '../../../../globalVariable/GlobalVariable';
+import { MapperContext } from '../../../../globalVariable/MapperContextProvider';
+import { translationKeys } from '../../../../globalVariable/Translation';
+import { showNotification } from '../../../../globalVariable/Notification';
+// util
+import { DashboardModalType, Locale, getDashboardInputStyles, getDashboardTabsStyles, localeTabs } from '../util';
+import { convertFileToBase64, generateId, toDateOrNull } from '../../../util';
+// query
+import { saveSchoolDocument } from '../../../../query/SchoolQuery';
+type SchoolFormFields = {
+    schoolName: string;
+    type: string;
+    title: string;
 };
 
-type SubmitHandler = Record<Locale, CompanyFormFields> & {
-    skillSets: string[];
+type SubmitHandler = Record<Locale, SchoolFormFields> & {
     present: boolean;
     logo: File | null;
     startDate: Date | null;
     endDate: Date | null;
+    gpa: number;
 };
 
-type AddCompanyModalContentProps = {
-    closeModal: () => void;
-    onSavingChange?: (isSaving: boolean) => void;
+const formWithLanguageFieldKeys: Array<keyof SchoolFormFields> = [
+    'schoolName',
+    'type',
+    'title',
+];
+
+const toNumberOrZero = (value: string | number) => {
+    if (typeof value === 'number') {
+        return Number.isNaN(value) ? 0 : value;
+    }
+
+    const parsedValue = Number(value);
+    return Number.isNaN(parsedValue) ? 0 : parsedValue;
 };
 
-const localeTabs: Array<{ value: Locale; label: string }> = [
-    { value: 'en', label: 'English' },
-    { value: 'zh', label: 'Traditional Chinese' },
-    { value: 'cn', label: 'Simplified Chinese' },
-];
-
-const formWithLanguageFieldKeys: Array<keyof CompanyFormFields> = [
-    'companyName',
-    'team',
-    'position',
-    'jobDutie',
-    'project',
-];
-
-export default function AddCompanyModalContent({ closeModal, onSavingChange }: AddCompanyModalContentProps) {
+export default function AddSchoolModalComponent({ closeModal, onSavingChange }: DashboardModalType) {
     // form
     const form = useForm<SubmitHandler>({
         mode: 'controlled',
         initialValues: {
             en: {
-                companyName: '',
-                team: '',
-                position: '',
-                jobDutie: '',
-                project: '',
+                schoolName: '',
+                type: '',
+                title: '',
             },
             zh: {
-                companyName: '',
-                team: '',
-                position: '',
-                jobDutie: '',
-                project: '',
+                schoolName: '',
+                type: '',
+                title: '',
             },
             cn: {
-                companyName: '',
-                team: '',
-                position: '',
-                jobDutie: '',
-                project: '',
+                schoolName: '',
+                type: '',
+                title: '',
             },
-            skillSets: [],
             present: false,
             logo: null,
             startDate: null,
             endDate: null,
+            gpa: 0,
         },
         validate: {
             en: {
-                companyName: (value) => (value.trim().length === 0 ? 'Company name is required' : null),
-                team: (value) => (value.trim().length === 0 ? 'Team is required' : null),
-                position: (value) => (value.trim().length === 0 ? 'Position is required' : null),
-                jobDutie: (value) => (value.trim().length === 0 ? 'Job duties are required' : null),
-                project: (value) => (value.trim().length === 0 ? 'Project is required' : null),
+                schoolName: (value) => (value.trim().length === 0 ? 'School name is required' : null),
+                type: (value) => (value.trim().length === 0 ? 'Type is required' : null),
+                title: (value) => (value.trim().length === 0 ? 'Title is required' : null),
             },
             zh: {
-                companyName: (value) => (value.trim().length === 0 ? 'Company name is required' : null),
-                team: (value) => (value.trim().length === 0 ? 'Team is required' : null),
-                position: (value) => (value.trim().length === 0 ? 'Position is required' : null),
-                jobDutie: (value) => (value.trim().length === 0 ? 'Job duties are required' : null),
-                project: (value) => (value.trim().length === 0 ? 'Project is required' : null),
+                schoolName: (value) => (value.trim().length === 0 ? 'School name is required' : null),
+                type: (value) => (value.trim().length === 0 ? 'Type is required' : null),
+                title: (value) => (value.trim().length === 0 ? 'Title is required' : null),
             },
             cn: {
-                companyName: (value) => (value.trim().length === 0 ? 'Company name is required' : null),
-                team: (value) => (value.trim().length === 0 ? 'Team is required' : null),
-                position: (value) => (value.trim().length === 0 ? 'Position is required' : null),
-                jobDutie: (value) => (value.trim().length === 0 ? 'Job duties are required' : null),
-                project: (value) => (value.trim().length === 0 ? 'Project is required' : null),
+                schoolName: (value) => (value.trim().length === 0 ? 'School name is required' : null),
+                type: (value) => (value.trim().length === 0 ? 'Type is required' : null),
+                title: (value) => (value.trim().length === 0 ? 'Title is required' : null),
             },
-            skillSets: (value) => (value.length === 0 ? 'At least one skill is required' : null),
             logo: (value) => (value === null ? 'Logo is required' : null),
             startDate: (value) => (value === null ? 'Start date is required' : null),
             endDate: (value, values) => {
@@ -116,30 +96,21 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
         },
     });
     // context
-    const { t, theme, skillData } = useContext(MapperContext);
+    const { t, theme } = useContext(MapperContext);
     // color theme
     const isDarkTheme = theme === colorTheme.dark;
     const [isSaving, setIsSaving] = useState(false);
 
     // style list
-    const inputStyles = {
-        label: {
-            color: isDarkTheme ? '#FFFFFF' : '#334155',
-            fontWeight: 600,
-            fontSize: '14px',
-        },
-        input: {
-            backgroundColor: isDarkTheme ? '#102340' : '#FFFFFF',
+    const inputStyles = getDashboardInputStyles(isDarkTheme);
+    const numberInputStyles = {
+        ...inputStyles,
+        control: {
             color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
             borderColor: isDarkTheme ? 'rgba(33, 212, 247, 0.45)' : 'rgba(11, 26, 51, 0.25)',
-            fontSize: '14px',
         },
     };
-    const tabsStyles = {
-        tab: {
-            color: isDarkTheme ? '#FFFFFF' : '#334155',
-        },
-    };
+    const tabsStyles = getDashboardTabsStyles(isDarkTheme);
 
     useEffect(() => {
         onSavingChange?.(isSaving);
@@ -155,30 +126,24 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
         try {
             const base64Logo = values.logo ? await convertFileToBase64(values.logo) : null;
 
-            await saveCompanyDocument(generateId(values.en.companyName), {
+            await saveSchoolDocument(generateId(values.en.schoolName), {
                 en: {
-                    CompanyName: values.en.companyName,
-                    Team: values.en.team,
-                    Position: values.en.position,
-                    JobDuties: values.en.jobDutie,
-                    Projects: values.en.project,
+                    SchoolName: values.en.schoolName,
+                    Type: values.en.type,
+                    Title: values.en.title,
                 },
                 zh: {
-                    CompanyName: values.zh.companyName,
-                    Team: values.zh.team,
-                    Position: values.zh.position,
-                    JobDuties: values.zh.jobDutie,
-                    Projects: values.zh.project,
+                    SchoolName: values.zh.schoolName,
+                    Type: values.zh.type,
+                    Title: values.zh.title,
                 },
                 cn: {
-                    CompanyName: values.cn.companyName,
-                    Team: values.cn.team,
-                    Position: values.cn.position,
-                    JobDuties: values.cn.jobDutie,
-                    Projects: values.cn.project,
+                    SchoolName: values.cn.schoolName,
+                    Type: values.cn.type,
+                    Title: values.cn.title,
                 },
+                GPA: values.gpa,
                 Logo: base64Logo,
-                SkillSets: values.skillSets,
                 Present: values.present,
                 StartDate: values.startDate ?? new Date(),
                 EndDate: values.present ? null : values.endDate,
@@ -187,10 +152,10 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
 
             form.reset();
             closeModal();
-            showNotification('Company saved successfully.', 'success');
+            showNotification('School saved successfully.', 'success');
         } catch (error) {
-            console.error('Failed to submit company:', error);
-            showNotification("Failed to submit company.", 'error');
+            console.error('Failed to submit school:', error);
+            showNotification("Failed to submit school.", 'error');
         } finally {
             setIsSaving(false);
         }
@@ -222,7 +187,7 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
     return (
         <div>
             {/* form */}
-            <form key={"companyForm"} onSubmit={form.onSubmit(onSubmit)}>
+            <form key={"schoolForm"} onSubmit={form.onSubmit(onSubmit)}>
                 <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>
                     <Tabs.List>
                         {localeTabs.map(({ value, label }) => (
@@ -233,16 +198,17 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
                     </Tabs.List>
                     {localeTabs.map(({ value }) => renderTabPanel(value))}
                 </Tabs>
-                <MultiSelect
-                    label="Skill(s)"
-                    data={skillData.map(skill => skill.SkillName)}
-                    clearable
-                    searchable
-                    styles={inputStyles}
-                    className="mt-2"
+                <NumberInput
+                    label="GPA"
+                    withAsterisk
+                    styles={numberInputStyles}
+                    value={form.values.gpa}
+                    onChange={(value) => form.setFieldValue('gpa', toNumberOrZero(value))}
+                    onBlur={() => form.validateField('gpa')}
+                    error={form.errors.gpa}
                     disabled={isSaving}
-                    key={form.key('skillSets')}
-                    {...form.getInputProps('skillSets')}
+                    className="pt-2"
+                    min={0}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:pt-2 lg:pt-2">
                     <DateInput
@@ -254,6 +220,8 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
                         onBlur={() => form.validateField('startDate')}
                         error={form.errors.startDate}
                         disabled={isSaving}
+                        clearable
+                        maxDate={form.values.endDate || undefined}
                     />
                     <DateInput
                         label="End Date"
@@ -263,6 +231,8 @@ export default function AddCompanyModalContent({ closeModal, onSavingChange }: A
                         onBlur={() => form.validateField('endDate')}
                         error={form.errors.endDate}
                         disabled={isSaving || form.values.present}
+                        minDate={form.values.startDate || undefined}
+                        clearable
                     />
                 </div>
                 <FileInput

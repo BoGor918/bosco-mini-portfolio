@@ -7,7 +7,7 @@ import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import ProjectModalComponent from '../modal/project/ProjectModalComponent';
+import ProjectModalComponent from '../home/modals/ProjectModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // type

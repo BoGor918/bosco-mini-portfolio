@@ -6,7 +6,7 @@ import { LoadingOverlay, Box } from "@mantine/core";
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
-import { getDetailStyles, modalStyles } from '../util';
+import { getDetailStyles, modalStyles } from './util';
 // global variable
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";

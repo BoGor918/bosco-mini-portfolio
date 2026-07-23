@@ -9,7 +9,7 @@ import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
 // icon
 import { MdEdit } from "react-icons/md";
-import { normalizeImageSource } from '../util';
+import { normalizeImageSource } from '../../util';
 
 // date helper functions
 const toDisplayDate = (seconds: number) => {

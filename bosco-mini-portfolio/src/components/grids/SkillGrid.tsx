@@ -7,14 +7,14 @@ import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import SkillModalComponent from '../modal/skill/SkillModalComponent';
+import SkillModalComponent from '../home/modals/SkillModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
 import { SkillData } from '../../types/type';
 // util
 import { gridStyles } from './util';
-import { normalizeImageSource } from '../dashboard/util';
+import { normalizeImageSource } from '../util';
 
 export default function SkillGrid() {
     // global variable

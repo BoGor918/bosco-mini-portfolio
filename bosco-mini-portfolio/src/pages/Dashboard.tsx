@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks';
-import CompanyTable from '../components/dashboard/table/CompanyTable';
-import SkillTable from '../components/dashboard/table/SkillTable';
+import CompanyTable from '../components/dashboard/tables/CompanyTable';
+import SkillTable from '../components/dashboard/tables/SkillTable';
+import SchoolTable from '../components/dashboard/tables/SchoolTable';
+import ProjectTable from '../components/dashboard/tables/ProjectTable';
 import { IoMdAddCircle } from "react-icons/io";
 import { MapperContext } from '../globalVariable/MapperContextProvider';
 import { colorTheme } from '../globalVariable/GlobalVariable';
 import { Modal } from '@mantine/core';
 import { useSearchParams } from 'react-router-dom';
-import AddCompanyModalContent from '../components/dashboard/company/AddCompanyModalContent';
-import AddSkillModalContent from '../components/dashboard/skill/AddSkillModalContent';
+import AddCompanyModalContent from '../components/dashboard/modals/company/AddCompanyModalComponent';
+import AddSkillModalContent from '../components/dashboard/modals/skill/AddSkillModalComponent';
+import AddSchoolModalContent from '../components/dashboard/modals/school/AddSchoolModalComponent';
+import AddProjectModalContent from '../components/dashboard/modals/project/AddProjectModalComponent';
 
 const validWidgets = new Set(["c", "e", "p", "s"]);
 
@@ -26,7 +30,7 @@ export default function Dashboard() {
     // modal title
     const modalTitle = widget === "c" ? "Add Company" : widget === "s" ? "Add Skill" : widget === "p" ? "Add Project" : "Add Education";
     // dashboard title
-    const dashboardTitle = widget === "c" ? "Companies" : widget === "s" ? "Skills" : widget === "p" ? "Projects" : "Educations";
+    const dashboardTitle = widget === "c" ? "Company(s)" : widget === "s" ? "Skill(s)" : widget === "p" ? "Project(s)" : "Education(s)";
 
     useEffect(() => {
         if (!validWidgets.has(widget)) {
@@ -57,7 +61,7 @@ export default function Dashboard() {
                 <span className={`text-xl mr-auto ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`}>{dashboardTitle}:</span>
                 <IoMdAddCircle onClick={handleOpenModal} className={`cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${isDarkTheme ? 'text-white' : 'text-[#0F172A]'}`} />
             </div>
-            {widget === "s" ? <SkillTable /> : <CompanyTable />}
+            {widget === "s" ? <SkillTable /> : widget === "e" ? <SchoolTable /> : widget === "p" ? <ProjectTable /> : <CompanyTable />}
             {/* modal components */}
             {
                 theme === colorTheme.light ?
@@ -71,7 +75,7 @@ export default function Dashboard() {
                         closeOnEscape={!isModalSaving}
                         withCloseButton={!isModalSaving}
                     >
-                        {widget === "c" ? <AddCompanyModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "s" ? <AddSkillModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "p" ? "Add Project" : "Add Education"}
+                        {widget === "c" ? <AddCompanyModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "s" ? <AddSkillModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "p" ? <AddProjectModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : <AddSchoolModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} />}
                     </Modal> :
                     <Modal opened={opened} onClose={handleCloseModal} size="lg" title={modalTitle} centered
                         closeOnClickOutside={!isModalSaving}
@@ -90,7 +94,7 @@ export default function Dashboard() {
                             },
                         }}
                     >
-                        {widget === "c" ? <AddCompanyModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "s" ? <AddSkillModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "p" ? "Add Project" : "Add Education"}
+                        {widget === "c" ? <AddCompanyModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "s" ? <AddSkillModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : widget === "p" ? <AddProjectModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} /> : <AddSchoolModalContent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} />}
                     </Modal>
             }
         </div>

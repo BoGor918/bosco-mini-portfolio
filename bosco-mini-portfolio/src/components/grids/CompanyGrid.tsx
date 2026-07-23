@@ -7,7 +7,7 @@ import { colorTheme } from '../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
-import CompanyModalComponent from '../modal/company/CompanyModalComponent';
+import CompanyModalComponent from '../home/modals/CompanyModalComponent';
 // react lazy load image
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
@@ -16,7 +16,7 @@ import { CompanyData } from '../../types/type';
 import { gridStyles } from './util';
 // global variable
 import { languageSetting } from '../../globalVariable/Translation';
-import { normalizeImageSource } from '../dashboard/util';
+import { normalizeImageSource } from '../util';
 
 export default function CompanyGrid() {
     // global variable
