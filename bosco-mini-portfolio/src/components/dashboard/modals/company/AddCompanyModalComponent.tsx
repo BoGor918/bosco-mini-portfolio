@@ -1,8 +1,7 @@
 // react
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 // mantine
-import { Button, Group, TextInput, Tabs, MultiSelect, Checkbox, FileInput } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { MultiSelect } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
 import { colorTheme } from '../../../../globalVariable/GlobalVariable';
@@ -11,7 +10,7 @@ import { translationKeys } from '../../../../globalVariable/Translation';
 import { showNotification } from '../../../../globalVariable/Notification';
 // util
 import { convertFileToBase64, generateId, toDateOrNull } from '../../../util';
-import { DashboardModalType, Locale, getDashboardInputStyles, getDashboardTabsStyles, localeTabs } from '../util';
+import { SuccessNotificationType, ErrorNotificationType, DashboardDateRangeFields, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardPresentCheckbox, DashboardSubmitButton, Locale, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect } from '../util';
 // query
 import { saveCompanyDocument } from '../../../../query/CompanyQuery';
 
@@ -40,6 +39,8 @@ const formWithLanguageFieldKeys: Array<keyof CompanyFormFields> = [
 ];
 
 export default function AddCompanyModalComponent({ closeModal, onSavingChange }: DashboardModalType) {
+    // context
+    const { t, theme, skillData } = useContext(MapperContext);
     // form
     const form = useForm<SubmitHandler>({
         mode: 'controlled',
@@ -73,39 +74,37 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
         },
         validate: {
             en: {
-                companyName: (value) => (value.trim().length === 0 ? 'Company name is required' : null),
-                team: (value) => (value.trim().length === 0 ? 'Team is required' : null),
-                position: (value) => (value.trim().length === 0 ? 'Position is required' : null),
-                jobDutie: (value) => (value.trim().length === 0 ? 'Job duties are required' : null),
-                project: (value) => (value.trim().length === 0 ? 'Project is required' : null),
+                companyName: (value) => (value.trim().length === 0 ? `${t(translationKeys.companyName)}${t(translationKeys.isRequired)}` : null),
+                team: (value) => (value.trim().length === 0 ? `${t(translationKeys.team)}${t(translationKeys.isRequired)}` : null),
+                position: (value) => (value.trim().length === 0 ? `${t(translationKeys.position)}${t(translationKeys.isRequired)}` : null),
+                jobDutie: (value) => (value.trim().length === 0 ? `${t(translationKeys.jobDutie)}${t(translationKeys.isRequired)}` : null),
+                project: (value) => (value.trim().length === 0 ? `${t(translationKeys.projectName)}${t(translationKeys.isRequired)}` : null),
             },
             zh: {
-                companyName: (value) => (value.trim().length === 0 ? 'Company name is required' : null),
-                team: (value) => (value.trim().length === 0 ? 'Team is required' : null),
-                position: (value) => (value.trim().length === 0 ? 'Position is required' : null),
-                jobDutie: (value) => (value.trim().length === 0 ? 'Job duties are required' : null),
-                project: (value) => (value.trim().length === 0 ? 'Project is required' : null),
+                companyName: (value) => (value.trim().length === 0 ? `${t(translationKeys.companyName)}${t(translationKeys.isRequired)}` : null),
+                team: (value) => (value.trim().length === 0 ? `${t(translationKeys.team)}${t(translationKeys.isRequired)}` : null),
+                position: (value) => (value.trim().length === 0 ? `${t(translationKeys.position)}${t(translationKeys.isRequired)}` : null),
+                jobDutie: (value) => (value.trim().length === 0 ? `${t(translationKeys.jobDutie)}${t(translationKeys.isRequired)}` : null),
+                project: (value) => (value.trim().length === 0 ? `${t(translationKeys.projectName)}${t(translationKeys.isRequired)}` : null),
             },
             cn: {
-                companyName: (value) => (value.trim().length === 0 ? 'Company name is required' : null),
-                team: (value) => (value.trim().length === 0 ? 'Team is required' : null),
-                position: (value) => (value.trim().length === 0 ? 'Position is required' : null),
-                jobDutie: (value) => (value.trim().length === 0 ? 'Job duties are required' : null),
-                project: (value) => (value.trim().length === 0 ? 'Project is required' : null),
+                companyName: (value) => (value.trim().length === 0 ? `${t(translationKeys.companyName)}${t(translationKeys.isRequired)}` : null),
+                team: (value) => (value.trim().length === 0 ? `${t(translationKeys.team)}${t(translationKeys.isRequired)}` : null),
+                position: (value) => (value.trim().length === 0 ? `${t(translationKeys.position)}${t(translationKeys.isRequired)}` : null),
+                jobDutie: (value) => (value.trim().length === 0 ? `${t(translationKeys.jobDutie)}${t(translationKeys.isRequired)}` : null),
+                project: (value) => (value.trim().length === 0 ? `${t(translationKeys.projectName)}${t(translationKeys.isRequired)}` : null),
             },
-            skillSets: (value) => (value.length === 0 ? 'At least one skill is required' : null),
-            logo: (value) => (value === null ? 'Logo is required' : null),
-            startDate: (value) => (value === null ? 'Start date is required' : null),
+            skillSets: (value) => (value.length === 0 ? `${t(translationKeys.atLeastOneSkill)}${t(translationKeys.isRequired)}` : null),
+            logo: (value) => (value === null ? `${t(translationKeys.logo)}${t(translationKeys.isRequired)}` : null),
+            startDate: (value) => (value === null ? `${t(translationKeys.startDate)}${t(translationKeys.isRequired)}` : null),
             endDate: (value, values) => {
                 if (!values.present && value === null) {
-                    return 'End date is required';
+                    return `${t(translationKeys.endDate)}${t(translationKeys.isRequired)}`;
                 }
                 return null;
             },
         },
     });
-    // context
-    const { t, theme, skillData } = useContext(MapperContext);
     // color theme
     const isDarkTheme = theme === colorTheme.dark;
     const [isSaving, setIsSaving] = useState(false);
@@ -114,9 +113,7 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
     const inputStyles = getDashboardInputStyles(isDarkTheme);
     const tabsStyles = getDashboardTabsStyles(isDarkTheme);
 
-    useEffect(() => {
-        onSavingChange?.(isSaving);
-    }, [isSaving, onSavingChange]);
+    useDashboardSavingEffect(isSaving, onSavingChange);
 
     const onSubmit = async (values: SubmitHandler) => {
         if (isSaving) {
@@ -160,54 +157,30 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
 
             form.reset();
             closeModal();
-            showNotification('Company saved successfully.', 'success');
+            showNotification(`${t(translationKeys.company)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
-            console.error('Failed to submit company:', error);
-            showNotification("Failed to submit company.", 'error');
+            console.error(`${t(translationKeys.failedToSubmit)}${t(translationKeys.company)}`, error);
+            showNotification(`${t(translationKeys.failedToSubmit)}${t(translationKeys.company)}`, ErrorNotificationType);
         } finally {
             setIsSaving(false);
         }
     };
 
-    const renderTabPanel = (locale: Locale) => (
-        <Tabs.Panel value={locale}>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 mt-2">
-                {formWithLanguageFieldKeys.map((fieldKey, index) => {
-                    const formPath = `${locale}.${fieldKey}` as const;
-                    const isLastOddField = formWithLanguageFieldKeys.length % 2 !== 0 && index === formWithLanguageFieldKeys.length - 1;
-
-                    return (
-                        <TextInput
-                            key={formPath}
-                            className={`w-full ${isLastOddField ? 'md:col-span-2' : ''}`}
-                            withAsterisk
-                            label={`${t(translationKeys[fieldKey])} (${locale})`}
-                            styles={inputStyles}
-                            {...form.getInputProps(formPath)}
-                            disabled={isSaving}
-                        />
-                    );
-                })}
-            </div>
-        </Tabs.Panel>
-    );
-
     return (
         <div>
             {/* form */}
             <form key={"companyForm"} onSubmit={form.onSubmit(onSubmit)}>
-                <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>
-                    <Tabs.List>
-                        {localeTabs.map(({ value, label }) => (
-                            <Tabs.Tab key={value} value={value}>
-                                {label}
-                            </Tabs.Tab>
-                        ))}
-                    </Tabs.List>
-                    {localeTabs.map(({ value }) => renderTabPanel(value))}
-                </Tabs>
+                <DashboardLocaleTextTabs
+                    tabsStyles={tabsStyles}
+                    fieldKeys={formWithLanguageFieldKeys as string[]}
+                    inputStyles={inputStyles}
+                    disabled={isSaving}
+                    getInputProps={(path) => form.getInputProps(path)}
+                    getFieldLabel={(fieldKey, locale) => `${t(translationKeys[fieldKey as keyof typeof translationKeys])} (${locale})`}
+                />
                 <MultiSelect
-                    label="Skill(s)"
+                    withAsterisk
+                    label={`${t(translationKeys.skill)}`}
                     data={skillData.map(skill => skill.SkillName)}
                     clearable
                     searchable
@@ -217,54 +190,36 @@ export default function AddCompanyModalComponent({ closeModal, onSavingChange }:
                     key={form.key('skillSets')}
                     {...form.getInputProps('skillSets')}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:pt-2 lg:pt-2">
-                    <DateInput
-                        label="Start Date"
-                        styles={inputStyles}
-                        className="pt-2 md:pt-0 lg:pt-0"
-                        value={form.values.startDate}
-                        onChange={(value) => form.setFieldValue('startDate', toDateOrNull(value))}
-                        onBlur={() => form.validateField('startDate')}
-                        error={form.errors.startDate}
-                        disabled={isSaving}
-                        maxDate={form.values.endDate || undefined}
-                        clearable
-                    />
-                    <DateInput
-                        label="End Date"
-                        styles={inputStyles}
-                        value={form.values.endDate}
-                        onChange={(value) => form.setFieldValue('endDate', toDateOrNull(value))}
-                        onBlur={() => form.validateField('endDate')}
-                        error={form.errors.endDate}
-                        disabled={isSaving || form.values.present}
-                        minDate={form.values.startDate || undefined}
-                        clearable
-                    />
-                </div>
-                <FileInput
-                    accept="image/png,image/jpeg"
-                    label="Upload files"
-                    placeholder="Upload files"
-                    styles={inputStyles}
-                    key={form.key('logo')}
-                    className="pt-2"
-                    disabled={isSaving}
-                    {...form.getInputProps('logo')}
+                <DashboardDateRangeFields
+                    inputStyles={inputStyles}
+                    isSaving={isSaving}
+                    present={form.values.present}
+                    startDate={form.values.startDate}
+                    endDate={form.values.endDate}
+                    onStartDateChange={(value) => form.setFieldValue('startDate', toDateOrNull(value))}
+                    onEndDateChange={(value) => form.setFieldValue('endDate', toDateOrNull(value))}
+                    onStartDateBlur={() => form.validateField('startDate')}
+                    onEndDateBlur={() => form.validateField('endDate')}
+                    startDateError={form.errors.startDate}
+                    endDateError={form.errors.endDate}
+                    startDateLabel={t(translationKeys.startDate)}
+                    endDateLabel={t(translationKeys.endDate)}
                 />
-                <Checkbox
-                    label="Present"
-                    className="pt-4"
-                    styles={inputStyles}
-                    key={form.key('present')}
+                <DashboardImageFileInput
+                    inputStyles={inputStyles}
+                    componentKey={form.key('logo')}
                     disabled={isSaving}
-                    {...form.getInputProps('present')}
+                    inputProps={form.getInputProps('logo')}
+                    label={t(translationKeys.uploadFile)}
                 />
-                <Group justify="space-between" mt="md">
-                    <Button type="submit" disabled={isSaving}>
-                        Submit
-                    </Button>
-                </Group>
+                <DashboardPresentCheckbox
+                    inputStyles={inputStyles}
+                    componentKey={form.key('present')}
+                    disabled={isSaving}
+                    inputProps={form.getInputProps('present')}
+                    label={t(translationKeys.present)}
+                />
+                <DashboardSubmitButton isSaving={isSaving} />
             </form>
         </div>
     );

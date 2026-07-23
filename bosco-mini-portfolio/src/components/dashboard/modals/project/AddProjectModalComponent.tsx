@@ -1,7 +1,7 @@
 // react
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 // mantine
-import { Button, Group, TextInput, Tabs, MultiSelect, FileInput, TagsInput } from '@mantine/core';
+import { TextInput, MultiSelect, TagsInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
 import { colorTheme } from '../../../../globalVariable/GlobalVariable';
@@ -10,7 +10,7 @@ import { translationKeys } from '../../../../globalVariable/Translation';
 import { showNotification } from '../../../../globalVariable/Notification';
 // util
 import { convertFileToBase64, generateId } from '../../../util';
-import { DashboardModalType, Locale, getDashboardInputStyles, getDashboardTabsStyles, localeTabs } from '../util';
+import { DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardSubmitButton, ErrorNotificationType, Locale, SuccessNotificationType, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect } from '../util';
 // query
 import { saveProjectDocument } from '../../../../query/ProjectQuery';
 
@@ -51,18 +51,18 @@ export default function AddProjectModalComponent({ closeModal, onSavingChange }:
         },
         validate: {
             en: {
-                description: (value) => (value.trim().length === 0 ? 'Description is required' : null),
+                description: (value) => (value.trim().length === 0 ? `${t(translationKeys.description)}${t(translationKeys.isRequired)}` : null),
             },
             zh: {
-                description: (value) => (value.trim().length === 0 ? 'Description is required' : null),
+                description: (value) => (value.trim().length === 0 ? `${t(translationKeys.description)}${t(translationKeys.isRequired)}` : null),
             },
             cn: {
-                description: (value) => (value.trim().length === 0 ? 'Description is required' : null),
+                description: (value) => (value.trim().length === 0 ? `${t(translationKeys.description)}${t(translationKeys.isRequired)}` : null),
             },
-            projectName: (value) => (value.trim().length === 0 ? 'Project name is required' : null),
-            techStack: (value) => (value.length === 0 ? 'At least one tech stack is required' : null),
-            link: (value) => (value.length === 0 ? 'At least one link is required' : null),
-            logo: (value) => (value === null ? 'Logo is required' : null),
+            projectName: (value) => (value.trim().length === 0 ? `${t(translationKeys.projectName)}${t(translationKeys.isRequired)}` : null),
+            techStack: (value) => (value.length === 0 ? `${t(translationKeys.atLeastOneTechStack)}${t(translationKeys.isRequired)}` : null),
+            link: (value) => (value.length === 0 ? `${t(translationKeys.atLeastOneLink)}${t(translationKeys.isRequired)}` : null),
+            logo: (value) => (value === null ? `${t(translationKeys.logo)}${t(translationKeys.isRequired)}` : null),
         },
     });
     // context
@@ -75,9 +75,7 @@ export default function AddProjectModalComponent({ closeModal, onSavingChange }:
     const inputStyles = getDashboardInputStyles(isDarkTheme);
     const tabsStyles = getDashboardTabsStyles(isDarkTheme);
 
-    useEffect(() => {
-        onSavingChange?.(isSaving);
-    }, [isSaving, onSavingChange]);
+    useDashboardSavingEffect(isSaving, onSavingChange);
 
     const onSubmit = async (values: SubmitHandler) => {
         if (isSaving) {
@@ -108,52 +106,27 @@ export default function AddProjectModalComponent({ closeModal, onSavingChange }:
 
             form.reset();
             closeModal();
-            showNotification('Project saved successfully.', 'success');
+            showNotification(`${t(translationKeys.project)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
-            console.error('Failed to submit project:', error);
-            showNotification("Failed to submit project.", 'error');
+            console.error(`${t(translationKeys.failedToSubmit)}${t(translationKeys.project)}`, error);
+            showNotification(`${t(translationKeys.failedToSubmit)}${t(translationKeys.project)}`, ErrorNotificationType);
         } finally {
             setIsSaving(false);
         }
     };
 
-    const renderTabPanel = (locale: Locale) => (
-        <Tabs.Panel value={locale}>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 mt-2">
-                {formWithLanguageFieldKeys.map((fieldKey, index) => {
-                    const formPath = `${locale}.${fieldKey}` as const;
-                    const isLastOddField = formWithLanguageFieldKeys.length % 2 !== 0 && index === formWithLanguageFieldKeys.length - 1;
-
-                    return (
-                        <TextInput
-                            key={formPath}
-                            className={`w-full ${isLastOddField ? 'md:col-span-2' : ''}`}
-                            withAsterisk
-                            label={`${t(translationKeys[fieldKey])} (${locale})`}
-                            styles={inputStyles}
-                            {...form.getInputProps(formPath)}
-                            disabled={isSaving}
-                        />
-                    );
-                })}
-            </div>
-        </Tabs.Panel>
-    );
-
     return (
         <div>
             {/* form */}
             <form key={"projectForm"} onSubmit={form.onSubmit(onSubmit)}>
-                <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>
-                    <Tabs.List>
-                        {localeTabs.map(({ value, label }) => (
-                            <Tabs.Tab key={value} value={value}>
-                                {label}
-                            </Tabs.Tab>
-                        ))}
-                    </Tabs.List>
-                    {localeTabs.map(({ value }) => renderTabPanel(value))}
-                </Tabs>
+                <DashboardLocaleTextTabs
+                    tabsStyles={tabsStyles}
+                    fieldKeys={formWithLanguageFieldKeys as string[]}
+                    inputStyles={inputStyles}
+                    disabled={isSaving}
+                    getInputProps={(path) => form.getInputProps(path)}
+                    getFieldLabel={(fieldKey, locale) => `${t(translationKeys[fieldKey as keyof typeof translationKeys])} (${locale})`}
+                />
                 <TextInput
                     className="w-full mt-2"
                     withAsterisk
@@ -164,7 +137,8 @@ export default function AddProjectModalComponent({ closeModal, onSavingChange }:
                     {...form.getInputProps('projectName')}
                 />
                 <MultiSelect
-                    label="Tech Stack(s)"
+                    label={t(translationKeys.techStack)}
+                    withAsterisk
                     data={skillData.map(skill => skill.SkillName)}
                     clearable
                     searchable
@@ -175,7 +149,8 @@ export default function AddProjectModalComponent({ closeModal, onSavingChange }:
                     {...form.getInputProps('techStack')}
                 />
                 <TagsInput
-                    label="Link(s)"
+                    label={t(translationKeys.link)}
+                    withAsterisk
                     styles={inputStyles}
                     className="mt-2"
                     disabled={isSaving}
@@ -185,21 +160,14 @@ export default function AddProjectModalComponent({ closeModal, onSavingChange }:
                     key={form.key('link')}
                     {...form.getInputProps('link')}
                 />
-                <FileInput
-                    accept="image/png,image/jpeg"
-                    label="Upload files"
-                    placeholder="Upload files"
-                    styles={inputStyles}
-                    key={form.key('logo')}
-                    className="pt-2"
+                <DashboardImageFileInput
+                    inputStyles={inputStyles}
+                    componentKey={form.key('logo')}
                     disabled={isSaving}
-                    {...form.getInputProps('logo')}
+                    inputProps={form.getInputProps('logo')}
+                    label={t(translationKeys.uploadFile)}
                 />
-                <Group justify="space-between" mt="md">
-                    <Button type="submit" disabled={isSaving}>
-                        Submit
-                    </Button>
-                </Group>
+                <DashboardSubmitButton isSaving={isSaving} />
             </form>
         </div>
     );

@@ -1,8 +1,7 @@
 // react
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 // mantine
-import { Button, Group, TextInput, Tabs, Checkbox, FileInput, NumberInput } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
 import { colorTheme } from '../../../../globalVariable/GlobalVariable';
@@ -10,7 +9,7 @@ import { MapperContext } from '../../../../globalVariable/MapperContextProvider'
 import { translationKeys } from '../../../../globalVariable/Translation';
 import { showNotification } from '../../../../globalVariable/Notification';
 // util
-import { DashboardModalType, Locale, getDashboardInputStyles, getDashboardTabsStyles, localeTabs } from '../util';
+import { DashboardDateRangeFields, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardPresentCheckbox, DashboardSubmitButton, ErrorNotificationType, Locale, SuccessNotificationType, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect } from '../util';
 import { convertFileToBase64, generateId, toDateOrNull } from '../../../util';
 // query
 import { saveSchoolDocument } from '../../../../query/SchoolQuery';
@@ -71,25 +70,25 @@ export default function AddSchoolModalComponent({ closeModal, onSavingChange }: 
         },
         validate: {
             en: {
-                schoolName: (value) => (value.trim().length === 0 ? 'School name is required' : null),
-                type: (value) => (value.trim().length === 0 ? 'Type is required' : null),
-                title: (value) => (value.trim().length === 0 ? 'Title is required' : null),
+                schoolName: (value) => (value.trim().length === 0 ? `${t(translationKeys.schoolName)}${t(translationKeys.isRequired)}` : null),
+                type: (value) => (value.trim().length === 0 ? `${t(translationKeys.type)}${t(translationKeys.isRequired)}` : null),
+                title: (value) => (value.trim().length === 0 ? `${t(translationKeys.title)}${t(translationKeys.isRequired)}` : null),
             },
             zh: {
-                schoolName: (value) => (value.trim().length === 0 ? 'School name is required' : null),
-                type: (value) => (value.trim().length === 0 ? 'Type is required' : null),
-                title: (value) => (value.trim().length === 0 ? 'Title is required' : null),
+                schoolName: (value) => (value.trim().length === 0 ? `${t(translationKeys.schoolName)}${t(translationKeys.isRequired)}` : null),
+                type: (value) => (value.trim().length === 0 ? `${t(translationKeys.type)}${t(translationKeys.isRequired)}` : null),
+                title: (value) => (value.trim().length === 0 ? `${t(translationKeys.title)}${t(translationKeys.isRequired)}` : null),
             },
             cn: {
-                schoolName: (value) => (value.trim().length === 0 ? 'School name is required' : null),
-                type: (value) => (value.trim().length === 0 ? 'Type is required' : null),
-                title: (value) => (value.trim().length === 0 ? 'Title is required' : null),
+                schoolName: (value) => (value.trim().length === 0 ? `${t(translationKeys.schoolName)}${t(translationKeys.isRequired)}` : null),
+                type: (value) => (value.trim().length === 0 ? `${t(translationKeys.type)}${t(translationKeys.isRequired)}` : null),
+                title: (value) => (value.trim().length === 0 ? `${t(translationKeys.title)}${t(translationKeys.isRequired)}` : null),
             },
-            logo: (value) => (value === null ? 'Logo is required' : null),
-            startDate: (value) => (value === null ? 'Start date is required' : null),
+            logo: (value) => (value === null ? `${t(translationKeys.logo)}${t(translationKeys.isRequired)}` : null),
+            startDate: (value) => (value === null ? `${t(translationKeys.startDate)}${t(translationKeys.isRequired)}` : null),
             endDate: (value, values) => {
                 if (!values.present && value === null) {
-                    return 'End date is required';
+                    return `${t(translationKeys.endDate)}${t(translationKeys.isRequired)}`;
                 }
                 return null;
             },
@@ -112,9 +111,7 @@ export default function AddSchoolModalComponent({ closeModal, onSavingChange }: 
     };
     const tabsStyles = getDashboardTabsStyles(isDarkTheme);
 
-    useEffect(() => {
-        onSavingChange?.(isSaving);
-    }, [isSaving, onSavingChange]);
+    useDashboardSavingEffect(isSaving, onSavingChange);
 
     const onSubmit = async (values: SubmitHandler) => {
         if (isSaving) {
@@ -152,54 +149,29 @@ export default function AddSchoolModalComponent({ closeModal, onSavingChange }: 
 
             form.reset();
             closeModal();
-            showNotification('School saved successfully.', 'success');
+            showNotification(`${t(translationKeys.school)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
-            console.error('Failed to submit school:', error);
-            showNotification("Failed to submit school.", 'error');
+            console.error(`${t(translationKeys.failedToSubmit)}${t(translationKeys.school)}`, error);
+            showNotification(`${t(translationKeys.failedToSubmit)}${t(translationKeys.school)}`, ErrorNotificationType);
         } finally {
             setIsSaving(false);
         }
     };
 
-    const renderTabPanel = (locale: Locale) => (
-        <Tabs.Panel value={locale}>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 mt-2">
-                {formWithLanguageFieldKeys.map((fieldKey, index) => {
-                    const formPath = `${locale}.${fieldKey}` as const;
-                    const isLastOddField = formWithLanguageFieldKeys.length % 2 !== 0 && index === formWithLanguageFieldKeys.length - 1;
-
-                    return (
-                        <TextInput
-                            key={formPath}
-                            className={`w-full ${isLastOddField ? 'md:col-span-2' : ''}`}
-                            withAsterisk
-                            label={`${t(translationKeys[fieldKey])} (${locale})`}
-                            styles={inputStyles}
-                            {...form.getInputProps(formPath)}
-                            disabled={isSaving}
-                        />
-                    );
-                })}
-            </div>
-        </Tabs.Panel>
-    );
-
     return (
         <div>
             {/* form */}
             <form key={"schoolForm"} onSubmit={form.onSubmit(onSubmit)}>
-                <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>
-                    <Tabs.List>
-                        {localeTabs.map(({ value, label }) => (
-                            <Tabs.Tab key={value} value={value}>
-                                {label}
-                            </Tabs.Tab>
-                        ))}
-                    </Tabs.List>
-                    {localeTabs.map(({ value }) => renderTabPanel(value))}
-                </Tabs>
+                <DashboardLocaleTextTabs
+                    tabsStyles={tabsStyles}
+                    fieldKeys={formWithLanguageFieldKeys as string[]}
+                    inputStyles={inputStyles}
+                    disabled={isSaving}
+                    getInputProps={(path) => form.getInputProps(path)}
+                    getFieldLabel={(fieldKey, locale) => `${t(translationKeys[fieldKey as keyof typeof translationKeys])} (${locale})`}
+                />
                 <NumberInput
-                    label="GPA"
+                    label={t(translationKeys.score)}
                     withAsterisk
                     styles={numberInputStyles}
                     value={form.values.gpa}
@@ -210,54 +182,36 @@ export default function AddSchoolModalComponent({ closeModal, onSavingChange }: 
                     className="pt-2"
                     min={0}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:pt-2 lg:pt-2">
-                    <DateInput
-                        label="Start Date"
-                        styles={inputStyles}
-                        className="pt-2 md:pt-0 lg:pt-0"
-                        value={form.values.startDate}
-                        onChange={(value) => form.setFieldValue('startDate', toDateOrNull(value))}
-                        onBlur={() => form.validateField('startDate')}
-                        error={form.errors.startDate}
-                        disabled={isSaving}
-                        clearable
-                        maxDate={form.values.endDate || undefined}
-                    />
-                    <DateInput
-                        label="End Date"
-                        styles={inputStyles}
-                        value={form.values.endDate}
-                        onChange={(value) => form.setFieldValue('endDate', toDateOrNull(value))}
-                        onBlur={() => form.validateField('endDate')}
-                        error={form.errors.endDate}
-                        disabled={isSaving || form.values.present}
-                        minDate={form.values.startDate || undefined}
-                        clearable
-                    />
-                </div>
-                <FileInput
-                    accept="image/png,image/jpeg"
-                    label="Upload files"
-                    placeholder="Upload files"
-                    styles={inputStyles}
-                    key={form.key('logo')}
-                    className="pt-2"
-                    disabled={isSaving}
-                    {...form.getInputProps('logo')}
+                <DashboardDateRangeFields
+                    inputStyles={inputStyles}
+                    isSaving={isSaving}
+                    present={form.values.present}
+                    startDate={form.values.startDate}
+                    endDate={form.values.endDate}
+                    onStartDateChange={(value) => form.setFieldValue('startDate', toDateOrNull(value))}
+                    onEndDateChange={(value) => form.setFieldValue('endDate', toDateOrNull(value))}
+                    onStartDateBlur={() => form.validateField('startDate')}
+                    onEndDateBlur={() => form.validateField('endDate')}
+                    startDateError={form.errors.startDate}
+                    endDateError={form.errors.endDate}
+                    startDateLabel={t(translationKeys.startDate)}
+                    endDateLabel={t(translationKeys.endDate)}
                 />
-                <Checkbox
-                    label="Present"
-                    className="pt-4"
-                    styles={inputStyles}
-                    key={form.key('present')}
+                <DashboardImageFileInput
+                    inputStyles={inputStyles}
+                    componentKey={form.key('logo')}
                     disabled={isSaving}
-                    {...form.getInputProps('present')}
+                    inputProps={form.getInputProps('logo')}
+                    label={t(translationKeys.uploadFile)}
                 />
-                <Group justify="space-between" mt="md">
-                    <Button type="submit" disabled={isSaving}>
-                        Submit
-                    </Button>
-                </Group>
+                <DashboardPresentCheckbox
+                    inputStyles={inputStyles}
+                    componentKey={form.key('present')}
+                    disabled={isSaving}
+                    inputProps={form.getInputProps('present')}
+                    label={t(translationKeys.present)}
+                />
+                <DashboardSubmitButton isSaving={isSaving} />
             </form>
         </div>
     );

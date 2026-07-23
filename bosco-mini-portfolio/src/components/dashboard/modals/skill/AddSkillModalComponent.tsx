@@ -1,7 +1,7 @@
 // react
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 // mantine
-import { Button, Group, TextInput, FileInput, LoadingOverlay } from '@mantine/core';
+import { TextInput, LoadingOverlay } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
 import { colorTheme } from '../../../../globalVariable/GlobalVariable';
@@ -10,7 +10,7 @@ import { showNotification } from '../../../../globalVariable/Notification';
 import { translationKeys } from '../../../../globalVariable/Translation';
 // util
 import { convertFileToBase64, generateId } from '../../../util';
-import { DashboardModalType, getDashboardInputStyles } from '../util';
+import { DashboardImageFileInput, DashboardModalType, DashboardSubmitButton, ErrorNotificationType, getDashboardInputStyles, SuccessNotificationType, useDashboardSavingEffect } from '../util';
 // query
 import { saveSkillDocument } from '../../../../query/SkillQuery';
 
@@ -24,9 +24,7 @@ type SubmitHandler = SkillFormFields;
 export default function AddSkillModalComponent({ closeModal, onSavingChange }: DashboardModalType) {
     const [isSaving, setIsSaving] = useState(false);
 
-    useEffect(() => {
-        onSavingChange?.(isSaving);
-    }, [isSaving, onSavingChange]);
+    useDashboardSavingEffect(isSaving, onSavingChange);
 
     // form
     const form = useForm<SubmitHandler>({
@@ -36,8 +34,8 @@ export default function AddSkillModalComponent({ closeModal, onSavingChange }: D
             logo: null,
         },
         validate: {
-            skillName: (value) => (value.trim().length === 0 ? 'Skill name is required' : null),
-            logo: (value) => (value === null ? 'Logo is required' : null),
+            skillName: (value) => (value.trim().length === 0 ? `${t(translationKeys.skillName)}${t(translationKeys.isRequired)}` : null),
+            logo: (value) => (value === null ? `${t(translationKeys.logo)}${t(translationKeys.isRequired)}` : null),
         },
     });
     // context
@@ -66,10 +64,10 @@ export default function AddSkillModalComponent({ closeModal, onSavingChange }: D
 
             form.reset();
             closeModal();
-            showNotification('Skill saved successfully.', 'success');
+            showNotification(`${t(translationKeys.skill)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
-            console.error('Failed to submit skill:', error);
-            showNotification("Failed to submit skill.", 'error');
+            console.error(`${t(translationKeys.failedToSubmit)}${t(translationKeys.skill)}`, error);
+            showNotification(`${t(translationKeys.failedToSubmit)}${t(translationKeys.skill)}`, ErrorNotificationType);
         } finally {
             setIsSaving(false);
         }
@@ -98,21 +96,14 @@ export default function AddSkillModalComponent({ closeModal, onSavingChange }: D
                     disabled={isSaving}
                     {...form.getInputProps('skillName')}
                 />
-                <FileInput
-                    accept="image/png,image/jpeg"
-                    label="Upload files"
-                    placeholder="Upload files"
-                    styles={inputStyles}
-                    key={form.key('logo')}
-                    className="pt-2"
+                <DashboardImageFileInput
+                    inputStyles={inputStyles}
+                    componentKey={form.key('logo')}
                     disabled={isSaving}
-                    {...form.getInputProps('logo')}
+                    inputProps={form.getInputProps('logo')}
+                    label={t(translationKeys.uploadFile)}
                 />
-                <Group justify="space-between" mt="md">
-                    <Button type="submit" loading={isSaving} disabled={isSaving}>
-                        {isSaving ? 'Saving...' : 'Submit'}
-                    </Button>
-                </Group>
+                <DashboardSubmitButton isSaving={isSaving} showLoading />
             </form>
         </div>
     );
