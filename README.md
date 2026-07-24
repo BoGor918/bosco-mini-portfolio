@@ -4,6 +4,47 @@ This project is a dynamic and responsive personal portfolio website for CHEUNG T
 
 Built with React, TypeScript, Tailwind CSS, Mantine, and Firebase, the app focuses on maintainability, smooth UI behavior, and a modern dashboard editing workflow.
 
+## Project Overview
+
+Bosco Mini Portfolio is designed with two main experiences:
+
+- Public-facing pages that showcase profile, projects, education, and skills
+- A protected dashboard for managing portfolio content with create, update, and delete actions
+
+The interface is fully responsive and supports desktop and mobile layouts, with multilingual content support and real-time updates from Firestore.
+
+## UI Walkthrough
+
+### Home Page
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Desktop Home Page](bosco-mini-portfolio/public/images/readme/Desktop_Home_Page.png) | ![Mobile Home Page](bosco-mini-portfolio/public/images/readme/Mobile_Home_Page.png) |
+
+### Login Page
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Desktop Login Page](bosco-mini-portfolio/public/images/readme/Desktop_Login_Page.png) | ![Mobile Login Page](bosco-mini-portfolio/public/images/readme/Mobile_Login_Page.png) |
+
+### Dashboard Main View
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Desktop Dashboard Page](bosco-mini-portfolio/public/images/readme/Desktop_Dashboard_Page.png) | ![Mobile Dashboard Page](bosco-mini-portfolio/public/images/readme/Mobile_Dashboard_Page.png) |
+
+### Dashboard Add Modal
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Desktop Dashboard Add Modal](bosco-mini-portfolio/public/images/readme/Desktop_Dashboard_Page_Add_Modal.png) | ![Mobile Dashboard Add Modal](bosco-mini-portfolio/public/images/readme/Mobile_Dashboard_Page_Add_Modal.png) |
+
+### Dashboard Edit Modal
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Desktop Dashboard Edit Modal](bosco-mini-portfolio/public/images/readme/Desktop_Dashboard_Page_Edit_Modal.png) | ![Mobile Dashboard Edit Modal](bosco-mini-portfolio/public/images/readme/Mobile_Dashboard_Page_Edit_Modal.png) |
+
 ## Features
 
 - Responsive layout for desktop and mobile devices
