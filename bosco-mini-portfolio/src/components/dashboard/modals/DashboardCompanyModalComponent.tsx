@@ -81,6 +81,7 @@ export default function DashboardCompanyModalComponent({
     closeModal,
     onSavingChange,
     onDirtyChange,
+    readOnly = false,
     mode = 'create',
     initialCompany = null,
     onDeleteRequest,
@@ -93,6 +94,8 @@ export default function DashboardCompanyModalComponent({
     const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
     // saving state
     const [isSaving, setIsSaving] = useState(false);
+    // form disabled state
+    const isFormDisabled = isSaving || readOnly;
     // hydrated form key ref
     const hydratedFormKeyRef = useRef<string>('');
     // form
@@ -150,8 +153,8 @@ export default function DashboardCompanyModalComponent({
 
     // dirty effect
     useEffect(() => {
-        onDirtyChange?.(isEditMode ? form.isDirty() : false);
-    }, [form, form.values, isEditMode, onDirtyChange]);
+        onDirtyChange?.(isEditMode && !readOnly ? form.isDirty() : false);
+    }, [form, form.values, isEditMode, onDirtyChange, readOnly]);
 
     // hydrate form values effect
     useEffect(() => {
@@ -207,7 +210,7 @@ export default function DashboardCompanyModalComponent({
     // submit handler
     const onSubmit = async (values: SubmitHandler) => {
         console.log(values)
-        if (isSaving) {
+        if (isSaving || readOnly) {
             return;
         }
 
@@ -288,7 +291,7 @@ export default function DashboardCompanyModalComponent({
                     t={t}
                     fieldKeys={formWithLanguageFieldKeys as string[]}
                     inputStyles={inputStyles}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     getInputProps={(path) => form.getInputProps(path)}
                     getFieldLabel={(fieldKey, locale) => `${t(translationKeys[fieldKey as keyof typeof translationKeys])} (${locale})`}
                 />
@@ -300,13 +303,14 @@ export default function DashboardCompanyModalComponent({
                     searchable
                     styles={inputStyles}
                     className="mt-2"
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     key={form.key('skillSets')}
                     {...form.getInputProps('skillSets')}
                 />
                 <DashboardDateRangeFields
                     inputStyles={inputStyles}
                     isSaving={isSaving}
+                    disabled={readOnly}
                     present={form.values.present}
                     startDate={form.values.startDate}
                     endDate={form.values.endDate}
@@ -322,7 +326,7 @@ export default function DashboardCompanyModalComponent({
                 <DashboardImageFileInput
                     inputStyles={inputStyles}
                     componentKey={form.key('logo')}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     inputProps={form.getInputProps('logo')}
                     label={t(translationKeys.uploadFile)}
                 />
@@ -339,12 +343,13 @@ export default function DashboardCompanyModalComponent({
                     inputStyles={inputStyles}
                     isDarkTheme={theme === colorTheme.dark}
                     componentKey={form.key('present')}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     inputProps={form.getInputProps('present', { type: 'checkbox' })}
                     label={t(translationKeys.present)}
                 />
                 <DashboardSubmitDeleteButtonGroup
                     isSaving={isSaving}
+                    disabled={readOnly}
                     idleText={buttonText}
                     deleteText={t(translationKeys.delete)}
                     showDelete={isEditMode}

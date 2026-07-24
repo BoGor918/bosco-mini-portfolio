@@ -15,11 +15,13 @@ export type DashboardModalType = {
     closeModal: () => void;
     onSavingChange?: (isSaving: boolean) => void;
     onDirtyChange?: (isDirty: boolean) => void;
+    readOnly?: boolean;
 };
 
 // dashboard submit button type
 type DashboardSubmitButtonProps = {
     isSaving: boolean;
+    disabled?: boolean;
     showLoading?: boolean;
     idleText?: string;
     savingText?: string;
@@ -75,6 +77,7 @@ type DashboardPresentCheckboxProps = {
 type DashboardDateRangeFieldsProps = {
     inputStyles: any;
     isSaving: boolean;
+    disabled: boolean;
     present: boolean;
     startDate: Date | null;
     endDate: Date | null;
@@ -131,6 +134,7 @@ export const useDashboardSavingEffect = (
 // dashboard submit button
 export function DashboardSubmitDeleteButtonGroup({
     isSaving,
+    disabled = false,
     showLoading = false,
     idleText = 'Submit',
     savingText = 'Saving...',
@@ -144,13 +148,13 @@ export function DashboardSubmitDeleteButtonGroup({
                 <Button
                     type="button"
                     className="bg-[#FF0000] hover:bg-red-700"
-                    disabled={isSaving}
+                    disabled={isSaving || disabled}
                     onClick={onDeleteClick}
                 >
                     {deleteText}
                 </Button>
             )}
-            <Button type="submit" disabled={isSaving} loading={showLoading && isSaving}>
+            <Button type="submit" disabled={isSaving || disabled} loading={showLoading && isSaving}>
                 {showLoading ? (isSaving ? savingText : idleText) : idleText}
             </Button>
         </Group>
@@ -282,6 +286,7 @@ export function DashboardPresentCheckbox({
 export function DashboardDateRangeFields({
     inputStyles,
     isSaving,
+    disabled,
     present,
     startDate,
     endDate,
@@ -305,7 +310,7 @@ export function DashboardDateRangeFields({
                 onChange={onStartDateChange}
                 onBlur={onStartDateBlur}
                 error={startDateError}
-                disabled={isSaving}
+                disabled={isSaving || disabled}
                 maxDate={endDate || undefined}
                 clearable
             />
@@ -317,7 +322,7 @@ export function DashboardDateRangeFields({
                 onChange={onEndDateChange}
                 onBlur={onEndDateBlur}
                 error={endDateError}
-                disabled={isSaving || present}
+                disabled={isSaving || disabled || present}
                 minDate={startDate || undefined}
                 clearable
             />

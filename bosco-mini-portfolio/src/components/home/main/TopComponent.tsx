@@ -11,7 +11,10 @@ import { BiMoon, BiSolidMoon } from "react-icons/bi";
 import { colorTheme } from "../../../globalVariable/GlobalVariable";
 import { languageSetting, translationKeys } from "../../../globalVariable/Translation";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
+// component
 import PersonalIconComponent from "../../icon/PersonalIconComponent";
+// react router
+import { useNavigate } from "react-router";
 
 const CVName = `CHEUNG_Tsz_Lai_Bosco_CV.pdf`;
 
@@ -22,8 +25,10 @@ export default function TopComponent() {
     const workStartDate = new Date(2021, 5, 1);
     const currentDate = new Date();
     const totalYear = currentDate.getFullYear() - workStartDate.getFullYear();
-    // translation
-    const { t, language, setLanguage, theme, setTheme } = useContext(MapperContext)
+    // global
+    const { t, language, setLanguage, theme, setTheme, user } = useContext(MapperContext);
+    // url param
+    const navigate = useNavigate();
     // style list
     const mainDivPaddingXStyle = language === languageSetting.english ? `px-[4rem]` : `px-[6rem]`;
     const mainDivStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-between items-center mt-[5rem] ${mainDivPaddingXStyle} self-center w-full max-w-[365px] sm:max-w-[365px] md:max-w-[365px] lg:max-w-[910px] font-light`;
@@ -39,6 +44,7 @@ export default function TopComponent() {
             : isActive
                 ? `border-[#0B1A33] bg-[#0B1A33] text-white`
                 : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
+    const loginTextStyle = `ml-0 lg:ml-2 font-bold text-sm cursor-pointer` + (theme === colorTheme.dark ? ` text-white hover:underline` : ` text-[#0B1A33] hover:underline`);
     const columnOneStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-start items-center mb-4`;
     const nameStyle = `text-[#0B1A33] dark:text-[#FFFFFF] text-[33px] sm:text-[33px] md:text-[33px] lg:text-[36px] font-extrabold`;
     const cvButtonDivStyle = `flex justify-center items-center lg:mb-0 my-3 lg:my-0`;
@@ -112,6 +118,15 @@ export default function TopComponent() {
                         >
                             {t(translationKeys.simplifiedChineseLanguage)}
                         </button>
+                        {/* login and dashboard link */}
+                        <span
+                            className={loginTextStyle}
+                            onClick={() => {
+                                user ? navigate('/dashboard') : navigate('/login')
+                            }}
+                        >
+                            {user ? t(translationKeys.dashboard) : t(translationKeys.login)}
+                        </span>
                     </div>
                 </div>
                 {/* name cv with theme switch column */}

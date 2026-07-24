@@ -116,6 +116,8 @@ const en = {
     authLoggedInSuccess: 'Logged in successfully.',
     authInvalidUsernameOrPassword: 'Invalid username or password.',
     welcome: 'Welcome',
+    login: 'Login',
+    dashboard: 'Dashboard',
 }
 
 const zhHK = {
@@ -224,6 +226,8 @@ const zhHK = {
     authLoggedInSuccess: '已成功登入。',
     authInvalidUsernameOrPassword: '用戶名或密碼無效。',
     welcome: '歡迎',
+    login: '登入',
+    dashboard: '後台',
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
@@ -331,6 +335,8 @@ const zhCN = {
     authLoggedInSuccess: '已成功登入。',
     authInvalidUsernameOrPassword: '用户名或密码无效。',
     welcome: '欢迎',
+    login: '登入',
+    dashboard: '后台',
 }
 
 export const translationKeys = {
@@ -439,6 +445,8 @@ export const translationKeys = {
     authLoggedInSuccess: 'authLoggedInSuccess',
     authInvalidUsernameOrPassword: 'authInvalidUsernameOrPassword',
     welcome: 'welcome',
+    login: 'login',
+    dashboard: 'dashboard',
 } as const;
 
 export type TranslationKey = keyof typeof en;

@@ -80,6 +80,7 @@ export default function DashboardSchoolModalComponent({
     closeModal,
     onSavingChange,
     onDirtyChange,
+    readOnly = false,
     mode = 'create',
     initialSchool = null,
     onDeleteRequest,
@@ -92,6 +93,8 @@ export default function DashboardSchoolModalComponent({
     const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
     // saving state
     const [isSaving, setIsSaving] = useState(false);
+    // form disabled state
+    const isFormDisabled = isSaving || readOnly;
     // hydrated form key ref
     const hydratedFormKeyRef = useRef<string>('');
     // form
@@ -149,8 +152,8 @@ export default function DashboardSchoolModalComponent({
 
     // dirty effect
     useEffect(() => {
-        onDirtyChange?.(isEditMode ? form.isDirty() : false);
-    }, [form, form.values, isEditMode, onDirtyChange]);
+        onDirtyChange?.(isEditMode && !readOnly ? form.isDirty() : false);
+    }, [form, form.values, isEditMode, onDirtyChange, readOnly]);
 
     // hydrate form values when initialSchool changes
     useEffect(() => {
@@ -199,7 +202,7 @@ export default function DashboardSchoolModalComponent({
 
     // submit handler
     const onSubmit = async (values: SubmitHandler) => {
-        if (isSaving) {
+        if (isSaving || readOnly) {
             return;
         }
 
@@ -274,7 +277,7 @@ export default function DashboardSchoolModalComponent({
                     t={t}
                     fieldKeys={formWithLanguageFieldKeys as string[]}
                     inputStyles={inputStyles}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     getInputProps={(path) => form.getInputProps(path)}
                     getFieldLabel={(fieldKey, locale) => `${t(translationKeys[fieldKey as keyof typeof translationKeys])} (${locale})`}
                 />
@@ -286,13 +289,14 @@ export default function DashboardSchoolModalComponent({
                     onChange={(value) => form.setFieldValue('gpa', toNumberOrZero(value))}
                     onBlur={() => form.validateField('gpa')}
                     error={form.errors.gpa}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     className="pt-2"
                     min={0}
                 />
                 <DashboardDateRangeFields
                     inputStyles={inputStyles}
                     isSaving={isSaving}
+                    disabled={readOnly}
                     present={form.values.present}
                     startDate={form.values.startDate}
                     endDate={form.values.endDate}
@@ -308,7 +312,7 @@ export default function DashboardSchoolModalComponent({
                 <DashboardImageFileInput
                     inputStyles={inputStyles}
                     componentKey={form.key('logo')}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     inputProps={form.getInputProps('logo')}
                     label={t(translationKeys.uploadFile)}
                 />
@@ -324,12 +328,13 @@ export default function DashboardSchoolModalComponent({
                     inputStyles={inputStyles}
                     isDarkTheme={theme === colorTheme.dark}
                     componentKey={form.key('present')}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     inputProps={form.getInputProps('present')}
                     label={t(translationKeys.present)}
                 />
                 <DashboardSubmitDeleteButtonGroup
                     isSaving={isSaving}
+                    disabled={readOnly}
                     idleText={buttonText}
                     deleteText={t(translationKeys.delete)}
                     showDelete={isEditMode}

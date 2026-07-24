@@ -47,6 +47,7 @@ export const modalEditMode = 'edit';
 export default function Dashboard() {
     // context
     const { t, language, setLanguage, theme, setTheme, loginUser, setLoginUser } = useContext(MapperContext);
+    const isReadOnly = loginUser?.IsAdmin !== true;
     // hook
     const [opened, { open, close }] = useDisclosure(false);
     const [isModalSaving, setIsModalSaving] = useState(false);
@@ -244,7 +245,7 @@ export default function Dashboard() {
     };
 
     const handleOpenDeleteConfirm = () => {
-        if (isModalSaving || !isEditModalOpen) {
+        if (isModalSaving || !isEditModalOpen || isReadOnly) {
             return;
         }
 
@@ -405,12 +406,12 @@ export default function Dashboard() {
                 styles={addEditModalStyles}
             >
                 {widget === dashboardNavItems[0].key
-                    ? <DashboardCompanyModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={companyModalMode} initialCompany={editingCompany} onDeleteRequest={handleOpenDeleteConfirm} />
+                    ? <DashboardCompanyModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={companyModalMode} initialCompany={editingCompany} onDeleteRequest={handleOpenDeleteConfirm} readOnly={isReadOnly} />
                     : widget === dashboardNavItems[3].key
-                        ? <DashboardSkillModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={skillModalMode} initialSkill={editingSkill} onDeleteRequest={handleOpenDeleteConfirm} />
+                        ? <DashboardSkillModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={skillModalMode} initialSkill={editingSkill} onDeleteRequest={handleOpenDeleteConfirm} readOnly={isReadOnly} />
                         : widget === dashboardNavItems[2].key
-                            ? <DashboardProjectModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={projectModalMode} initialProject={editingProject} onDeleteRequest={handleOpenDeleteConfirm} />
-                            : <DashboardSchoolModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={schoolModalMode} initialSchool={editingSchool} onDeleteRequest={handleOpenDeleteConfirm} />}
+                            ? <DashboardProjectModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={projectModalMode} initialProject={editingProject} onDeleteRequest={handleOpenDeleteConfirm} readOnly={isReadOnly} />
+                            : <DashboardSchoolModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={schoolModalMode} initialSchool={editingSchool} onDeleteRequest={handleOpenDeleteConfirm} readOnly={isReadOnly} />}
             </Modal>
             {/* discard modal */}
             <Modal

@@ -59,6 +59,7 @@ export default function DashboardProjectModalComponent({
     closeModal,
     onSavingChange,
     onDirtyChange,
+    readOnly = false,
     mode = 'create',
     initialProject = null,
     onDeleteRequest,
@@ -71,6 +72,8 @@ export default function DashboardProjectModalComponent({
     const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
     // saving state
     const [isSaving, setIsSaving] = useState(false);
+    // form disabled state
+    const isFormDisabled = isSaving || readOnly;
     // hydrated form key ref
     const hydratedFormKeyRef = useRef<string>('');
     // form
@@ -111,8 +114,8 @@ export default function DashboardProjectModalComponent({
 
     // dirty effect
     useEffect(() => {
-        onDirtyChange?.(isEditMode ? form.isDirty() : false);
-    }, [form, form.values, isEditMode, onDirtyChange]);
+        onDirtyChange?.(isEditMode && !readOnly ? form.isDirty() : false);
+    }, [form, form.values, isEditMode, onDirtyChange, readOnly]);
 
     // hydrate form values effect
     useEffect(() => {
@@ -154,7 +157,7 @@ export default function DashboardProjectModalComponent({
 
     // submit handler
     const onSubmit = async (values: SubmitHandler) => {
-        if (isSaving) {
+        if (isSaving || readOnly) {
             return;
         }
 
@@ -222,7 +225,7 @@ export default function DashboardProjectModalComponent({
                     t={t}
                     fieldKeys={formWithLanguageFieldKeys as string[]}
                     inputStyles={inputStyles}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     getInputProps={(path) => form.getInputProps(path)}
                     getFieldLabel={(fieldKey, locale) => `${t(translationKeys[fieldKey as keyof typeof translationKeys])} (${locale})`}
                 />
@@ -232,7 +235,7 @@ export default function DashboardProjectModalComponent({
                     label={t(translationKeys.projectName)}
                     key={form.key('projectName')}
                     styles={inputStyles}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     {...form.getInputProps('projectName')}
                 />
                 <MultiSelect
@@ -243,7 +246,7 @@ export default function DashboardProjectModalComponent({
                     searchable
                     styles={inputStyles}
                     className="mt-2"
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     key={form.key('techStack')}
                     {...form.getInputProps('techStack')}
                 />
@@ -252,7 +255,7 @@ export default function DashboardProjectModalComponent({
                     withAsterisk
                     styles={inputStyles}
                     className="mt-2"
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     clearable
                     acceptValueOnBlur
                     splitChars={[',']}
@@ -262,7 +265,7 @@ export default function DashboardProjectModalComponent({
                 <DashboardImageFileInput
                     inputStyles={inputStyles}
                     componentKey={form.key('logo')}
-                    disabled={isSaving}
+                    disabled={isFormDisabled}
                     inputProps={form.getInputProps('logo')}
                     label={t(translationKeys.uploadFile)}
                 />
@@ -276,6 +279,7 @@ export default function DashboardProjectModalComponent({
                 )}
                 <DashboardSubmitDeleteButtonGroup
                     isSaving={isSaving}
+                    disabled={readOnly}
                     idleText={buttonText}
                     deleteText={t(translationKeys.delete)}
                     showDelete={isEditMode}
