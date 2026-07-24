@@ -82,18 +82,36 @@ root/
 |-- README.md
 |-- netlify.toml
 `-- bosco-mini-portfolio/
+    |-- .env.local
+    |-- package.json
+    |-- package-lock.json
+    |-- tsconfig.json
+    |-- tailwind.config.js
     |-- public/
     |-- src/
+    |   |-- App.tsx
+    |   |-- index.tsx
+    |   |-- index.css
+    |   |-- firebase.tsx
+    |   |-- react-app-env.d.ts
     |   |-- components/
     |   |   |-- dashboard/
-    |   |   `-- home/
+    |   |   |   |-- modals/
+    |   |   |   `-- tables/
+    |   |   |-- home/
+    |   |   |   |-- grids/
+    |   |   |   |-- main/
+    |   |   |   `-- modals/
+    |   |   |-- icon/
+    |   |   |   `-- modals/
+    |   |   |-- loading/
+    |   |   `-- util.tsx
+    |   |-- files/
     |   |-- globalVariable/
     |   |-- pages/
     |   |-- query/
     |   |-- types/
-    |   `-- firebase.tsx
-    |-- package.json
-    `-- tailwind.config.js
+    `-- build/
 ```
 
 ## Deployment
