@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 // mantine
-import { Button, Checkbox, FileInput, Group, Tabs, TextInput } from '@mantine/core';
+import { Button, Checkbox, FileInput, Group, Tabs, Text, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { translationKeys } from '../../../globalVariable/Translation';
 
@@ -19,7 +19,7 @@ export type DashboardModalType = {
 };
 
 // dashboard submit button type
-type DashboardSubmitButtonProps = {
+type DashboardSubmitDeleteButtonGroupProps = {
     isSaving: boolean;
     disabled?: boolean;
     showLoading?: boolean;
@@ -28,6 +28,7 @@ type DashboardSubmitButtonProps = {
     deleteText?: string;
     showDelete?: boolean;
     onDeleteClick?: () => void;
+    validationMessage?: string;
 };
 
 // dashboard locale text tabs type
@@ -137,11 +138,11 @@ export function DashboardSubmitDeleteButtonGroup({
     disabled = false,
     showLoading = false,
     idleText = 'Submit',
-    savingText = 'Saving...',
     deleteText = 'Delete',
     showDelete = false,
     onDeleteClick,
-}: DashboardSubmitButtonProps) {
+    validationMessage,
+}: DashboardSubmitDeleteButtonGroupProps) {
     return (
         <Group mt="md">
             {showDelete && (
@@ -155,8 +156,13 @@ export function DashboardSubmitDeleteButtonGroup({
                 </Button>
             )}
             <Button type="submit" disabled={isSaving || disabled} loading={showLoading && isSaving}>
-                {showLoading ? (isSaving ? savingText : idleText) : idleText}
+                {idleText}
             </Button>
+            {validationMessage && (
+                <Text c="red" size="xs" className="ml-0 lg:ml-[-5px]">
+                    {validationMessage}
+                </Text>
+            )}
         </Group>
     );
 }

@@ -1,5 +1,5 @@
 // others
-import { useState, createContext, useEffect, type PropsWithChildren } from "react";
+import { useState, createContext, useEffect, useRef, useCallback, type PropsWithChildren } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
 // data
 import { LanguageType, TranslationKey, languageSetting, translations } from "./Translation";
@@ -9,12 +9,6 @@ import { CompanyData, ProjectData, SchoolData, SkillData, UserProfile } from "..
 import { auth } from "../firebase";
 // global variable
 import { colorTheme } from "./GlobalVariable";
-// query
-import { fetchUserCollectionData } from "../query/UserQuery";
-import { fetchSkillCollectionData } from "../query/SkillQuery";
-import { fetchCompanyCollectionData } from "../query/CompanyQuery";
-import { fetchSchoolCollectionData } from "../query/SchoolQuery";
-import { fetchProjectCollectionData } from "../query/ProjectQuery";
 
 // variable interface
 interface MapperContextType {
@@ -36,6 +30,8 @@ interface MapperContextType {
     setLanguage: (language: LanguageType) => void;
     t: (key: TranslationKey) => string;
     setLoginUser: (user: UserProfile | null) => void;
+    loadUserData: () => Promise<void>;
+    loadPortfolioData: () => Promise<void>;
 }
 
 // create context
@@ -58,6 +54,8 @@ export const MapperContext = createContext<MapperContextType>({
     t: (key) => translations.en[key],
     loginUser: null,
     setLoginUser: () => { },
+    loadUserData: async () => { },
+    loadPortfolioData: async () => { },
 });
 
 // initial language and theme functions
@@ -106,15 +104,138 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
     const [schoolLoading, setSchoolLoading] = useState(true);
     const [projectLoading, setProjectLoading] = useState(true);
     const [skillLoading, setSkillLoading] = useState(true);
+    const userDataLoadingRef = useRef(false);
+    const userDataLoadedRef = useRef(false);
+    const portfolioLoadingRef = useRef(false);
+    const portfolioDataLoadedRef = useRef(false);
+    const portfolioUnsubscribersRef = useRef<Array<() => void>>([]);
+
+    const fetchUsers = useCallback(async () => {
+        const { fetchUserCollectionData } = await import("../query/UserQuery");
+
+        return fetchUserCollectionData<UserProfile>(
+            "Users",
+            (userDocument) => userDocument.data() as UserProfile,
+        );
+    }, []);
+
+    const loadUserData = useCallback(async () => {
+        if (userDataLoadedRef.current || userDataLoadingRef.current) {
+            return;
+        }
+
+        userDataLoadingRef.current = true;
+
+        try {
+            const users = await fetchUsers();
+
+            setUserData(users);
+            userDataLoadedRef.current = true;
+        } finally {
+            userDataLoadingRef.current = false;
+        }
+    }, [fetchUsers]);
+
+    const stopPortfolioData = useCallback(() => {
+        portfolioUnsubscribersRef.current.forEach((unsubscribe) => unsubscribe());
+        portfolioUnsubscribersRef.current = [];
+        portfolioLoadingRef.current = false;
+        portfolioDataLoadedRef.current = false;
+    }, []);
+
+    const loadPortfolioData = useCallback(async () => {
+        if (portfolioDataLoadedRef.current || portfolioLoadingRef.current) {
+            return;
+        }
+
+        portfolioLoadingRef.current = true;
+        setCompanyLoading(true);
+        setSchoolLoading(true);
+        setProjectLoading(true);
+        setSkillLoading(true);
+
+        try {
+            const [companyQuery, schoolQuery, projectQuery, skillQuery] = await Promise.all([
+                import("../query/CompanyQuery"),
+                import("../query/SchoolQuery"),
+                import("../query/ProjectQuery"),
+                import("../query/SkillQuery"),
+            ]);
+
+            const companyUnsubscribe = companyQuery.fetchCompanyCollectionData(
+                (companies) => {
+                    setCompanyData(companies);
+                    setCompanyLoading(false);
+                },
+                () => {
+                    setCompanyData([]);
+                    setCompanyLoading(false);
+                },
+            );
+
+            const schoolUnsubscribe = schoolQuery.fetchSchoolCollectionData(
+                (schools) => {
+                    setSchoolData(schools);
+                    setSchoolLoading(false);
+                },
+                () => {
+                    setSchoolData([]);
+                    setSchoolLoading(false);
+                },
+            );
+
+            const projectUnsubscribe = projectQuery.fetchProjectCollectionData(
+                (projects) => {
+                    setProjectData(projects);
+                    setProjectLoading(false);
+                },
+                () => {
+                    setProjectData([]);
+                    setProjectLoading(false);
+                },
+            );
+
+            const skillUnsubscribe = skillQuery.fetchSkillCollectionData(
+                (skills) => {
+                    setSkillData(skills);
+                    setSkillLoading(false);
+                },
+                () => {
+                    setSkillData([]);
+                    setSkillLoading(false);
+                },
+            );
+
+            portfolioUnsubscribersRef.current = [
+                companyUnsubscribe,
+                schoolUnsubscribe,
+                projectUnsubscribe,
+                skillUnsubscribe,
+            ];
+            portfolioDataLoadedRef.current = true;
+        } catch {
+            setCompanyData([]);
+            setSchoolData([]);
+            setProjectData([]);
+            setSkillData([]);
+            setCompanyLoading(false);
+            setSchoolLoading(false);
+            setProjectLoading(false);
+            setSkillLoading(false);
+        } finally {
+            portfolioLoadingRef.current = false;
+        }
+    }, []);
 
     // listen for authentication state changes
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
+            setLoginUser(null);
             // set login user
             if (currentUser) {
                 const loadLoginUser = async () => {
-                    const users = await fetchUserCollectionData<UserProfile>('Users', (userDocument) => userDocument.data() as UserProfile);
+                    const users = await fetchUsers();
                     const foundUser = users.find((user) => user.UID === currentUser.uid) || null;
                     setLoginUser(foundUser);
                 };
@@ -124,79 +245,13 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [fetchUsers]);
 
-    // fetch user data and subscribe skill data when user state changes
     useEffect(() => {
-        let isActive = true;
-
-        setCompanyLoading(true);
-        setSchoolLoading(true);
-        setProjectLoading(true);
-        setSkillLoading(true);
-
-        const loadUsers = async () => {
-            const users = await fetchUserCollectionData<UserProfile>('Users', (userDocument) => userDocument.data() as UserProfile);
-
-            if (!isActive) {
-                return;
-            }
-
-            setUserData(users);
-        };
-
-        loadUsers();
-
-        const loadCompanies = fetchCompanyCollectionData(
-            (company) => {
-                setCompanyData(company);
-                setCompanyLoading(false);
-            },
-            () => {
-                setCompanyData([]);
-                setCompanyLoading(false);
-            },
-        );
-        const loadSchools = fetchSchoolCollectionData(
-            (schools) => {
-                setSchoolData(schools);
-                setSchoolLoading(false);
-            },
-            () => {
-                setSchoolData([]);
-                setSchoolLoading(false);
-            },
-        );
-        const loadProjects = fetchProjectCollectionData(
-            (projects) => {
-                setProjectData(projects);
-                setProjectLoading(false);
-            },
-            () => {
-                setProjectData([]);
-                setProjectLoading(false);
-            },
-        );
-        const loadSkills = fetchSkillCollectionData(
-            (skills) => {
-                setSkillData(skills);
-                setSkillLoading(false);
-            },
-            () => {
-                setSkillData([]);
-                setSkillLoading(false);
-            },
-        );
-
-        // this will unsubscribe from the skill snapshot
         return () => {
-            isActive = false;
-            loadSkills();
-            loadCompanies();
-            loadSchools();
-            loadProjects();
+            stopPortfolioData();
         };
-    }, [user]);
+    }, [stopPortfolioData]);
 
     // set language
     useEffect(() => {
@@ -244,6 +299,8 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
             language,
             setLanguage,
             t,
+            loadUserData,
+            loadPortfolioData,
         }}>
             {children}
         </MapperContext.Provider>

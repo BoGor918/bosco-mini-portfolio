@@ -94,6 +94,8 @@ export default function DashboardCompanyModalComponent({
     const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
     // saving state
     const [isSaving, setIsSaving] = useState(false);
+    // validation hint state
+    const [showValidationHint, setShowValidationHint] = useState(false);
     // form disabled state
     const isFormDisabled = isSaving || readOnly;
     // hydrated form key ref
@@ -156,6 +158,16 @@ export default function DashboardCompanyModalComponent({
         onDirtyChange?.(isEditMode && !readOnly ? form.isDirty() : false);
     }, [form, form.values, isEditMode, onDirtyChange, readOnly]);
 
+    useEffect(() => {
+        if (!showValidationHint) {
+            return;
+        }
+
+        if (Object.keys(form.errors).length === 0) {
+            setShowValidationHint(false);
+        }
+    }, [form.errors, showValidationHint]);
+
     // hydrate form values effect
     useEffect(() => {
         const hydrationKey = isEditMode && initialCompany ? `edit:${initialCompany.id}` : 'create';
@@ -198,6 +210,7 @@ export default function DashboardCompanyModalComponent({
             form.resetDirty();
             form.clearErrors();
             form.resetTouched();
+            setShowValidationHint(false);
             return;
         }
 
@@ -205,6 +218,7 @@ export default function DashboardCompanyModalComponent({
         form.resetDirty();
         form.clearErrors();
         form.resetTouched();
+        setShowValidationHint(false);
     }, [form, initialCompany, isEditMode]);
 
     // submit handler
@@ -214,6 +228,7 @@ export default function DashboardCompanyModalComponent({
             return;
         }
 
+        setShowValidationHint(false);
         setIsSaving(true);
 
         try {
@@ -262,6 +277,7 @@ export default function DashboardCompanyModalComponent({
             });
 
             form.reset();
+            setShowValidationHint(false);
             closeModal();
             showNotification(`${t(translationKeys.company)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
@@ -285,7 +301,12 @@ export default function DashboardCompanyModalComponent({
                 }}
             />
             {/* form */}
-            <form key={"companyForm"} onSubmit={form.onSubmit(onSubmit)}>
+            <form
+                key={"companyForm"}
+                onSubmit={form.onSubmit(onSubmit, () => {
+                    setShowValidationHint(true);
+                })}
+            >
                 <DashboardLocaleTextTabs
                     tabsStyles={tabsStyles}
                     t={t}
@@ -354,6 +375,7 @@ export default function DashboardCompanyModalComponent({
                     deleteText={t(translationKeys.delete)}
                     showDelete={isEditMode}
                     onDeleteClick={onDeleteRequest}
+                    validationMessage={showValidationHint ? t(translationKeys.pleaseFixHighlightedErrors) : undefined}
                 />
             </form>
         </div>

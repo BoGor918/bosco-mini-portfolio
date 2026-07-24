@@ -1,5 +1,5 @@
 // react
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 // mantine
 import { Button, PasswordInput, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -62,7 +62,7 @@ export default function Login() {
         },
     });
     // context
-    const { t, theme, language, setLanguage, setTheme, userData } = useContext(MapperContext);
+    const { t, theme, language, setLanguage, setTheme, userData, loadUserData } = useContext(MapperContext);
     // state
     const [isSignUp, setIsSignUp] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -70,6 +70,10 @@ export default function Login() {
     const modeText = useMemo(() => (isSignUp ? t(translationKeys.createAnAccount) : t(translationKeys.signIn)), [isSignUp, t]);
     // navigate
     const navigate = useNavigate();
+
+    useEffect(() => {
+        loadUserData();
+    }, [loadUserData]);
 
     // style list
     const loginContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen`;
@@ -205,14 +209,16 @@ export default function Login() {
                     }
                 </button>
                 {/* login and dashboard link */}
-                <span
+                <button
+                    type="button"
                     className={backtoHomeTextStyle}
                     onClick={() => {
                         navigate('/');
                     }}
+                    aria-label={t(translationKeys.backToHome)}
                 >
                     {t(translationKeys.backToHome)}
-                </span>
+                </button>
             </div>
             <form className={formStyle} onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {isSignUp ? (
@@ -253,14 +259,16 @@ export default function Login() {
                     {...form.getInputProps('password')}
                 />
                 <Group justify="space-between" mt="md">
-                    <div
+                    <button
+                        type="button"
                         className={createAccountTextStyle}
                         onClick={() => {
                             setIsSignUp((value) => !value);
                         }}
+                        aria-label={isSignUp ? t(translationKeys.alreadyHaveAnAccount) : t(translationKeys.createAnAccount)}
                     >
                         {isSignUp ? t(translationKeys.alreadyHaveAnAccount) : t(translationKeys.createAnAccount)}
-                    </div>
+                    </button>
                     <Button type="submit" className={submitButtonStyle} loading={loading}>
                         {modeText}
                     </Button>

@@ -7,21 +7,9 @@ import MainLoading from "./components/loading/MainLoading";
 import { MapperContext } from "./globalVariable/MapperContextProvider";
 import { translationKeys } from "./globalVariable/Translation";
 // lazy load components
-const Home = lazy(() => {
-  return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-    resolve(import('./pages/Home'));
-  });
-});
-const Login = lazy(() => {
-  return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-    resolve(import('./pages/Login'));
-  });
-});
-const Dashboard = lazy(() => {
-  return new Promise<{ default: React.ComponentType<any> }>((resolve) => {
-    resolve(import('./pages/Dashboard'));
-  });
-});
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 function AppContent() {
   const { t, user, authLoading } = useContext(MapperContext);

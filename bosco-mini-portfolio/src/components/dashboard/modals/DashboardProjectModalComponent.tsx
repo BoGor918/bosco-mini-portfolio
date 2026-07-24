@@ -72,6 +72,8 @@ export default function DashboardProjectModalComponent({
     const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
     // saving state
     const [isSaving, setIsSaving] = useState(false);
+     // validation hint state
+    const [showValidationHint, setShowValidationHint] = useState(false);
     // form disabled state
     const isFormDisabled = isSaving || readOnly;
     // hydrated form key ref
@@ -117,6 +119,16 @@ export default function DashboardProjectModalComponent({
         onDirtyChange?.(isEditMode && !readOnly ? form.isDirty() : false);
     }, [form, form.values, isEditMode, onDirtyChange, readOnly]);
 
+    useEffect(() => {
+        if (!showValidationHint) {
+            return;
+        }
+
+        if (Object.keys(form.errors).length === 0) {
+            setShowValidationHint(false);
+        }
+    }, [form.errors, showValidationHint]);
+
     // hydrate form values effect
     useEffect(() => {
         const hydrationKey = isEditMode && initialProject ? `edit:${initialProject.id}` : 'create';
@@ -146,6 +158,7 @@ export default function DashboardProjectModalComponent({
             form.resetDirty();
             form.clearErrors();
             form.resetTouched();
+            setShowValidationHint(false);
             return;
         }
 
@@ -153,6 +166,7 @@ export default function DashboardProjectModalComponent({
         form.resetDirty();
         form.clearErrors();
         form.resetTouched();
+        setShowValidationHint(false);
     }, [form, initialProject, isEditMode]);
 
     // submit handler
@@ -161,6 +175,7 @@ export default function DashboardProjectModalComponent({
             return;
         }
 
+        setShowValidationHint(false);
         setIsSaving(true);
 
         try {
@@ -196,6 +211,7 @@ export default function DashboardProjectModalComponent({
             });
 
             form.reset();
+            setShowValidationHint(false);
             closeModal();
             showNotification(`${t(translationKeys.project)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
@@ -219,7 +235,12 @@ export default function DashboardProjectModalComponent({
                 }}
             />
             {/* form */}
-            <form key={"projectForm"} onSubmit={form.onSubmit(onSubmit)}>
+            <form
+                key={"projectForm"}
+                onSubmit={form.onSubmit(onSubmit, () => {
+                    setShowValidationHint(true);
+                })}
+            >
                 <DashboardLocaleTextTabs
                     tabsStyles={tabsStyles}
                     t={t}
@@ -284,6 +305,7 @@ export default function DashboardProjectModalComponent({
                     deleteText={t(translationKeys.delete)}
                     showDelete={isEditMode}
                     onDeleteClick={onDeleteRequest}
+                    validationMessage={showValidationHint ? t(translationKeys.pleaseFixHighlightedErrors) : undefined}
                 />
             </form>
         </div>

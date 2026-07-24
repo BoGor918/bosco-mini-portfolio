@@ -46,7 +46,7 @@ export const modalEditMode = 'edit';
 
 export default function Dashboard() {
     // context
-    const { t, language, setLanguage, theme, setTheme, loginUser, setLoginUser } = useContext(MapperContext);
+    const { t, language, setLanguage, theme, setTheme, loginUser, setLoginUser, loadPortfolioData } = useContext(MapperContext);
     const isReadOnly = loginUser?.IsAdmin !== true;
     // hook
     const [opened, { open, close }] = useDisclosure(false);
@@ -112,6 +112,11 @@ export default function Dashboard() {
             },
         }
         : undefined;
+        
+    // load portfolio data on component mount
+    useEffect(() => {
+        loadPortfolioData();
+    }, [loadPortfolioData]);
 
     // style list
     const dashboardContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen px-4`;
@@ -311,7 +316,7 @@ export default function Dashboard() {
     return (
         <div className={dashboardContainerStyle}>
             <div className={welcomeTextContainerStyle}>
-                <span className={welcomeTextStyle}>{loginUser ? `Welcome, ${loginUser.Username}` : 'Welcome'}</span>
+                <span className={welcomeTextStyle}>{loginUser ? `${t(translationKeys.welcome)}, ${loginUser.Username}` : t(translationKeys.welcome)}</span>
             </div>
             <div className={languageSwitchAndThemeContainerStyle}>
                 <div className={languageSwitchContainerStyle}>
@@ -363,9 +368,14 @@ export default function Dashboard() {
             <div className={titleAndAddButtonContainerStyle}>
                 <span className={titleStyle}>{dashboardTitle}:</span>
                 <Tooltip label={modalTitle}>
-                    <span className="inline-flex">
-                        <IoMdAddCircle onClick={handleOpenModal} className={addIconStyle} />
-                    </span>
+                    <button
+                        type="button"
+                        className="inline-flex"
+                        onClick={handleOpenModal}
+                        aria-label={modalTitle}
+                    >
+                        <IoMdAddCircle className={addIconStyle} />
+                    </button>
                 </Tooltip>
             </div>
             {widget === dashboardNavItems[3].key

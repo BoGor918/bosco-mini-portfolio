@@ -48,6 +48,8 @@ export default function DashboardSkillModalComponent({
     const buttonText = isEditMode ? t(translationKeys.update) : t(translationKeys.submit);
     // saving state
     const [isSaving, setIsSaving] = useState(false);
+     // validation hint state
+    const [showValidationHint, setShowValidationHint] = useState(false);
     // form disabled state
     const isFormDisabled = isSaving || readOnly;
     // hydrated form key ref
@@ -84,6 +86,16 @@ export default function DashboardSkillModalComponent({
         onDirtyChange?.(isEditMode && !readOnly ? form.isDirty() : false);
     }, [form, form.values, isEditMode, onDirtyChange, readOnly]);
 
+    useEffect(() => {
+        if (!showValidationHint) {
+            return;
+        }
+
+        if (Object.keys(form.errors).length === 0) {
+            setShowValidationHint(false);
+        }
+    }, [form.errors, showValidationHint]);
+
     // hydrate form values when initialSkill changes
     useEffect(() => {
         const hydrationKey = isEditMode && initialSkill ? `edit:${String(initialSkill.id)}` : 'create';
@@ -102,6 +114,7 @@ export default function DashboardSkillModalComponent({
             form.resetDirty();
             form.clearErrors();
             form.resetTouched();
+            setShowValidationHint(false);
             return;
         }
 
@@ -112,6 +125,7 @@ export default function DashboardSkillModalComponent({
         form.resetDirty();
         form.clearErrors();
         form.resetTouched();
+        setShowValidationHint(false);
     }, [form, initialSkill, isEditMode]);
 
     // submit handler
@@ -120,6 +134,7 @@ export default function DashboardSkillModalComponent({
             return;
         }
 
+        setShowValidationHint(false);
         setIsSaving(true);
 
         try {
@@ -144,6 +159,7 @@ export default function DashboardSkillModalComponent({
             });
 
             form.reset();
+            setShowValidationHint(false);
             closeModal();
             showNotification(`${t(translationKeys.skill)}${t(translationKeys.savedSuccessfully)}`, SuccessNotificationType);
         } catch (error) {
@@ -167,7 +183,12 @@ export default function DashboardSkillModalComponent({
                 }}
             />
             {/* form */}
-            <form key={"skillForm"} onSubmit={form.onSubmit(onSubmit)}>
+            <form
+                key={"skillForm"}
+                onSubmit={form.onSubmit(onSubmit, () => {
+                    setShowValidationHint(true);
+                })}
+            >
                 <TextInput
                     className="w-full"
                     withAsterisk
@@ -200,6 +221,7 @@ export default function DashboardSkillModalComponent({
                     deleteText={t(translationKeys.delete)}
                     showDelete={isEditMode}
                     onDeleteClick={onDeleteRequest}
+                    validationMessage={showValidationHint ? t(translationKeys.pleaseFixHighlightedErrors) : undefined}
                 />
             </form>
         </div>
