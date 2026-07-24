@@ -1,7 +1,7 @@
 // react
 import { useContext } from 'react';
 // mantine
-import { Table } from '@mantine/core';
+import { Loader, Table, Tooltip } from '@mantine/core';
 // global variable
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
@@ -19,7 +19,9 @@ type SkillTableProps = {
 
 export default function SkillTable({ onEditSkill }: SkillTableProps) {
     // context
-    const { t, skillData, theme } = useContext(MapperContext);
+    const { t, skillData, skillLoading, theme } = useContext(MapperContext);
+    // edit icon text
+    const editIconText = `${t(translationKeys.edit)}${t(translationKeys.skill)}`;
     // style list
     const {
         tableMainStyle,
@@ -43,10 +45,14 @@ export default function SkillTable({ onEditSkill }: SkillTableProps) {
             </Table.Td>
             <Table.Td className={bodyCellStyle}>{skill.SkillName}</Table.Td>
             <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>
-                <MdEdit
-                    className={editIconStyle}
-                    onClick={() => onEditSkill?.(skill)}
-                />
+                <Tooltip label={editIconText}>
+                    <span className="inline-flex">
+                        <MdEdit
+                            className={editIconStyle}
+                            onClick={() => onEditSkill?.(skill)}
+                        />
+                    </span>
+                </Tooltip>
             </Table.Td>
         </Table.Tr>
     ));
@@ -63,11 +69,19 @@ export default function SkillTable({ onEditSkill }: SkillTableProps) {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {rows.length > 0 ? (
+                        {skillLoading ? (
+                            <Table.Tr>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={3}>
+                                    <div className="flex items-center justify-center gap-2 py-2">
+                                        <Loader size="sm" type="dots" />
+                                    </div>
+                                </Table.Td>
+                            </Table.Tr>
+                        ) : rows.length > 0 ? (
                             rows
                         ) : (
                             <Table.Tr>
-                                <Table.Td className={bodyCellStyle} colSpan={5}>{t(translationKeys.empty)}</Table.Td>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={3}>{t(translationKeys.empty)}</Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>

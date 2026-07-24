@@ -12,7 +12,7 @@ import { languageSetting, translationKeys } from '../../globalVariable/Translati
 // react lazy load image
 import { LazyLoadImage } from "react-lazy-load-image-component";
 // components
-import IntroductionModalComponent from '../home/modals/IntroductionModalComponent';
+import IntroductionModalComponent from './modals/IntroductionModalComponent';
 
 const PersonalIcon = `/images/personal_icon1.png`;
 const PersonalIconName = `personal_icon.png`;

@@ -1,5 +1,6 @@
 import {
     collection,
+    deleteDoc,
     doc,
     onSnapshot,
     orderBy,
@@ -69,4 +70,8 @@ export const saveCompanyDocument = async (
     },
 ) => {
     await setDoc(doc(firestore, 'Company', id), payload);
+};
+
+export const deleteCompanyDocument = async (id: string) => {
+    await deleteDoc(doc(firestore, 'Company', id));
 };

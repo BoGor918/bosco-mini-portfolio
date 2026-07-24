@@ -23,6 +23,9 @@ type DashboardSubmitButtonProps = {
     showLoading?: boolean;
     idleText?: string;
     savingText?: string;
+    deleteText?: string;
+    showDelete?: boolean;
+    onDeleteClick?: () => void;
 };
 
 // dashboard locale text tabs type
@@ -126,14 +129,27 @@ export const useDashboardSavingEffect = (
 };
 
 // dashboard submit button
-export function DashboardSubmitButton({
+export function DashboardSubmitDeleteButtonGroup({
     isSaving,
     showLoading = false,
     idleText = 'Submit',
     savingText = 'Saving...',
+    deleteText = 'Delete',
+    showDelete = false,
+    onDeleteClick,
 }: DashboardSubmitButtonProps) {
     return (
-        <Group justify="space-between" mt="md">
+        <Group mt="md">
+            {showDelete && (
+                <Button
+                    type="button"
+                    className="bg-[#FF0000] hover:bg-red-700"
+                    disabled={isSaving}
+                    onClick={onDeleteClick}
+                >
+                    {deleteText}
+                </Button>
+            )}
             <Button type="submit" disabled={isSaving} loading={showLoading && isSaving}>
                 {showLoading ? (isSaving ? savingText : idleText) : idleText}
             </Button>

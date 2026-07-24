@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { colorTheme } from '../globalVariable/GlobalVariable';
 import { MapperContext } from '../globalVariable/MapperContextProvider';
 import { showNotification } from '../globalVariable/Notification';
+import { translationKeys } from '../globalVariable/Translation';
 // components
 import PersonalIconComponent from '../components/icon/PersonalIconComponent';
 // firebase
@@ -17,7 +18,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { translationKeys } from '../globalVariable/Translation';
+// query
 import { saveUserDocument } from '../query/UserQuery';
 
 // form submit handler type
@@ -29,21 +30,21 @@ type SubmitHandler = {
 };
 
 // helper function to get user-friendly error messages based on Firebase error codes
-function getFirebaseErrorMessage(code: string): string {
+function getFirebaseErrorMessage(code: string, t: (key: keyof typeof translationKeys) => string): string {
     switch (code) {
         case 'auth/invalid-email':
-            return 'Invalid email format.';
+            return t(translationKeys.authInvalidEmailFormat);
         case 'auth/user-not-found':
         case 'auth/wrong-password':
-            return 'Invalid email or password.';
+            return t(translationKeys.authInvalidEmailOrPassword);
         case 'auth/email-already-in-use':
-            return 'This email is already in use.';
+            return t(translationKeys.authEmailAlreadyInUse);
         case 'auth/weak-password':
-            return 'Password should be at least 6 characters.';
+            return t(translationKeys.authWeakPassword);
         case 'auth/too-many-requests':
-            return 'Too many attempts. Please try again later.';
+            return t(translationKeys.authTooManyRequests);
         default:
-            return 'Authentication failed. Please try again.';
+            return t(translationKeys.authFailed);
     }
 }
 
@@ -98,12 +99,12 @@ export default function Login() {
                 const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signUpEmail);
 
                 if (!isEmail) {
-                    showNotification('Please enter a valid email to create an account.', 'error');
+                    showNotification(t(translationKeys.authValidEmailRequired), 'error');
                     setLoading(false);
                     return;
                 }
                 if (!signUpUsername) {
-                    showNotification('Please enter a username.', 'error');
+                    showNotification(t(translationKeys.authUsernameRequired), 'error');
                     setLoading(false);
                     return;
                 }
@@ -114,9 +115,10 @@ export default function Login() {
                     Email: userCredential.user.email ?? signUpEmail,
                     Username: signUpUsername,
                     UID: userCredential.user.uid,
+                    IsAdmin: false,
                 });
 
-                showNotification('Account created and logged in successfully.', 'success');
+                showNotification(t(translationKeys.authAccountCreatedSuccess), 'success');
                 navigate('/');
                 return;
             }
@@ -127,7 +129,7 @@ export default function Login() {
             if (!isEmail) {
                 const userProfile = userData.find((profile) => profile.Username === inputValue);
                 if (!userProfile || !userProfile.Email) {
-                    showNotification('Invalid username or password.', 'error');
+                    showNotification(t(translationKeys.authInvalidUsernameOrPassword), 'error');
                     setLoading(false);
                     return;
                 }
@@ -135,11 +137,11 @@ export default function Login() {
             }
 
             await signInWithEmailAndPassword(auth, emailFromUserProfile ?? inputValue, values.password);
-            showNotification('Logged in successfully.', 'success');
+            showNotification(t(translationKeys.authLoggedInSuccess), 'success');
 
             navigate('/dashboard');
         } catch (error: any) {
-            const notificationMessage = getFirebaseErrorMessage(error?.code)
+            const notificationMessage = getFirebaseErrorMessage(error?.code, t)
             showNotification(notificationMessage, 'error');
         } finally {
             form.setFieldValue('password', '');

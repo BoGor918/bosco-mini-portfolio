@@ -10,7 +10,7 @@ import { showNotification } from '../../../globalVariable/Notification';
 import { translationKeys } from '../../../globalVariable/Translation';
 // util
 import { convertFileToBase64, generateId, normalizeImageSource } from '../../util';
-import { DashboardExistingImagePreview, DashboardImageFileInput, DashboardModalType, DashboardSubmitButton, ErrorNotificationType, getDashboardInputStyles, SuccessNotificationType, useDashboardSavingEffect } from './util';
+import { DashboardExistingImagePreview, DashboardImageFileInput, DashboardModalType, DashboardSubmitDeleteButtonGroup, ErrorNotificationType, getDashboardInputStyles, SuccessNotificationType, useDashboardSavingEffect } from './util';
 // query
 import { saveSkillDocument } from '../../../query/SkillQuery';
 // type
@@ -28,6 +28,7 @@ type SkillModalMode = 'create' | 'edit';
 type SkillModalProps = DashboardModalType & {
     mode?: SkillModalMode;
     initialSkill?: SkillData | null;
+    onDeleteRequest?: () => void;
 };
 
 export default function DashboardSkillModalComponent({
@@ -36,6 +37,7 @@ export default function DashboardSkillModalComponent({
     onDirtyChange,
     mode = 'create',
     initialSkill = null,
+    onDeleteRequest,
 }: SkillModalProps) {
     // context
     const { t, theme } = useContext(MapperContext);
@@ -187,7 +189,14 @@ export default function DashboardSkillModalComponent({
                         isDarkTheme={theme === colorTheme.dark}
                     />
                 )}
-                <DashboardSubmitButton isSaving={isSaving} showLoading idleText={buttonText} />
+                <DashboardSubmitDeleteButtonGroup
+                    isSaving={isSaving}
+                    showLoading
+                    idleText={buttonText}
+                    deleteText={t(translationKeys.delete)}
+                    showDelete={isEditMode}
+                    onDeleteClick={onDeleteRequest}
+                />
             </form>
         </div>
     );

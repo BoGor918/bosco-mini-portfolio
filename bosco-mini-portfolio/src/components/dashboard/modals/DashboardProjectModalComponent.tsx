@@ -10,7 +10,7 @@ import { translationKeys } from '../../../globalVariable/Translation';
 import { showNotification } from '../../../globalVariable/Notification';
 // util
 import { convertFileToBase64, generateId, normalizeImageSource } from '../../util';
-import { DashboardExistingImagePreview, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardSubmitButton, ErrorNotificationType, Locale, SuccessNotificationType, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect } from './util';
+import { DashboardExistingImagePreview, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardSubmitDeleteButtonGroup, ErrorNotificationType, Locale, SuccessNotificationType, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect } from './util';
 // query
 import { saveProjectDocument } from '../../../query/ProjectQuery';
 // type
@@ -36,6 +36,7 @@ type ProjectModalMode = 'create' | 'edit';
 type ProjectModalProps = DashboardModalType & {
     mode?: ProjectModalMode;
     initialProject?: ProjectData | null;
+    onDeleteRequest?: () => void;
 };
 
 const getInitialValues = (): SubmitHandler => ({
@@ -60,6 +61,7 @@ export default function DashboardProjectModalComponent({
     onDirtyChange,
     mode = 'create',
     initialProject = null,
+    onDeleteRequest,
 }: ProjectModalProps) {
     // context
     const { t, theme, skillData } = useContext(MapperContext);
@@ -272,7 +274,13 @@ export default function DashboardProjectModalComponent({
                         isDarkTheme={theme === colorTheme.dark}
                     />
                 )}
-                <DashboardSubmitButton isSaving={isSaving} idleText={buttonText} />
+                <DashboardSubmitDeleteButtonGroup
+                    isSaving={isSaving}
+                    idleText={buttonText}
+                    deleteText={t(translationKeys.delete)}
+                    showDelete={isEditMode}
+                    onDeleteClick={onDeleteRequest}
+                />
             </form>
         </div>
     );

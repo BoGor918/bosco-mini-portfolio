@@ -9,7 +9,7 @@ import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
 import { showNotification } from '../../../globalVariable/Notification';
 // util
-import { DashboardDateRangeFields, DashboardExistingImagePreview, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardPresentCheckbox, DashboardSubmitButton, ErrorNotificationType, Locale, SuccessNotificationType, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect, toDateFromTimestamp } from './util';
+import { DashboardDateRangeFields, DashboardExistingImagePreview, DashboardImageFileInput, DashboardLocaleTextTabs, DashboardModalType, DashboardPresentCheckbox, DashboardSubmitDeleteButtonGroup, ErrorNotificationType, Locale, SuccessNotificationType, getDashboardInputStyles, getDashboardTabsStyles, useDashboardSavingEffect, toDateFromTimestamp } from './util';
 import { convertFileToBase64, generateId, normalizeImageSource, toDateOrNull } from '../../util';
 // query
 import { saveSchoolDocument } from '../../../query/SchoolQuery';
@@ -41,6 +41,7 @@ type SchoolModalMode = 'create' | 'edit';
 type SchoolModalProps = DashboardModalType & {
     mode?: SchoolModalMode;
     initialSchool?: SchoolData | null;
+    onDeleteRequest?: () => void;
 };
 
 const getInitialValues = (): SubmitHandler => ({
@@ -81,6 +82,7 @@ export default function DashboardSchoolModalComponent({
     onDirtyChange,
     mode = 'create',
     initialSchool = null,
+    onDeleteRequest,
 }: SchoolModalProps) {
     // context
     const { t, theme } = useContext(MapperContext);
@@ -326,7 +328,13 @@ export default function DashboardSchoolModalComponent({
                     inputProps={form.getInputProps('present')}
                     label={t(translationKeys.present)}
                 />
-                <DashboardSubmitButton isSaving={isSaving} idleText={buttonText} />
+                <DashboardSubmitDeleteButtonGroup
+                    isSaving={isSaving}
+                    idleText={buttonText}
+                    deleteText={t(translationKeys.delete)}
+                    showDelete={isEditMode}
+                    onDeleteClick={onDeleteRequest}
+                />
             </form>
         </div>
     );

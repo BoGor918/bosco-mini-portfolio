@@ -29,7 +29,7 @@ export const fetchUserCollectionData = async <T,>(
 
 export const saveUserDocument = async (
     userId: string,
-    payload: Pick<UserProfile, 'Email' | 'Username' | 'UID'>,
+    payload: Pick<UserProfile, 'Email' | 'Username' | 'UID' | 'IsAdmin'>,
 ) => {
     await setDoc(doc(firestore, 'Users', userId), payload);
 };

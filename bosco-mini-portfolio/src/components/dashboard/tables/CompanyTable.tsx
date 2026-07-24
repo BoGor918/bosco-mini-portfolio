@@ -1,7 +1,7 @@
 // react
 import { useContext } from 'react';
 // mantine
-import { Table } from '@mantine/core';
+import { Loader, Table, Tooltip } from '@mantine/core';
 // global variable
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
@@ -19,7 +19,9 @@ type CompanyTableProps = {
 
 export default function CompanyTable({ onEditCompany }: CompanyTableProps) {
     // context
-    const { t, companyData, language, theme } = useContext(MapperContext);
+    const { t, companyData, companyLoading, language, theme } = useContext(MapperContext);
+    // edit icon text
+    const editIconText = `${t(translationKeys.edit)}${t(translationKeys.company)}`;
     // style list
     const {
         tableMainStyle,
@@ -74,10 +76,14 @@ export default function CompanyTable({ onEditCompany }: CompanyTableProps) {
                 )}
             </Table.Td>
             <Table.Td className={`${bodyCellStyle} whitespace-normal break-words ml-auto`}>
-                <MdEdit
-                    className={editIconStyle}
-                    onClick={() => onEditCompany?.(company)}
-                />
+                <Tooltip label={editIconText}>
+                    <span className="inline-flex">
+                        <MdEdit
+                            className={editIconStyle}
+                            onClick={() => onEditCompany?.(company)}
+                        />
+                    </span>
+                </Tooltip>
             </Table.Td>
         </Table.Tr>
     ));
@@ -96,11 +102,19 @@ export default function CompanyTable({ onEditCompany }: CompanyTableProps) {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {rows.length > 0 ? (
+                        {companyLoading ? (
+                            <Table.Tr>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={5}>
+                                    <div className="flex items-center justify-center gap-2 py-2">
+                                        <Loader size="sm" type="dots" />
+                                    </div>
+                                </Table.Td>
+                            </Table.Tr>
+                        ) : rows.length > 0 ? (
                             rows
                         ) : (
                             <Table.Tr>
-                                <Table.Td className={bodyCellStyle} colSpan={4}>{t(translationKeys.empty)}</Table.Td>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={5}>{t(translationKeys.empty)}</Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>

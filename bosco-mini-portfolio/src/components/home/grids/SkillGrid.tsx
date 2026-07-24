@@ -13,15 +13,19 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
 import { SkillData } from '../../../types/type';
 // util
-import { gridStyles } from './util';
+import { gridStyles, getModalStyle } from './util';
 import { normalizeImageSource } from '../../util';
+
+// loading placeholders for skeleton loaders
+const loadingPlaceholders = Array.from({ length: 5 });
 
 export default function SkillGrid() {
     // global variable
     const {
+        theme,
+        skillLoading,
         skillData
     } = useContext(MapperContext);
-
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected skill
@@ -30,6 +34,9 @@ export default function SkillGrid() {
     const [loadedLogoIds, setLoadedLogoIds] = useState<Set<SkillData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<SkillData['id']>>(new Set());
+
+    // style list
+    const { modalProps } = getModalStyle(theme === colorTheme.dark);
 
     // open modal with set selected skill
     const openModal = (skill: SkillData) => {
@@ -51,7 +58,23 @@ export default function SkillGrid() {
         <div className={gridStyles.gridMainDivStyle}>
             {/* skill grid */}
             <div className={gridStyles.gridDivFiveColStyle}>
-                {skillData.map((skill: SkillData, i: number) => {
+                {skillLoading && (
+                    loadingPlaceholders.map((_, index) => (
+                        <div
+                            key={`skill-loading-${index}`}
+                            className={gridStyles.gridLazyLoadImageSmallDivStyle}
+                            aria-hidden="true"
+                        >
+                            <Loader size="lg" type="bars" color="blue" />
+                        </div>
+                    ))
+                )}
+                {!skillLoading && skillData.length === 0 && (
+                    <div className="col-span-full min-h-[9rem] w-full flex items-center justify-center rounded-md border border-[#0B1A33]/10 bg-white/80 text-[#334155] text-sm font-semibold">
+                        No records found.
+                    </div>
+                )}
+                {!skillLoading && skillData.map((skill: SkillData, i: number) => {
                     const hasLogoUrl = Boolean(skill.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(skill.id);
                     const isLogoLoaded = loadedLogoIds.has(skill.id);
@@ -82,35 +105,14 @@ export default function SkillGrid() {
                 })}
             </div>
             {/* modal components */}
-            {
-                localStorage.getItem(colorTheme.theme) === colorTheme.light ?
-                    <Modal opened={opened} onClose={close} size="md" centered>
-                        {selectedSkill && (
-                            <SkillModalComponent
-                                skillName={selectedSkill.SkillName}
-                                logo={normalizeImageSource(selectedSkill.Logo)}
-                            />
-                        )}
-                    </Modal> :
-                    <Modal opened={opened} onClose={close} size="md" centered
-                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
-                        styles={{
-                            header: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            content: {
-                                backgroundColor: "#0B1A33",
-                            },
-                        }}
-                    >
-                        {selectedSkill && (
-                            <SkillModalComponent
-                                skillName={selectedSkill.SkillName}
-                                logo={normalizeImageSource(selectedSkill.Logo)}
-                            />
-                        )}
-                    </Modal>
-            }
+            <Modal opened={opened} onClose={close} size="md" centered {...modalProps}>
+                {selectedSkill && (
+                    <SkillModalComponent
+                        skillName={selectedSkill.SkillName}
+                        logo={normalizeImageSource(selectedSkill.Logo)}
+                    />
+                )}
+            </Modal>
         </div>
     );
 }

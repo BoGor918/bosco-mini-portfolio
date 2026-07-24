@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 // route
 import { useNavigate, useSearchParams } from 'react-router-dom';
 // mantine
-import { Button, Modal } from '@mantine/core';
+import { Button, LoadingOverlay, Modal, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 // components
 import CompanyTable from '../components/dashboard/tables/CompanyTable';
@@ -26,6 +26,11 @@ import { showNotification } from '../globalVariable/Notification';
 import { CompanyData, ProjectData, SchoolData, SkillData } from '../types/type';
 // util
 import { ErrorNotificationType, SuccessNotificationType } from '../components/dashboard/modals/util';
+// query
+import { deleteCompanyDocument } from '../query/CompanyQuery';
+import { deleteProjectDocument } from '../query/ProjectQuery';
+import { deleteSchoolDocument } from '../query/SchoolQuery';
+import { deleteSkillDocument } from '../query/SkillQuery';
 // firebase
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
@@ -41,12 +46,14 @@ export const modalEditMode = 'edit';
 
 export default function Dashboard() {
     // context
-    const { t, language, setLanguage, theme, setTheme } = useContext(MapperContext);
+    const { t, language, setLanguage, theme, setTheme, loginUser, setLoginUser } = useContext(MapperContext);
     // hook
     const [opened, { open, close }] = useDisclosure(false);
     const [isModalSaving, setIsModalSaving] = useState(false);
     const [isModalDirty, setIsModalDirty] = useState(false);
     const [confirmCloseOpened, setConfirmCloseOpened] = useState(false);
+    const [confirmDeleteOpened, setConfirmDeleteOpened] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [companyModalMode, setCompanyModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
     const [skillModalMode, setSkillModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
     const [projectModalMode, setProjectModalMode] = useState<modalCreateModeType | modalEditModeType>(modalCreateMode);
@@ -62,10 +69,10 @@ export default function Dashboard() {
     const widget = searchParams.get("d") ?? "c";
     // dashboard navigation items
     const dashboardNavItems = useMemo(() => [
-        { key: 'c', label: t(translationKeys.companys) },
-        { key: 'e', label: t(translationKeys.educations) },
-        { key: 'p', label: t(translationKeys.projects) },
-        { key: 's', label: t(translationKeys.skills) },
+        { key: 'c', label: t(translationKeys.company) },
+        { key: 'e', label: t(translationKeys.education) },
+        { key: 'p', label: t(translationKeys.project) },
+        { key: 's', label: t(translationKeys.skill) },
     ], [t]);
     // modal title
     const modalTitle = widget === dashboardNavItems[0].key
@@ -84,6 +91,13 @@ export default function Dashboard() {
         (widget === 'p' && projectModalMode === modalEditMode) ||
         (widget === 'e' && schoolModalMode === modalEditMode);
     const shouldBlockCloseForUnsavedChanges = isEditModalOpen && isModalDirty;
+    const deleteTargetLabel = widget === 'c'
+        ? t(translationKeys.company)
+        : widget === 's'
+            ? t(translationKeys.skill)
+            : widget === 'p'
+                ? t(translationKeys.project)
+                : t(translationKeys.school);
     const addEditModalStyles = theme === colorTheme.dark
         ? {
             header: {
@@ -123,13 +137,15 @@ export default function Dashboard() {
                 ? `border-[#0B1A33] bg-[#0B1A33] text-white`
                 : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
     const titleAndAddButtonContainerStyle = `flex justify-between items-center w-full mb-2`;
+    const welcomeTextContainerStyle = `w-full flex justify-start pb-1`;
+    const welcomeTextStyle = `block text-left font-bold text-xl ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
     const titleStyle = `font-bold text-xl mr-auto ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
     const addIconStyle = `cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${theme === colorTheme.dark ? 'text-white hover:text-white/70' : 'text-[#0B1A33] hover:text-[#0B1A33]/70'}`;
     const unsavedChangesDescriptionStyle = `text-sm ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
     const unsavedChangesButtonContainerStyle = `mt-4 flex justify-end gap-2`;
     const keepEditingButtonStyle = `px-3 py-2 rounded border`;
     const discardButtonStyle = `px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white`;
-    const footerActionsContainerStyle = 'w-full pt-3 mt-2 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
+    const footerActionsContainerStyle = 'w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
     const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red-600 hover:bg-red-700 text-white mr-2`;
     const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition`;
 
@@ -195,6 +211,8 @@ export default function Dashboard() {
         setIsModalSaving(false);
         setIsModalDirty(false);
         setConfirmCloseOpened(false);
+        setConfirmDeleteOpened(false);
+        setIsDeleting(false);
         close();
         setCompanyModalMode(modalCreateMode);
         setSkillModalMode(modalCreateMode);
@@ -225,6 +243,44 @@ export default function Dashboard() {
         closeAndResetModalState();
     };
 
+    const handleOpenDeleteConfirm = () => {
+        if (isModalSaving || !isEditModalOpen) {
+            return;
+        }
+
+        setConfirmDeleteOpened(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (isDeleting) {
+            return;
+        }
+
+        setIsDeleting(true);
+
+        try {
+            if (widget === 'c' && editingCompany) {
+                await deleteCompanyDocument(editingCompany.id);
+            } else if (widget === 's' && editingSkill) {
+                await deleteSkillDocument(String(editingSkill.id));
+            } else if (widget === 'p' && editingProject) {
+                await deleteProjectDocument(editingProject.id);
+            } else if (widget === 'e' && editingSchool) {
+                await deleteSchoolDocument(editingSchool.id);
+            } else {
+                setConfirmDeleteOpened(false);
+                return;
+            }
+
+            showNotification(`${deleteTargetLabel} ${t(translationKeys.delete)}d successfully.`, SuccessNotificationType);
+            closeAndResetModalState();
+        } catch {
+            showNotification(`Failed to ${t(translationKeys.delete).toLowerCase()} ${deleteTargetLabel}.`, ErrorNotificationType);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
     // handle navigate to different widget
     const handleNavigateWidget = (nextWidget: string) => {
         setSearchParams({ d: nextWidget });
@@ -241,6 +297,7 @@ export default function Dashboard() {
 
         try {
             await signOut(auth);
+            await setLoginUser(null);
             showNotification(`${t(translationKeys.signOutMessage)}`, SuccessNotificationType);
             navigate('/', { replace: true });
         } catch {
@@ -252,6 +309,9 @@ export default function Dashboard() {
 
     return (
         <div className={dashboardContainerStyle}>
+            <div className={welcomeTextContainerStyle}>
+                <span className={welcomeTextStyle}>{loginUser ? `Welcome, ${loginUser.Username}` : 'Welcome'}</span>
+            </div>
             <div className={languageSwitchAndThemeContainerStyle}>
                 <div className={languageSwitchContainerStyle}>
                     <button
@@ -301,7 +361,11 @@ export default function Dashboard() {
             </nav>
             <div className={titleAndAddButtonContainerStyle}>
                 <span className={titleStyle}>{dashboardTitle}:</span>
-                <IoMdAddCircle onClick={handleOpenModal} className={addIconStyle} />
+                <Tooltip label={modalTitle}>
+                    <span className="inline-flex">
+                        <IoMdAddCircle onClick={handleOpenModal} className={addIconStyle} />
+                    </span>
+                </Tooltip>
             </div>
             {widget === dashboardNavItems[3].key
                 ? <SkillTable onEditSkill={handleEditSkill} />
@@ -341,12 +405,12 @@ export default function Dashboard() {
                 styles={addEditModalStyles}
             >
                 {widget === dashboardNavItems[0].key
-                    ? <DashboardCompanyModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={companyModalMode} initialCompany={editingCompany} />
+                    ? <DashboardCompanyModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={companyModalMode} initialCompany={editingCompany} onDeleteRequest={handleOpenDeleteConfirm} />
                     : widget === dashboardNavItems[3].key
-                        ? <DashboardSkillModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={skillModalMode} initialSkill={editingSkill} />
+                        ? <DashboardSkillModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={skillModalMode} initialSkill={editingSkill} onDeleteRequest={handleOpenDeleteConfirm} />
                         : widget === dashboardNavItems[2].key
-                            ? <DashboardProjectModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={projectModalMode} initialProject={editingProject} />
-                            : <DashboardSchoolModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={schoolModalMode} initialSchool={editingSchool} />}
+                            ? <DashboardProjectModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={projectModalMode} initialProject={editingProject} onDeleteRequest={handleOpenDeleteConfirm} />
+                            : <DashboardSchoolModalComponent closeModal={handleCloseModal} onSavingChange={setIsModalSaving} onDirtyChange={setIsModalDirty} mode={schoolModalMode} initialSchool={editingSchool} onDeleteRequest={handleOpenDeleteConfirm} />}
             </Modal>
             {/* discard modal */}
             <Modal
@@ -361,24 +425,83 @@ export default function Dashboard() {
                 closeButtonProps={theme === colorTheme.dark ? { className: 'intro-modal-close-btn' } : undefined}
                 styles={addEditModalStyles}
             >
-                <p className={unsavedChangesDescriptionStyle}>
-                    {t(translationKeys.unsavedChangesDescription)}
-                </p>
-                <div className={unsavedChangesButtonContainerStyle}>
-                    <Button
-                        type="button"
-                        className={keepEditingButtonStyle}
-                        onClick={() => setConfirmCloseOpened(false)}
-                    >
-                        {t(translationKeys.keepEditing)}
-                    </Button>
-                    <Button
-                        type="button"
-                        className={discardButtonStyle}
-                        onClick={handleDiscardUnsavedChanges}
-                    >
-                        {t(translationKeys.discard)}
-                    </Button>
+                <div className="relative">
+                    <LoadingOverlay
+                        visible={isModalSaving}
+                        zIndex={1000}
+                        overlayProps={{
+                            radius: 'sm',
+                            blur: 1.5,
+                            backgroundOpacity: 0.35,
+                            color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                        }}
+                    />
+                    <p className={unsavedChangesDescriptionStyle}>
+                        {t(translationKeys.unsavedChangesDescription)}
+                    </p>
+                    <div className={unsavedChangesButtonContainerStyle}>
+                        <Button
+                            type="button"
+                            className={keepEditingButtonStyle}
+                            onClick={() => setConfirmCloseOpened(false)}
+                        >
+                            {t(translationKeys.keepEditing)}
+                        </Button>
+                        <Button
+                            type="button"
+                            className={discardButtonStyle}
+                            onClick={handleDiscardUnsavedChanges}
+                        >
+                            {t(translationKeys.discard)}
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
+            {/* delete confirm modal */}
+            <Modal
+                opened={confirmDeleteOpened}
+                onClose={() => setConfirmDeleteOpened(false)}
+                size="lg"
+                title={`${t(translationKeys.delete)} ${deleteTargetLabel}`}
+                centered
+                closeOnClickOutside={!isDeleting}
+                closeOnEscape={!isDeleting}
+                withCloseButton={!isDeleting}
+                closeButtonProps={theme === colorTheme.dark ? { className: 'intro-modal-close-btn' } : undefined}
+                styles={addEditModalStyles}
+            >
+                <div className="relative">
+                    <LoadingOverlay
+                        visible={isDeleting}
+                        zIndex={1000}
+                        overlayProps={{
+                            radius: 'sm',
+                            blur: 1.5,
+                            backgroundOpacity: 0.35,
+                            color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                        }}
+                    />
+                    <p className={unsavedChangesDescriptionStyle}>
+                        This action cannot be undone. Are you sure you want to continue?
+                    </p>
+                    <div className={unsavedChangesButtonContainerStyle}>
+                        <Button
+                            type="button"
+                            className={keepEditingButtonStyle}
+                            onClick={() => setConfirmDeleteOpened(false)}
+                            disabled={isDeleting}
+                        >
+                            {t(translationKeys.keepEditing)}
+                        </Button>
+                        <Button
+                            type="button"
+                            className={discardButtonStyle}
+                            onClick={handleConfirmDelete}
+                            disabled={isDeleting}
+                        >
+                            {isDeleting ? `${t(translationKeys.delete)}...` : t(translationKeys.delete)}
+                        </Button>
+                    </div>
                 </div>
             </Modal>
         </div>

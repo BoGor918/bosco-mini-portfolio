@@ -7,3 +7,21 @@ export const gridStyles = {
     gridLazyLoadImageStyle: "w-full h-full object-contain p-4 sm:p-4 md:p-4 lg:p-10 transition-opacity duration-300",
     gridLazyLoaderDivStyle: "absolute inset-0 flex justify-center items-center",
 }
+
+export const getModalStyle = (isDarkTheme: boolean) => {
+    return isDarkTheme
+        ? {
+            modalProps: {
+                closeButtonProps: { className: 'intro-modal-close-btn' },
+                styles: {
+                    header: {
+                        backgroundColor: '#0B1A33',
+                    },
+                    content: {
+                        backgroundColor: '#0B1A33',
+                    },
+                },
+            },
+        }
+        : {};
+}

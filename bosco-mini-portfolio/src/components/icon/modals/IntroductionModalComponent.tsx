@@ -1,6 +1,6 @@
 // util
 import { useContext } from "react"
-import { modalStyles } from "./util"
+import { modalStyles } from "../../home/modals/util"
 import { MapperContext } from "../../../globalVariable/MapperContextProvider"
 import { translationKeys } from "../../../globalVariable/Translation"
 

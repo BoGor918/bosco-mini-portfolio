@@ -108,4 +108,5 @@ export type UserProfile = {
     Email?: string,
     Username?: string,
     UID?: string,
+    IsAdmin?: boolean,
 }

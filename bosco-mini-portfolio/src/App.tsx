@@ -24,7 +24,7 @@ const Dashboard = lazy(() => {
 });
 
 function AppContent() {
-  const { t, user } = useContext(MapperContext);
+  const { t, user, authLoading } = useContext(MapperContext);
 
   useEffect(() => {
     document.title = t(translationKeys.boscoPortfolio);
@@ -34,6 +34,10 @@ function AppContent() {
       description.setAttribute("content", t(translationKeys.introModalDescription));
     }
   }, [t]);
+
+  if (authLoading) {
+    return <MainLoading />;
+  }
 
   return (
     <Suspense fallback={<MainLoading />}>

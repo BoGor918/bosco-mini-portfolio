@@ -13,18 +13,22 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // type
 import { ProjectData } from '../../../types/type';
 // util
-import { gridStyles } from './util';
+import { gridStyles, getModalStyle } from './util';
 import { normalizeImageSource } from '../../util';
 // global variable
 import { languageSetting } from '../../../globalVariable/Translation';
 
-export default function CompanyGrid() {
+// loading placeholders for skeleton loaders
+const loadingPlaceholders = Array.from({ length: 3 });
+
+export default function ProjectGrid() {
     // global variable
     const {
         language,
+        theme,
+        projectLoading,
         projectData
     } = useContext(MapperContext);
-
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected project
@@ -33,6 +37,9 @@ export default function CompanyGrid() {
     const [loadedLogoIds, setLoadedLogoIds] = useState<Set<ProjectData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<ProjectData['id']>>(new Set());
+
+    // style list
+    const { modalProps } = getModalStyle(theme === colorTheme.dark);
 
     // open modal with set selected project
     const openModal = (project: ProjectData) => {
@@ -54,7 +61,23 @@ export default function CompanyGrid() {
         <div className={gridStyles.gridMainDivStyle}>
             {/* project grid */}
             <div className={gridStyles.gridDivThreeColStyle}>
-                {projectData.map((project: ProjectData, i: number) => {
+                {projectLoading && (
+                    loadingPlaceholders.map((_, index) => (
+                        <div
+                            key={`project-loading-${index}`}
+                            className={gridStyles.gridLazyLoadImageDivStyle}
+                            aria-hidden="true"
+                        >
+                            <Loader size="lg" type="bars" color="blue" />
+                        </div>
+                    ))
+                )}
+                {!projectLoading && projectData.length === 0 && (
+                    <div className="col-span-full min-h-[9rem] w-full flex items-center justify-center rounded-md border border-[#0B1A33]/10 bg-white/80 text-[#334155] text-sm font-semibold">
+                        No records found.
+                    </div>
+                )}
+                {!projectLoading && projectData.map((project: ProjectData, i: number) => {
                     const hasLogoUrl = Boolean(project.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(project.id);
                     const isLogoLoaded = loadedLogoIds.has(project.id);
@@ -85,41 +108,17 @@ export default function CompanyGrid() {
                 })}
             </div>
             {/* modal components */}
-            {
-                localStorage.getItem(colorTheme.theme) === colorTheme.light ?
-                    <Modal opened={opened} onClose={close} size="lg" centered>
-                        {selectedProject && (
-                            <ProjectModalComponent
-                                projectName={selectedProject.ProjectName}
-                                description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
-                                techStack={selectedProject.TechStack}
-                                link={selectedProject.Link}
-                                logo={normalizeImageSource(selectedProject.Logo)}
-                            />
-                        )}
-                    </Modal> :
-                    <Modal opened={opened} onClose={close} size="lg" centered
-                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
-                        styles={{
-                            header: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            content: {
-                                backgroundColor: "#0B1A33",
-                            },
-                        }}
-                    >
-                        {selectedProject && (
-                            <ProjectModalComponent
-                                projectName={selectedProject.ProjectName}
-                                description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
-                                techStack={selectedProject.TechStack}
-                                link={selectedProject.Link}
-                                logo={normalizeImageSource(selectedProject.Logo)}
-                            />
-                        )}
-                    </Modal>
-            }
+            <Modal opened={opened} onClose={close} size="lg" centered {...modalProps}>
+                {selectedProject && (
+                    <ProjectModalComponent
+                        projectName={selectedProject.ProjectName}
+                        description={language === languageSetting.english ? selectedProject.en.Description : language === languageSetting.traditionalChinese ? selectedProject.zh.Description : selectedProject.cn.Description}
+                        techStack={selectedProject.TechStack}
+                        link={selectedProject.Link}
+                        logo={normalizeImageSource(selectedProject.Logo)}
+                    />
+                )}
+            </Modal>
         </div>
     );
 }

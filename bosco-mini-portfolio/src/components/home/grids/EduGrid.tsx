@@ -13,18 +13,22 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
 import { SchoolData } from '../../../types/type';
 // util
-import { gridStyles } from './util';
+import { gridStyles, getModalStyle } from './util';
 import { normalizeImageSource } from '../../util';
 // global variable
 import { languageSetting } from '../../../globalVariable/Translation';
+
+// loading placeholders for skeleton loaders
+const loadingPlaceholders = Array.from({ length: 3 });
 
 export default function EduGrid() {
     // global variable
     const {
         language,
+        theme,
+        schoolLoading,
         schoolData
     } = useContext(MapperContext);
-
     // modal hook
     const [opened, { open, close }] = useDisclosure(false);
     // selected school
@@ -33,6 +37,9 @@ export default function EduGrid() {
     const [loadedLogoIds, setLoadedLogoIds] = useState<Set<SchoolData['id']>>(new Set());
     // failed logo ids
     const [failedLogoIds, setFailedLogoIds] = useState<Set<SchoolData['id']>>(new Set());
+
+    // style list
+    const { modalProps } = getModalStyle(theme === colorTheme.dark);
 
     // open modal with set selected school
     const openModal = (school: SchoolData) => {
@@ -54,7 +61,23 @@ export default function EduGrid() {
         <div className={gridStyles.gridMainDivStyle}>
             {/* school grid */}
             <div className={gridStyles.gridDivThreeColStyle}>
-                {schoolData.map((school: SchoolData, i: number) => {
+                {schoolLoading && (
+                    loadingPlaceholders.map((_, index) => (
+                        <div
+                            key={`school-loading-${index}`}
+                            className={gridStyles.gridLazyLoadImageDivStyle}
+                            aria-hidden="true"
+                        >
+                            <Loader size="lg" type="bars" color="blue" />
+                        </div>
+                    ))
+                )}
+                {!schoolLoading && schoolData.length === 0 && (
+                    <div className="col-span-full min-h-[9rem] w-full flex items-center justify-center rounded-md border border-[#0B1A33]/10 bg-white/80 text-[#334155] text-sm font-semibold">
+                        No records found.
+                    </div>
+                )}
+                {!schoolLoading && schoolData.map((school: SchoolData, i: number) => {
                     const hasLogoUrl = Boolean(school.Logo);
                     const showLogoFallback = !hasLogoUrl || failedLogoIds.has(school.id);
                     const isLogoLoaded = loadedLogoIds.has(school.id);
@@ -85,49 +108,21 @@ export default function EduGrid() {
                 })}
             </div>
             {/* modal components */}
-            {
-                localStorage.getItem(colorTheme.theme) === colorTheme.light ?
-                    <Modal opened={opened} onClose={close} size="lg" centered>
-                        {selectedSchool && (
-                            <EducationModalComponent
-                                docID={selectedSchool.id}
-                                schoolName={language === languageSetting.english ? selectedSchool.en.SchoolName : language === languageSetting.traditionalChinese ? selectedSchool.zh.SchoolName : selectedSchool.cn.SchoolName}
-                                type={language === languageSetting.english ? selectedSchool.en.Type : language === languageSetting.traditionalChinese ? selectedSchool.zh.Type : selectedSchool.cn.Type}
-                                title={language === languageSetting.english ? selectedSchool.en.Title : language === languageSetting.traditionalChinese ? selectedSchool.zh.Title : selectedSchool.cn.Title}
-                                gpa={selectedSchool.GPA}
-                                startDate={selectedSchool.StartDate}
-                                endDate={selectedSchool.EndDate}
-                                present={selectedSchool.Present}
-                                logo={normalizeImageSource(selectedSchool.Logo)}
-                            />
-                        )}
-                    </Modal> :
-                    <Modal opened={opened} onClose={close} size="lg" centered
-                        closeButtonProps={{ className: 'intro-modal-close-btn' }}
-                        styles={{
-                            header: {
-                                backgroundColor: "#0B1A33",
-                            },
-                            content: {
-                                backgroundColor: "#0B1A33",
-                            },
-                        }}
-                    >
-                        {selectedSchool && (
-                            <EducationModalComponent
-                                docID={selectedSchool.id}
-                                schoolName={language === languageSetting.english ? selectedSchool.en.SchoolName : language === languageSetting.traditionalChinese ? selectedSchool.zh.SchoolName : selectedSchool.cn.SchoolName}
-                                type={language === languageSetting.english ? selectedSchool.en.Type : language === languageSetting.traditionalChinese ? selectedSchool.zh.Type : selectedSchool.cn.Type}
-                                title={language === languageSetting.english ? selectedSchool.en.Title : language === languageSetting.traditionalChinese ? selectedSchool.zh.Title : selectedSchool.cn.Title}
-                                gpa={selectedSchool.GPA}
-                                startDate={selectedSchool.StartDate}
-                                endDate={selectedSchool.EndDate}
-                                present={selectedSchool.Present}
-                                logo={normalizeImageSource(selectedSchool.Logo)}
-                            />
-                        )}
-                    </Modal>
-            }
+            <Modal opened={opened} onClose={close} size="lg" centered {...modalProps}>
+                {selectedSchool && (
+                    <EducationModalComponent
+                        docID={selectedSchool.id}
+                        schoolName={language === languageSetting.english ? selectedSchool.en.SchoolName : language === languageSetting.traditionalChinese ? selectedSchool.zh.SchoolName : selectedSchool.cn.SchoolName}
+                        type={language === languageSetting.english ? selectedSchool.en.Type : language === languageSetting.traditionalChinese ? selectedSchool.zh.Type : selectedSchool.cn.Type}
+                        title={language === languageSetting.english ? selectedSchool.en.Title : language === languageSetting.traditionalChinese ? selectedSchool.zh.Title : selectedSchool.cn.Title}
+                        gpa={selectedSchool.GPA}
+                        startDate={selectedSchool.StartDate}
+                        endDate={selectedSchool.EndDate}
+                        present={selectedSchool.Present}
+                        logo={normalizeImageSource(selectedSchool.Logo)}
+                    />
+                )}
+            </Modal>
         </div>
     );
 }

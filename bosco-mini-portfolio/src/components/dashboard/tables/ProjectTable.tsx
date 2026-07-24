@@ -1,7 +1,7 @@
 // react
 import { useContext } from 'react';
 // mantine
-import { Table } from '@mantine/core';
+import { Loader, Table, Tooltip } from '@mantine/core';
 // global variable
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
@@ -19,7 +19,9 @@ type ProjectTableProps = {
 
 export default function ProjectTable({ onEditProject }: ProjectTableProps) {
     // context
-    const { t, projectData, language, theme } = useContext(MapperContext);
+    const { t, projectData, projectLoading, language, theme } = useContext(MapperContext);
+    // edit icon text
+    const editIconText = `${t(translationKeys.edit)}${t(translationKeys.project)}`;
     // style list
     const {
         tableMainStyle,
@@ -52,10 +54,14 @@ export default function ProjectTable({ onEditProject }: ProjectTableProps) {
                 <Table.Td className={bodyCellStyle}>{project.ProjectName}</Table.Td>
                 <Table.Td className={`${bodyCellStyle} whitespace-normal break-words max-w-[18rem]`}>{description}</Table.Td>
                 <Table.Td className={`${bodyCellStyle} whitespace-normal break-words`}>
-                    <MdEdit
-                        className={editIconStyle}
-                        onClick={() => onEditProject?.(project)}
-                    />
+                    <Tooltip label={editIconText}>
+                        <span className="inline-flex">
+                            <MdEdit
+                                className={editIconStyle}
+                                onClick={() => onEditProject?.(project)}
+                            />
+                        </span>
+                    </Tooltip>
                 </Table.Td>
             </Table.Tr>
         );
@@ -74,11 +80,19 @@ export default function ProjectTable({ onEditProject }: ProjectTableProps) {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {rows.length > 0 ? (
+                        {projectLoading ? (
+                            <Table.Tr>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={4}>
+                                    <div className="flex items-center justify-center gap-2 py-2">
+                                        <Loader size="sm" type="dots" />
+                                    </div>
+                                </Table.Td>
+                            </Table.Tr>
+                        ) : rows.length > 0 ? (
                             rows
                         ) : (
                             <Table.Tr>
-                                <Table.Td className={bodyCellStyle} colSpan={6}>{t(translationKeys.empty)}</Table.Td>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={4}>{t(translationKeys.empty)}</Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>
