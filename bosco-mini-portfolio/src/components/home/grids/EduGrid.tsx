@@ -19,7 +19,7 @@ import { normalizeImageSource } from '../../util';
 import { languageSetting } from '../../../globalVariable/Translation';
 
 // loading placeholders for skeleton loaders
-const loadingPlaceholders = Array.from({ length: 3 });
+const loadingPlaceholders = Array.from({ length: 10 });
 
 export default function EduGrid() {
     // global variable
