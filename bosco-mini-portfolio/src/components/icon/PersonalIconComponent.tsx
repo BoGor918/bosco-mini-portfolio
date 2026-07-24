@@ -14,7 +14,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 // components
 import IntroductionModalComponent from './modals/IntroductionModalComponent';
 
-const PersonalIcon = `/images/personal_icon1.png`;
+const PersonalIcon = `/images/personal_icon.png`;
 const PersonalIconName = `personal_icon.png`;
 
 export default function PersonalIconComponent() {

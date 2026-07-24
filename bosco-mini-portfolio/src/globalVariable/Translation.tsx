@@ -123,7 +123,7 @@ const en = {
 
 const zhHK = {
     introModalTitle: '歡迎來到我的個人網站',
-    introModalDescription: '這個個人網站是一個動態且高效的網頁應用程式，使用 Node、React、TypeScript、Tailwind CSS 與 Mantine 建置而成。這些先進技術的組合，為我有效展示個人資訊提供了穩固基礎。透過響應式設計，網站能以視覺化且易用的方式呈現我的工作經驗、學歷、專案與技能，讓訪客在瀏覽作品集時獲得愉快且具資訊性的體驗。',
+    introModalDescription: '這個個人網站是一個動態且高效的網頁應用程式，使用 Node、React、TypeScript、Tailwind CSS、Mantine 與 Firebase 建置而成。這些先進技術的組合，為我有效展示個人資訊提供了穩固基礎。透過響應式設計，網站能以視覺化且易用的方式呈現我的工作經驗、學歷、專案與技能，讓訪客在瀏覽作品集時獲得愉快且具資訊性的體驗。',
     aboutThisWebsite: '關於這個網站',
     viewIntro: "查看簡介",
     boscoPortfolio: 'Bosco 個人網站',
@@ -233,7 +233,7 @@ const zhHK = {
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
-    introModalDescription: '这个个人网站是一个动态且高效的网页应用程式，使用 Node、React、TypeScript、Tailwind CSS 与 Mantine 建置而成。这些先进技术的组合，为我有效展示个人资讯提供了稳固基础。透过响应式设计，网站能以视觉化且易用的方式呈现我的工作经验、学历、专案与技能，让访客在浏览作品集时获得愉快且具资讯性的体验。',
+    introModalDescription: '这个个人网站是一个动态且高效的网页应用程式，使用 Node、React、TypeScript、Tailwind CSS、Mantine 与 Firebase 建置而成。这些先进技术的组合，为我有效展示个人资讯提供了稳固基础。透过响应式设计，网站能以视觉化且易用的方式呈现我的工作经验、学历、专案与技能，让访客在浏览作品集时获得愉快且具资讯性的体验。',
     aboutThisWebsite: '关于这个网站',
     viewIntro: "查看简介",
     boscoPortfolio: 'Bosco 个人网站',

@@ -1,62 +1,79 @@
 # Bosco Mini Portfolio Website
 
-This project is a dynamic and responsive personal portfolio website for CHEUNG Tsz Lai Bosco. It is designed to present professional experience, education, projects, and technical skills in a visually engaging and easy-to-navigate format.
+This project is a dynamic and responsive personal portfolio website for CHEUNG Tsz Lai Bosco. It presents professional experience, education, projects, and skills in a clean and easy-to-navigate interface.
 
-Built with Node.js, React, TypeScript, Tailwind CSS, and Mantine, the application combines strong performance with a clean and modern user experience. The result is a portfolio site that is efficient, maintainable, and well-suited for showcasing personal and professional information.
+Built with React, TypeScript, Tailwind CSS, Mantine, and Firebase, the app focuses on maintainability, smooth UI behavior, and a modern dashboard editing workflow.
 
 ## Features
 
 - Responsive layout for desktop and mobile devices
-- Dedicated sections for work experience, education, projects, and skills
-- Interactive UI components powered by Mantine
-- Type-safe React development with TypeScript
-- Utility-first styling with Tailwind CSS
+- Public portfolio sections for work experience, education, projects, and skills
+- Dashboard CRUD workflow for content management
+- Authentication with Firebase Auth
+- Firestore-backed real-time data updates
+- Multilingual UI support: English, Traditional Chinese, and Simplified Chinese
+- Inline dashboard form validation with clear error feedback beside Submit or Update
+- On-demand data loading for non-critical collections to improve initial load behavior
 
 ## Tech Stack
 
 - Node.js
-- React
+- React 18
 - TypeScript
 - Tailwind CSS
 - Mantine
+- Firebase Auth and Firestore
 - Create React App
 
 ## Getting Started
 
 ### Prerequisites
 
-- Install Node.js from https://nodejs.org/en/download
+- Install Node.js from [nodejs.org](https://nodejs.org/en/download)
+
+### Environment variables
+
+Create a .env.local file inside the bosco-mini-portfolio folder and configure:
+
+```env
+REACT_APP_FIREBASE_API_KEY=your_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
+```
 
 ### Run the project locally
 
 1. Open a terminal in the repository root.
-2. Move into the application folder:
+1. Move into the application folder:
 
-   ```bash
-   cd bosco-mini-portfolio
-   ```
+```bash
+cd bosco-mini-portfolio
+```
 
-3. Install dependencies:
+1. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-4. Start the development server:
+1. Start the development server:
 
-   ```bash
-   npm start
-   ```
+```bash
+npm start
+```
 
-5. Open http://localhost:{port} in your browser.
+1. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Available Scripts
 
-Inside `bosco-mini-portfolio`, you can run:
+Inside the bosco-mini-portfolio folder, you can run:
 
-- `npm start` - Runs the app in development mode
-- `npm run build` - Builds the app for production
-- `npm test` - Launches the test runner
+- npm start: Runs the app in development mode
+- npm run build: Builds the app for production
+- npm test: Launches the test runner
 
 ## Project Structure
 
@@ -68,9 +85,13 @@ root/
     |-- public/
     |-- src/
     |   |-- components/
-    |   |-- data/
+    |   |   |-- dashboard/
+    |   |   `-- home/
     |   |-- globalVariable/
-    |   `-- types/
+    |   |-- pages/
+    |   |-- query/
+    |   |-- types/
+    |   `-- firebase.tsx
     |-- package.json
     `-- tailwind.config.js
 ```
@@ -79,4 +100,4 @@ root/
 
 The project is deployed on Netlify:
 
-https://cheungtszlai.netlify.app/
+[https://cheungtszlai.netlify.app/](https://cheungtszlai.netlify.app/)
