@@ -17,11 +17,15 @@ The interface is fully responsive and supports desktop and mobile layouts, with 
 
 ### Home Page
 
+The Home page is the public-facing landing experience. Visitors can quickly browse profile highlights, work experience, education background, projects, and skill sets in a clean, responsive layout.
+
 | Desktop | Mobile |
 | --- | --- |
 | ![Desktop Home Page](bosco-mini-portfolio/public/images/readme/Desktop_Home_Page.png) | ![Mobile Home Page](bosco-mini-portfolio/public/images/readme/Mobile_Home_Page.png) |
 
 ### Login Page
+
+The Login page secures access to the management dashboard. Authenticated users can sign in with Firebase Authentication before performing any content updates.
 
 | Desktop | Mobile |
 | --- | --- |
@@ -29,11 +33,15 @@ The interface is fully responsive and supports desktop and mobile layouts, with 
 
 ### Dashboard Main View
 
+The Dashboard is the content control center. It presents portfolio records in organized sections and allows admins to review existing entries before editing.
+
 | Desktop | Mobile |
 | --- | --- |
 | ![Desktop Dashboard Page](bosco-mini-portfolio/public/images/readme/Desktop_Dashboard_Page.png) | ![Mobile Dashboard Page](bosco-mini-portfolio/public/images/readme/Mobile_Dashboard_Page.png) |
 
 ### Dashboard Add Modal
+
+The Add modal supports creating new records for companies, schools, projects, or skills. Form validation provides immediate feedback to keep submitted data complete and consistent.
 
 | Desktop | Mobile |
 | --- | --- |
@@ -41,20 +49,22 @@ The interface is fully responsive and supports desktop and mobile layouts, with 
 
 ### Dashboard Edit Modal
 
+The Edit modal is used to update existing content quickly. Users can revise details and save changes directly, with an interface optimized for both desktop and mobile workflows.
+
 | Desktop | Mobile |
 | --- | --- |
 | ![Desktop Dashboard Edit Modal](bosco-mini-portfolio/public/images/readme/Desktop_Dashboard_Page_Edit_Modal.png) | ![Mobile Dashboard Edit Modal](bosco-mini-portfolio/public/images/readme/Mobile_Dashboard_Page_Edit_Modal.png) |
 
 ## Features
 
-- Responsive layout for desktop and mobile devices
-- Public portfolio sections for work experience, education, projects, and skills
-- Dashboard CRUD workflow for content management
-- Authentication with Firebase Auth
-- Firestore-backed real-time data updates
-- Multilingual UI support: English, Traditional Chinese, and Simplified Chinese
-- Inline dashboard form validation with clear error feedback beside Submit or Update
-- On-demand data loading for non-critical collections to improve initial load behavior
+- Responsive layout for desktop and mobile devices.
+- Public portfolio sections for work experience, education, projects, and skills.
+- Dashboard CRUD workflow for content management (CRUD actions are restricted to admin users, for regular users only have read-only access).
+- Authentication with Firebase Auth.
+- Firestore-backed real-time data updates.
+- Multilingual UI support: English, Traditional Chinese, and Simplified Chinese.
+- Inline dashboard form validation with clear error feedback beside Submit or Update.
+- On-demand data loading for non-critical collections to improve initial load behavior.
 
 ## Tech Stack
 
