@@ -1,7 +1,7 @@
 // dashboard table styles
 export const getDashboardTableStyles = (isDarkTheme: boolean) => ({
     tableMainStyle: `min-w-[980px]`,
-    tableWrapperStyle: `animate-fade-up animate-delay-100 animate-once w-full overflow-hidden rounded-xl border shadow-sm ${isDarkTheme
+    tableWrapperStyle: `w-full overflow-hidden rounded-xl border shadow-sm ${isDarkTheme
         ? 'border-[#21D4F7]/25 bg-[#102340]'
         : 'border-[#0B1A33]/15 bg-white'
         }`,
