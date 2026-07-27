@@ -1,10 +1,13 @@
 // react
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 // mantine
 import { Button, Checkbox, FileInput, Group, Tabs, Text, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { translationKeys } from '../../../globalVariable/Translation';
+import { useMediaQuery } from '@mantine/hooks';
+// global variable
+import { MapperContext } from '../../../globalVariable/MapperContextProvider';
+import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
 
 // notification
 export const SuccessNotificationType = "success";
@@ -94,10 +97,22 @@ type DashboardDateRangeFieldsProps = {
 
 // locale type and tab values
 export type Locale = 'en' | 'zh' | 'cn';
-export const getLocaleTabs = (t: (key: keyof typeof translationKeys) => string): Array<{ value: Locale; label: string }> => [
-    { value: 'en', label: t(translationKeys.english) },
-    { value: 'zh', label: t(translationKeys.tranditionalChinese) },
-    { value: 'cn', label: t(translationKeys.simplifiedChinese) },
+export const getLocaleTabs = (
+    t: (key: keyof typeof translationKeys) => string,
+    isMobile = false,
+): Array<{ value: Locale; label: string }> => [
+    {
+        value: 'en',
+        label: t(isMobile ? translationKeys.englishShortForm : translationKeys.english),
+    },
+    {
+        value: 'zh',
+        label: t(isMobile ? translationKeys.traditionalChineseShortForm : translationKeys.tranditionalChinese),
+    },
+    {
+        value: 'cn',
+        label: t(isMobile ? translationKeys.simplifiedChineseShortForm : translationKeys.simplifiedChinese),
+    },
 ];
 
 // dashboard input styles and tabs styles
@@ -177,7 +192,9 @@ export function DashboardLocaleTextTabs({
     getInputProps,
     getFieldLabel,
 }: DashboardLocaleTextTabsProps) {
-    const localeTabs = getLocaleTabs(t);
+    const { language } = useContext(MapperContext);
+    const isMobile = useMediaQuery('(max-width: 48em)');
+    const localeTabs = getLocaleTabs(t, isMobile && language === languageSetting.english);
 
     return (
         <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>

@@ -120,6 +120,9 @@ const en = {
     login: 'Login',
     dashboard: 'Dashboard',
     noRecordsFound: 'No record(s) found.',
+    englishShortForm: 'Eng',
+    traditionalChineseShortForm: 'Trad Chin',
+    simplifiedChineseShortForm: 'Simp Chin',
 }
 
 const zhHK = {
@@ -232,6 +235,9 @@ const zhHK = {
     login: '登入',
     dashboard: '後台',
     noRecordsFound: '目前沒有紀錄。',
+    englishShortForm: 'Eng',
+    traditionalChineseShortForm: 'Trad Chin',
+    simplifiedChineseShortForm: 'Simp Chin',
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
@@ -343,6 +349,9 @@ const zhCN = {
     login: '登入',
     dashboard: '后台',
     noRecordsFound: '目前没有记录。',
+    englishShortForm: 'Eng',
+    traditionalChineseShortForm: 'Trad Chin',
+    simplifiedChineseShortForm: 'Simp Chin',
 }
 
 export const translationKeys = {
@@ -455,6 +464,9 @@ export const translationKeys = {
     login: 'login',
     dashboard: 'dashboard',
     noRecordsFound: 'noRecordsFound',
+    englishShortForm: 'englishShortForm',
+    traditionalChineseShortForm: 'traditionalChineseShortForm',
+    simplifiedChineseShortForm: 'simplifiedChineseShortForm',
 } as const;
 
 export type TranslationKey = keyof typeof en;
