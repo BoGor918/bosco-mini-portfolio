@@ -12,6 +12,7 @@ import { MdEdit } from 'react-icons/md';
 // util
 import { normalizeImageSource } from '../../util';
 import { getDashboardTableStyles } from './util';
+import { NoRecordsFoundComponent } from '../../home/grids/util';
 
 type ProjectTableProps = {
     onEditProject?: (project: ProjectData) => void;
@@ -92,7 +93,9 @@ export default function ProjectTable({ onEditProject }: ProjectTableProps) {
                             rows
                         ) : (
                             <Table.Tr>
-                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={4}>{t(translationKeys.empty)}</Table.Td>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={4}>
+                                    <NoRecordsFoundComponent translate={t} theme={theme} />
+                                </Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>

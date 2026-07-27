@@ -12,6 +12,7 @@ import { MdEdit } from 'react-icons/md';
 // util
 import { normalizeImageSource } from '../../util';
 import { getDashboardTableStyles, toPeriod } from './util';
+import { NoRecordsFoundComponent } from '../../home/grids/util';
 
 type SchoolTableProps = {
     onEditSchool?: (school: SchoolData) => void;
@@ -108,7 +109,9 @@ export default function SchoolTable({ onEditSchool }: SchoolTableProps) {
                             rows
                         ) : (
                             <Table.Tr>
-                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={5}>{t(translationKeys.empty)}</Table.Td>
+                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={5}>
+                                    <NoRecordsFoundComponent translate={t} theme={theme} />
+                                </Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>

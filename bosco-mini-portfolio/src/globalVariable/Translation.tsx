@@ -119,6 +119,7 @@ const en = {
     welcome: 'Welcome',
     login: 'Login',
     dashboard: 'Dashboard',
+    noRecordsFound: 'No record(s) found.',
 }
 
 const zhHK = {
@@ -230,6 +231,7 @@ const zhHK = {
     welcome: '歡迎',
     login: '登入',
     dashboard: '後台',
+    noRecordsFound: '目前沒有紀錄。',
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
@@ -340,6 +342,7 @@ const zhCN = {
     welcome: '欢迎',
     login: '登入',
     dashboard: '后台',
+    noRecordsFound: '目前没有记录。',
 }
 
 export const translationKeys = {
@@ -451,6 +454,7 @@ export const translationKeys = {
     welcome: 'welcome',
     login: 'login',
     dashboard: 'dashboard',
+    noRecordsFound: 'noRecordsFound',
 } as const;
 
 export type TranslationKey = keyof typeof en;

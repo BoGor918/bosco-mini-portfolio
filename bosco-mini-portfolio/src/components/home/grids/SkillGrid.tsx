@@ -13,7 +13,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
 import { SkillData } from '../../../types/type';
 // util
-import { gridStyles, getModalStyle } from './util';
+import { gridStyles, getModalStyle, NoRecordsFoundComponent } from './util';
 import { normalizeImageSource } from '../../util';
 
 // loading placeholders for skeleton loaders
@@ -22,6 +22,7 @@ const loadingPlaceholders = Array.from({ length: 20 });
 export default function SkillGrid() {
     // global variable
     const {
+        t,
         theme,
         skillLoading,
         skillData
@@ -70,9 +71,7 @@ export default function SkillGrid() {
                     ))
                 )}
                 {!skillLoading && skillData.length === 0 && (
-                    <div className="col-span-full min-h-[9rem] w-full flex items-center justify-center rounded-md border border-[#0B1A33]/10 bg-white/80 text-[#334155] text-sm font-semibold">
-                        No records found.
-                    </div>
+                    <NoRecordsFoundComponent translate={t} theme={theme} />
                 )}
                 {!skillLoading && skillData.map((skill: SkillData, i: number) => {
                     const hasLogoUrl = Boolean(skill.Logo);

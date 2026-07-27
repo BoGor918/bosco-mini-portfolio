@@ -1,3 +1,7 @@
+// global variable
+import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { translationKeys, type TranslationKey } from "../../../globalVariable/Translation";
+
 export const gridStyles = {
     gridMainDivStyle: "animate-fade animate-delay-0 animate-once flex justify-center items-center mt-[1rem] sm:mt-[1rem] md:mt-[1rem] lg:mt-[2rem] w-full",
     gridDivThreeColStyle: "mx-0 sm:mx-0 md:mx-0 lg:mx-2 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-1 w-fit",
@@ -25,3 +29,11 @@ export const getModalStyle = (isDarkTheme: boolean) => {
         }
         : {};
 }
+
+export const NoRecordsFoundComponent = ({ translate, theme }: { translate: (key: TranslationKey) => string, theme: string }) => {
+    return (
+        <div className={`col-span-full min-h-[9rem] w-full flex items-center justify-center rounded-md text-sm font-semibold ${theme === colorTheme.dark ? 'text-white' : 'text-[#334155]'}`}>
+            {translate(translationKeys.noRecordsFound)}
+        </div>
+    );
+};
