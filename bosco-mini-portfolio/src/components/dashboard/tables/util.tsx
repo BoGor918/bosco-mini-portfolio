@@ -5,7 +5,7 @@ export const getDashboardTableStyles = (isDarkTheme: boolean) => ({
         ? 'border-[#21D4F7]/25 bg-[#102340]'
         : 'border-[#0B1A33]/15 bg-white'
         }`,
-    tableScrollStyle: 'max-h-[30rem] overflow-auto',
+    tableScrollStyle: 'max-h-[303px] overflow-auto',
     headCellStyle: `text-[13px] font-semibold uppercase tracking-[0.12em] ${isDarkTheme
         ? 'text-[#FFFFFF]'
         : 'text-[#0B1A33]'
