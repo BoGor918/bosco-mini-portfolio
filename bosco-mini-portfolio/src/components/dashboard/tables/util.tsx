@@ -1,7 +1,7 @@
 // dashboard table styles
 export const getDashboardTableStyles = (isDarkTheme: boolean) => ({
     tableMainStyle: `min-w-[980px]`,
-    tableWrapperStyle: `w-full max-w-7xl rounded-xl border shadow-sm ${isDarkTheme
+    tableWrapperStyle: `w-full rounded-xl border shadow-sm ${isDarkTheme
         ? 'border-[#21D4F7]/25 bg-[#102340]'
         : 'border-[#0B1A33]/15 bg-white'
         }`,
