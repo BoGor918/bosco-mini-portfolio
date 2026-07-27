@@ -120,7 +120,7 @@ export default function Dashboard() {
 
     // style list
     const dashboardContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen px-4`;
-    const languageSwitchAndThemeContainerStyle = `w-full mb-3 flex flex-wrap items-center gap-2`;
+    const languageSwitchAndThemeContainerStyle = `w-full mb-3 flex flex-wrap items-center gap-2 animate-fade-up animate-delay-0 animate-once`;
     const languageSwitchContainerStyle = `flex items-center gap-2`;
     const languageSwitchButtonStyle = (isActive: boolean) =>
         `px-2 py-1 border rounded-md text-[11px] font-semibold transition ` + (theme === colorTheme.dark
@@ -133,7 +133,7 @@ export default function Dashboard() {
     const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme !== colorTheme.dark ? ` border-[#0B1A33] hover:bg-[#0B1A33]/10` : ` border-[#FFFFFF] hover:bg-[#FFFFFF]/10`);
     const biMoonIconStyle = `text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
     const biSolidMoonIconStyle = `text-[#FFFFFF] text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
-    const navContainerStyle = `w-full mb-3 flex flex-wrap gap-2`;
+    const navContainerStyle = `w-full mb-3 flex flex-wrap gap-2 animate-fade-up animate-delay-0 animate-once`;
     const navButtonStyle = (isActive: boolean) =>
         `px-2 py-1 border rounded-md text-[14px] font-semibold transition ` + (theme === colorTheme.dark
             ? isActive
@@ -142,8 +142,8 @@ export default function Dashboard() {
             : isActive
                 ? `border-[#0B1A33] bg-[#0B1A33] text-white`
                 : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
-    const titleAndAddButtonContainerStyle = `flex justify-between items-center w-full mb-2`;
-    const welcomeTextContainerStyle = `w-full flex justify-start pb-1`;
+    const titleAndAddButtonContainerStyle = `animate-fade-up animate-delay-0 animate-once flex justify-between items-center w-full mb-2`;
+    const welcomeTextContainerStyle = `w-full flex justify-start pb-1 animate-fade-up animate-delay-0 animate-once`;
     const welcomeTextStyle = `block text-left font-bold text-xl ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
     const titleStyle = `font-bold text-xl mr-auto ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
     const addIconStyle = `cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${theme === colorTheme.dark ? 'text-white hover:text-white/70' : 'text-[#0B1A33] hover:text-[#0B1A33]/70'}`;
@@ -151,7 +151,7 @@ export default function Dashboard() {
     const unsavedChangesButtonContainerStyle = `mt-4 flex justify-end gap-2`;
     const keepEditingButtonStyle = `px-3 py-2 rounded border`;
     const discardButtonStyle = `px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white`;
-    const footerActionsContainerStyle = 'w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
+    const footerActionsContainerStyle = 'animate-fade-up animate-delay-200 animate-once w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
     const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red-600 hover:bg-red-700 text-white mr-2`;
     const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition`;
 
