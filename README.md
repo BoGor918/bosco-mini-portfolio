@@ -1,5 +1,7 @@
 # Bosco Mini Portfolio Website
 
+![Main Logo](bosco-mini-portfolio/public/main_logo.png)
+
 This project is a dynamic and responsive personal portfolio website for CHEUNG Tsz Lai Bosco. It presents professional experience, education, projects, and skills in a clean and easy-to-navigate interface.
 
 Built with React, TypeScript, Tailwind CSS, Mantine, and Firebase, the app focuses on maintainability, smooth UI behavior, and a modern dashboard editing workflow.
