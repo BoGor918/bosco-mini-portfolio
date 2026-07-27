@@ -1,11 +1,11 @@
 // dashboard table styles
 export const getDashboardTableStyles = (isDarkTheme: boolean) => ({
     tableMainStyle: `min-w-[980px]`,
-    tableWrapperStyle: `w-full rounded-xl border shadow-sm ${isDarkTheme
+    tableWrapperStyle: `w-full overflow-hidden rounded-xl border shadow-sm ${isDarkTheme
         ? 'border-[#21D4F7]/25 bg-[#102340]'
         : 'border-[#0B1A33]/15 bg-white'
         }`,
-    tableScrollStyle: 'max-h-[303px] overflow-auto',
+    tableScrollStyle: 'max-h-[303px] overflow-auto [border-radius:inherit] [-webkit-overflow-scrolling:touch]',
     headCellStyle: `text-[13px] font-semibold uppercase tracking-[0.12em] ${isDarkTheme
         ? 'text-[#FFFFFF]'
         : 'text-[#0B1A33]'
