@@ -132,15 +132,36 @@ Inside the bosco-mini-portfolio folder, you can run:
 
 ```text
 root/
+|-- .hintrc
 |-- README.md
 |-- netlify.toml
 `-- bosco-mini-portfolio/
     |-- .env.local
+    |-- .gitignore
+    |-- node_modules/
     |-- package.json
     |-- package-lock.json
     |-- tsconfig.json
     |-- tailwind.config.js
     |-- public/
+    |   |-- images/
+    |   |   |-- personal_icon.png
+    |   |   `-- readme/
+    |   |       |-- Desktop_Dashboard_Page.png
+    |   |       |-- Desktop_Dashboard_Page_Add_Modal.png
+    |   |       |-- Desktop_Dashboard_Page_Edit_Modal.png
+    |   |       |-- Desktop_Home_Page.png
+    |   |       |-- Desktop_Login_Page.png
+    |   |       |-- Mobile_Dashboard_Page.png
+    |   |       |-- Mobile_Dashboard_Page_Add_Modal.png
+    |   |       |-- Mobile_Dashboard_Page_Edit_Modal.png
+    |   |       |-- Mobile_Home_Page.png
+    |   |       `-- Mobile_Login_Page.png
+    |   |-- index.html
+    |   |-- main_logo.ico
+    |   |-- main_logo.png
+    |   |-- manifest.json
+    |   `-- robots.txt
     |-- src/
     |   |-- App.tsx
     |   |-- index.tsx
@@ -150,21 +171,62 @@ root/
     |   |-- components/
     |   |   |-- dashboard/
     |   |   |   |-- modals/
+    |   |   |   |   |-- DashboardCompanyModalComponent.tsx
+    |   |   |   |   |-- DashboardProjectModalComponent.tsx
+    |   |   |   |   |-- DashboardSchoolModalComponent.tsx
+    |   |   |   |   |-- DashboardSkillModalComponent.tsx
+    |   |   |   |   `-- util.tsx
     |   |   |   `-- tables/
+    |   |   |       |-- CompanyTable.tsx
+    |   |   |       |-- ProjectTable.tsx
+    |   |   |       |-- SchoolTable.tsx
+    |   |   |       |-- SkillTable.tsx
+    |   |   |       `-- util.tsx
     |   |   |-- home/
     |   |   |   |-- grids/
+    |   |   |   |   |-- CompanyGrid.tsx
+    |   |   |   |   |-- EduGrid.tsx
+    |   |   |   |   |-- ProjectGrid.tsx
+    |   |   |   |   |-- SkillGrid.tsx
+    |   |   |   |   `-- util.tsx
     |   |   |   |-- main/
+    |   |   |   |   |-- BottomComponent.tsx
+    |   |   |   |   |-- MiddleComponent.tsx
+    |   |   |   |   `-- TopComponent.tsx
     |   |   |   `-- modals/
+    |   |   |       |-- CompanyModalComponent.tsx
+    |   |   |       |-- EducationModalComponent.tsx
+    |   |   |       |-- ProjectModalComponent.tsx
+    |   |   |       |-- SkillModalComponent.tsx
+    |   |   |       `-- util.tsx
     |   |   |-- icon/
+    |   |   |   |-- PersonalIconComponent.tsx
     |   |   |   `-- modals/
+    |   |   |       `-- IntroductionModalComponent.tsx
     |   |   |-- loading/
+    |   |   |   `-- MainLoading.tsx
     |   |   `-- util.tsx
     |   |-- files/
+    |   |   `-- CV.pdf
     |   |-- globalVariable/
+    |   |   |-- GlobalVariable.tsx
+    |   |   |-- MapperContextProvider.tsx
+    |   |   |-- Notification.tsx
+    |   |   `-- Translation.tsx
     |   |-- pages/
+    |   |   |-- Dashboard.tsx
+    |   |   |-- Home.tsx
+    |   |   `-- Login.tsx
     |   |-- query/
+    |   |   |-- CompanyQuery.tsx
+    |   |   |-- ProjectQuery.tsx
+    |   |   |-- SchoolQuery.tsx
+    |   |   |-- SkillQuery.tsx
+    |   |   `-- UserQuery.tsx
     |   |-- types/
-    `-- build/
+    |   |   |-- assets.d.ts
+    |   |   |-- index.d.tsx
+    |   |   `-- type.tsx
 ```
 
 ## Deployment
