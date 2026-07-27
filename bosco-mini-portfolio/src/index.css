@@ -11,6 +11,15 @@ body * {
     @apply transition-colors duration-200;
 }
 
+/* Prevent iOS Safari auto-zoom on focused form controls */
+@media screen and (max-width: 768px) {
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+    }
+}
+
 .intro-modal-close-btn {
     color: #94A3B8 !important;
     outline: none;
