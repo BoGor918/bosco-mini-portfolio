@@ -101,19 +101,18 @@ type DashboardDateRangeFieldsProps = {
 export type Locale = 'en' | 'zh' | 'cn';
 export const getLocaleTabs = (
     t: (key: keyof typeof translationKeys) => string,
-    isMobile = false,
 ): Array<{ value: Locale; label: string }> => [
         {
             value: 'en',
-            label: t(isMobile ? translationKeys.englishShortForm : translationKeys.english),
+            label: t(translationKeys.englishLanguage),
         },
         {
             value: 'zh',
-            label: t(isMobile ? translationKeys.traditionalChineseShortForm : translationKeys.tranditionalChinese),
+            label: t(translationKeys.tranditionalChineseLanguage),
         },
         {
             value: 'cn',
-            label: t(isMobile ? translationKeys.simplifiedChineseShortForm : translationKeys.simplifiedChinese),
+            label: t(translationKeys.simplifiedChineseLanguage),
         },
     ];
 
@@ -215,9 +214,7 @@ export function DashboardLocaleTextTabs({
     getInputProps,
     getFieldLabel,
 }: DashboardLocaleTextTabsProps) {
-    const { language } = useContext(MapperContext);
-    const isMobile = useMediaQuery('(max-width: 48em)');
-    const localeTabs = getLocaleTabs(t, isMobile && language === languageSetting.english);
+    const localeTabs = getLocaleTabs(t);
 
     return (
         <Tabs variant="outline" defaultValue="en" styles={tabsStyles}>
