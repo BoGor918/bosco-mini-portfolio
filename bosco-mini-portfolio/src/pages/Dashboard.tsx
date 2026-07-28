@@ -119,7 +119,7 @@ export default function Dashboard() {
     }, [loadPortfolioData]);
 
     // style list
-    const dashboardContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen px-4`;
+    const dashboardContainerStyle = `flex flex-col my-auto w-full px-4 mt-[5rem]`;
     const languageSwitchAndThemeContainerStyle = `w-full mb-3 flex flex-wrap items-center gap-2`;
     const languageSwitchContainerStyle = `flex items-center gap-2`;
     const languageSwitchButtonStyle = (isActive: boolean) =>
