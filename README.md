@@ -17,7 +17,7 @@ The interface is fully responsive and supports desktop and mobile layouts, with 
 
 ## UI Walkthrough
 
-### Home Page
+### Home Page /
 
 The Home page is the public-facing landing experience. Visitors can quickly browse profile highlights, work experience, education background, projects, and skill sets in a clean, responsive layout.
 
@@ -25,7 +25,7 @@ The Home page is the public-facing landing experience. Visitors can quickly brow
 | --- | --- |
 | ![Desktop Home Page](bosco-mini-portfolio/public/images/readme/Desktop_Home_Page.png) | ![Mobile Home Page](bosco-mini-portfolio/public/images/readme/Mobile_Home_Page.png) |
 
-### Login Page
+### Login Page /login
 
 The Login page secures access to the management dashboard. Authenticated users can sign in with Firebase Authentication before performing any content updates.
 
@@ -33,7 +33,7 @@ The Login page secures access to the management dashboard. Authenticated users c
 | --- | --- |
 | ![Desktop Login Page](bosco-mini-portfolio/public/images/readme/Desktop_Login_Page.png) | ![Mobile Login Page](bosco-mini-portfolio/public/images/readme/Mobile_Login_Page.png) |
 
-### Dashboard Main View
+### Dashboard Main View /dashboard
 
 The Dashboard is the content control center. It presents portfolio records in organized sections and allows admins to review existing entries before editing.
 

@@ -103,19 +103,19 @@ export const getLocaleTabs = (
     t: (key: keyof typeof translationKeys) => string,
     isMobile = false,
 ): Array<{ value: Locale; label: string }> => [
-    {
-        value: 'en',
-        label: t(isMobile ? translationKeys.englishShortForm : translationKeys.english),
-    },
-    {
-        value: 'zh',
-        label: t(isMobile ? translationKeys.traditionalChineseShortForm : translationKeys.tranditionalChinese),
-    },
-    {
-        value: 'cn',
-        label: t(isMobile ? translationKeys.simplifiedChineseShortForm : translationKeys.simplifiedChinese),
-    },
-];
+        {
+            value: 'en',
+            label: t(isMobile ? translationKeys.englishShortForm : translationKeys.english),
+        },
+        {
+            value: 'zh',
+            label: t(isMobile ? translationKeys.traditionalChineseShortForm : translationKeys.tranditionalChinese),
+        },
+        {
+            value: 'cn',
+            label: t(isMobile ? translationKeys.simplifiedChineseShortForm : translationKeys.simplifiedChinese),
+        },
+    ];
 
 // dashboard input styles and tabs styles
 export const getDashboardInputStyles = (isDarkTheme: boolean) => ({
@@ -161,36 +161,46 @@ export function DashboardSubmitDeleteButtonGroup({
     validationMessage,
     theme,
 }: DashboardSubmitDeleteButtonGroupProps) {
-    const { theme: contextTheme } = useContext(MapperContext);
+    const { theme: contextTheme, loginUser, t } = useContext(MapperContext);
     const activeTheme = theme ?? contextTheme;
+    const isReadOnly = loginUser?.IsAdmin !== true;
 
     return (
-        <div className="mt-4 flex justify-start gap-2">
-            {showDelete && (
+        <div className="mt-4 flex flex-col md:flex-row lg:flex-row justify-start item-start md:items-center lg:items-center">
+            <div className="flex gap-2 mb-1 lg:mb-0">
+                {showDelete && (
+                    <Button
+                        type="button"
+                        className={"bg-[#FF0000] hover:bg-red-700" + (disabled ? ' cursor-not-allowed' : '')}
+                        disabled={isSaving || disabled}
+                        onClick={onDeleteClick}
+                    >
+                        {deleteText}
+                    </Button>
+                )}
                 <Button
-                    type="button"
-                    className={"bg-[#FF0000] hover:bg-red-700" + (disabled ? ' cursor-not-allowed' : '')}
+                    type="submit"
                     disabled={isSaving || disabled}
-                    onClick={onDeleteClick}
+                    loading={showLoading && isSaving}
+                    className={activeTheme === colorTheme.dark
+                        ? `bg-[#4094F4] hover:bg-[#4094F4]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')
+                        : `bg-[#0B1A33] hover:bg-[#0B1A33]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')}
                 >
-                    {deleteText}
+                    {idleText}
                 </Button>
-            )}
-            <Button
-                type="submit"
-                disabled={isSaving || disabled}
-                loading={showLoading && isSaving}
-                className={activeTheme === colorTheme.dark
-                    ? `bg-[#4094F4] hover:bg-[#4094F4]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')
-                    : `bg-[#0B1A33] hover:bg-[#0B1A33]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')}
-            >
-                {idleText}
-            </Button>
-            {validationMessage && (
-                <Text c="red" size="xs" className="ml-0 lg:ml-[-5px]">
-                    {validationMessage}
-                </Text>
-            )}
+            </div>
+            <div className="ml-0 md:ml-2 lg:ml-2">
+                {validationMessage && (
+                    <Text c="red" size="xs">
+                        {validationMessage}
+                    </Text>
+                )}
+                {isReadOnly && (
+                    <Text c="red" size="xs">
+                        {t(translationKeys.onlyAdminCanSubmitOrEdit)}
+                    </Text>
+                )}
+            </div>
         </div>
     );
 }

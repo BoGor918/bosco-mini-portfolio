@@ -123,6 +123,7 @@ const en = {
     englishShortForm: 'Eng',
     traditionalChineseShortForm: 'Trad Chin',
     simplifiedChineseShortForm: 'Simp Chin',
+    onlyAdminCanSubmitOrEdit: 'Only admin can submit or update.',
 }
 
 const zhHK = {
@@ -238,6 +239,7 @@ const zhHK = {
     englishShortForm: 'Eng',
     traditionalChineseShortForm: 'Trad Chin',
     simplifiedChineseShortForm: 'Simp Chin',
+    onlyAdminCanSubmitOrEdit: '只有管理員可以提交或更新。',
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
@@ -352,6 +354,7 @@ const zhCN = {
     englishShortForm: 'Eng',
     traditionalChineseShortForm: 'Trad Chin',
     simplifiedChineseShortForm: 'Simp Chin',
+    onlyAdminCanSubmitOrEdit: '只有管理员可以提交或更新。',
 }
 
 export const translationKeys = {
@@ -467,6 +470,7 @@ export const translationKeys = {
     englishShortForm: 'englishShortForm',
     traditionalChineseShortForm: 'traditionalChineseShortForm',
     simplifiedChineseShortForm: 'simplifiedChineseShortForm',
+    onlyAdminCanSubmitOrEdit: 'onlyAdminCanSubmitOrEdit',
 } as const;
 
 export type TranslationKey = keyof typeof en;
