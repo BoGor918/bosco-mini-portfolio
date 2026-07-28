@@ -7,7 +7,8 @@ import { getLoaderColor } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader } from '@mantine/core';
 // icons
-import { BiGrid, BiObjectsVerticalBottom, BiBookContent, BiCalendarCheck } from "react-icons/bi";
+import { MdOutlineWorkOutline, MdOutlineSchool } from "react-icons/md";
+import { BiBookContent, BiCalendarCheck } from "react-icons/bi";
 // translation
 import { translationKeys } from '../../../globalVariable/Translation';
 
@@ -68,7 +69,7 @@ export default function BottomComponent() {
                     <button type="button" onClick={() => navClicked("1")} className={navButtonStyle}>
                         <div className={widget === "1" || widget === null ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
-                            <BiGrid className={widget === "1" ? iconStyleSelected : iconStyleUnSelected} size={30} />
+                            <MdOutlineWorkOutline className={widget === "1" ? iconStyleSelected : iconStyleUnSelected} size={30} />
                             <span className={widget === "1" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.work)}</span>
                         </div>
                     </button>
@@ -76,7 +77,7 @@ export default function BottomComponent() {
                     <button type="button" onClick={() => navClicked("2")} className={navButtonStyle}>
                         <div className={widget === "2" ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
-                            <BiObjectsVerticalBottom className={widget === "2" ? iconStyleSelected : iconStyleUnSelected} size={30} />
+                            <MdOutlineSchool className={widget === "2" ? iconStyleSelected : iconStyleUnSelected} size={30} />
                             <span className={widget === "2" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.education)}</span>
                         </div>
                     </button>
