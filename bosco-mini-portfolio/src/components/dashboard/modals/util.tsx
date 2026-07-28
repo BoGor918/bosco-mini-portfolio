@@ -169,7 +169,7 @@ export function DashboardSubmitDeleteButtonGroup({
             {showDelete && (
                 <Button
                     type="button"
-                    className={"bg-[#FF0000] hover:bg-red-700" + (isSaving || disabled ? ' cursor-not-allowed' : '')}
+                    className={"bg-[#FF0000] hover:bg-red-700" + (disabled ? ' cursor-not-allowed' : '')}
                     disabled={isSaving || disabled}
                     onClick={onDeleteClick}
                 >
@@ -181,8 +181,8 @@ export function DashboardSubmitDeleteButtonGroup({
                 disabled={isSaving || disabled}
                 loading={showLoading && isSaving}
                 className={activeTheme === colorTheme.dark
-                    ? `bg-[#4094F4] hover:bg-[#4094F4]/90 text-[#FFFFFF]`
-                    : `bg-[#0B1A33] hover:bg-[#0B1A33]/90 text-[#FFFFFF]` + (isSaving || disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')}
+                    ? `bg-[#4094F4] hover:bg-[#4094F4]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')
+                    : `bg-[#0B1A33] hover:bg-[#0B1A33]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')}
             >
                 {idleText}
             </Button>
