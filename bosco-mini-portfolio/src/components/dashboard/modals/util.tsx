@@ -4,10 +4,9 @@ import type { ReactNode } from 'react';
 // mantine
 import { Button, Checkbox, FileInput, Tabs, Text, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { useMediaQuery } from '@mantine/hooks';
 // global variable
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
-import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
+import { translationKeys } from '../../../globalVariable/Translation';
 import { colorTheme } from '../../../globalVariable/GlobalVariable';
 
 // notification
