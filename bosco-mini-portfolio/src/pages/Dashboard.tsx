@@ -153,7 +153,7 @@ export default function Dashboard() {
     const discardButtonStyle = `px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white`;
     const footerActionsContainerStyle = 'w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
     const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red-600 hover:bg-red-700 text-white mr-2`;
-    const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition`;
+    const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
 
     // effect to handle invalid widget in url param
     useEffect(() => {
