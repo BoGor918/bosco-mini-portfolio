@@ -161,6 +161,9 @@ export function DashboardSubmitDeleteButtonGroup({
     validationMessage,
     theme,
 }: DashboardSubmitDeleteButtonGroupProps) {
+    const { theme: contextTheme } = useContext(MapperContext);
+    const activeTheme = theme ?? contextTheme;
+
     return (
         <div className="mt-4 flex justify-start gap-2">
             {showDelete && (
@@ -173,7 +176,14 @@ export function DashboardSubmitDeleteButtonGroup({
                     {deleteText}
                 </Button>
             )}
-            <Button type="submit" disabled={isSaving || disabled} loading={showLoading && isSaving} className={theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`}>
+            <Button
+                type="submit"
+                disabled={isSaving || disabled}
+                loading={showLoading && isSaving}
+                className={activeTheme === colorTheme.dark
+                    ? `bg-[#4094F4] hover:bg-[#4094F4]/90 text-[#FFFFFF]`
+                    : `bg-[#0B1A33] hover:bg-[#0B1A33]/90 text-[#FFFFFF]`}
+            >
                 {idleText}
             </Button>
             {validationMessage && (
