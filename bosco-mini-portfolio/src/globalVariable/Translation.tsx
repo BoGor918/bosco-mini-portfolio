@@ -82,7 +82,7 @@ const en = {
     skillName: 'Skill Name',
     unsavedChanges: 'Unsaved Changes',
     unsavedChangesDescription: 'You have unsaved changes. Are you sure you want to discard them?',
-    keepEditing: 'Keep editing',
+    keepEditing: 'Keep Editing',
     discard: 'Discard',
     submit: 'Submit',
     update: 'Update',

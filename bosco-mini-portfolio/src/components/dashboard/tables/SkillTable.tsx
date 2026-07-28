@@ -3,7 +3,7 @@ import { useContext } from 'react';
 // mantine
 import { Loader, Table, Tooltip } from '@mantine/core';
 // global variable
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { colorTheme, getLoaderColor } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
 import { SkillData } from '../../../types/type';
@@ -34,6 +34,7 @@ export default function SkillTable({ onEditSkill }: SkillTableProps) {
         rowStyle,
         rowImageStyle,
     } = getDashboardTableStyles(theme === colorTheme.dark);
+    const loaderColor = getLoaderColor(theme);
 
     const rows = skillData.map((skill) => (
         <Table.Tr key={skill.id} className={rowStyle}>
@@ -74,7 +75,7 @@ export default function SkillTable({ onEditSkill }: SkillTableProps) {
                             <Table.Tr>
                                 <Table.Td className={`${bodyCellStyle} text-center`} colSpan={3}>
                                     <div className="flex items-center justify-center gap-2 py-2">
-                                        <Loader size="sm" type="dots" />
+                                        <Loader size="sm" type="dots" color={loaderColor} />
                                     </div>
                                 </Table.Td>
                             </Table.Tr>

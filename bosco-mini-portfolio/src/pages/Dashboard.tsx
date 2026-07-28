@@ -149,7 +149,7 @@ export default function Dashboard() {
     const addIconStyle = `cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${theme === colorTheme.dark ? 'text-white hover:text-white/70' : 'text-[#0B1A33] hover:text-[#0B1A33]/70'}`;
     const unsavedChangesDescriptionStyle = `text-sm ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
     const unsavedChangesButtonContainerStyle = `mt-4 flex justify-end gap-2`;
-    const keepEditingButtonStyle = `px-3 py-2 rounded border`;
+    const keepEditingButtonStyle = `px-3 py-2 rounded border` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
     const discardButtonStyle = `px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white`;
     const footerActionsContainerStyle = 'w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
     const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red-600 hover:bg-red-700 text-white mr-2`;

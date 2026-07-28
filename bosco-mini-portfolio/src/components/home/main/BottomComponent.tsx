@@ -3,6 +3,7 @@ import { lazy, Suspense, useContext, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom';
 // global components
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
+import { getLoaderColor } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader } from '@mantine/core';
 // icons
@@ -20,9 +21,10 @@ const validWidgets = new Set(["1", "2", "3", "4"]);
 
 export default function BottomComponent() {
     // translation
-    const { t } = useContext(MapperContext)
+    const { t, theme } = useContext(MapperContext)
     const [searchParams, setSearchParams] = useSearchParams();
     const widget = searchParams.get("w") ?? "1";
+    const loaderColor = getLoaderColor(theme);
 
     useEffect(() => {
         if (!validWidgets.has(widget)) {
@@ -98,7 +100,7 @@ export default function BottomComponent() {
             </nav>
             {/* display grid */}
             <div className={displayGridDivStyle}>
-                <Suspense fallback={<Loader className='my-[2rem]' />}>
+                <Suspense fallback={<Loader className='my-[2rem]' color={loaderColor} />}>
                     {
                         widget === "1" || widget === null ? <CompanyGrid /> : widget === "2" ? <EduGrid /> : widget === "3" ? <ProjectGrid /> : widget === "4" ? <SkillGrid /> : <></>
                     }

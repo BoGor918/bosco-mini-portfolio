@@ -376,6 +376,7 @@ export default function DashboardCompanyModalComponent({
                     showDelete={isEditMode}
                     onDeleteClick={onDeleteRequest}
                     validationMessage={showValidationHint ? t(translationKeys.pleaseFixHighlightedErrors) : undefined}
+                    theme={theme}
                 />
             </form>
         </div>

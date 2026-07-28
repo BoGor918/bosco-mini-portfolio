@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 // global variable
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { colorTheme, getLoaderColor } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
@@ -38,6 +38,7 @@ export default function SkillGrid() {
 
     // style list
     const { modalProps } = getModalStyle(theme === colorTheme.dark);
+    const loaderColor = getLoaderColor(theme);
 
     // open modal with set selected skill
     const openModal = (skill: SkillData) => {
@@ -66,7 +67,7 @@ export default function SkillGrid() {
                             className={gridStyles.gridLazyLoadImageSmallDivStyle}
                             aria-hidden="true"
                         >
-                            <Loader size="lg" type="bars" color="blue" />
+                            <Loader size="lg" type="bars" color={loaderColor} />
                         </div>
                     ))
                 )}
@@ -96,7 +97,7 @@ export default function SkillGrid() {
                             )}
                             {(!isLogoLoaded || showLogoFallback) && (
                                 <div className={gridStyles.gridLazyLoaderDivStyle}>
-                                    <Loader type="bars" color="blue" />
+                                    <Loader type="bars" color={loaderColor} />
                                 </div>
                             )}
                         </button>

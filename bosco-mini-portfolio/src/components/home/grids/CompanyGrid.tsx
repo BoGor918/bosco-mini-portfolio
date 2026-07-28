@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 // global variable
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { colorTheme, getLoaderColor } from '../../../globalVariable/GlobalVariable';
 // mantine components
 import { Loader, Modal } from '@mantine/core';
 // page components
@@ -41,6 +41,7 @@ export default function CompanyGrid() {
 
     // style list
     const { modalProps } = getModalStyle(theme === colorTheme.dark);
+    const loaderColor = getLoaderColor(theme);
 
     // open modal with set selected company
     const openModal = (company: CompanyData) => {
@@ -69,7 +70,7 @@ export default function CompanyGrid() {
                             className={gridStyles.gridLazyLoadImageDivStyle}
                             aria-hidden="true"
                         >
-                            <Loader size="lg" type="bars" color="blue" />
+                            <Loader size="lg" type="bars" color={loaderColor} />
                         </div>
                     ))
                 )}
@@ -99,7 +100,7 @@ export default function CompanyGrid() {
                             )}
                             {(!isLogoLoaded || showLogoFallback) && (
                                 <div className={gridStyles.gridLazyLoaderDivStyle}>
-                                    <Loader type="bars" color="blue" />
+                                    <Loader type="bars" color={loaderColor} />
                                 </div>
                             )}
                         </button>

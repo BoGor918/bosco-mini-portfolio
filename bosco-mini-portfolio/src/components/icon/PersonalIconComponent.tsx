@@ -7,7 +7,7 @@ import { Loader, Modal } from "@mantine/core";
 import packageJson from "../../../package.json"
 // global variable
 import { MapperContext } from '../../globalVariable/MapperContextProvider';
-import { colorTheme } from "../../globalVariable/GlobalVariable";
+import { colorTheme, getLoaderColor } from "../../globalVariable/GlobalVariable";
 import { languageSetting, translationKeys } from '../../globalVariable/Translation';
 // react lazy load image
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -101,7 +101,7 @@ export default function PersonalIconComponent() {
                     )}
                     {!isPersonalIconLoaded && !isPersonalIconFailed && (
                         <div className={personalIconLoaderStyle}>
-                            <Loader type="bars" color="blue" />
+                            <Loader type="bars" color={getLoaderColor(theme)} />
                         </div>
                     )}
                     {isPersonalIconFailed && (

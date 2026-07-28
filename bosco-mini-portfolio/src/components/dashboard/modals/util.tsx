@@ -2,12 +2,13 @@
 import { useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 // mantine
-import { Button, Checkbox, FileInput, Group, Tabs, Text, TextInput } from '@mantine/core';
+import { Button, Checkbox, FileInput, Tabs, Text, TextInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useMediaQuery } from '@mantine/hooks';
 // global variable
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
+import { colorTheme } from '../../../globalVariable/GlobalVariable';
 
 // notification
 export const SuccessNotificationType = "success";
@@ -32,6 +33,7 @@ type DashboardSubmitDeleteButtonGroupProps = {
     showDelete?: boolean;
     onDeleteClick?: () => void;
     validationMessage?: string;
+    theme?: string;
 };
 
 // dashboard locale text tabs type
@@ -157,9 +159,10 @@ export function DashboardSubmitDeleteButtonGroup({
     showDelete = false,
     onDeleteClick,
     validationMessage,
+    theme,
 }: DashboardSubmitDeleteButtonGroupProps) {
     return (
-        <Group mt="md">
+        <div className="mt-4 flex justify-start gap-2">
             {showDelete && (
                 <Button
                     type="button"
@@ -170,7 +173,7 @@ export function DashboardSubmitDeleteButtonGroup({
                     {deleteText}
                 </Button>
             )}
-            <Button type="submit" disabled={isSaving || disabled} loading={showLoading && isSaving}>
+            <Button type="submit" disabled={isSaving || disabled} loading={showLoading && isSaving} className={theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`}>
                 {idleText}
             </Button>
             {validationMessage && (
@@ -178,7 +181,7 @@ export function DashboardSubmitDeleteButtonGroup({
                     {validationMessage}
                 </Text>
             )}
-        </Group>
+        </div>
     );
 }
 

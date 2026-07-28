@@ -3,7 +3,7 @@ import { useContext } from 'react';
 // mantine
 import { Loader, Table, Tooltip } from '@mantine/core';
 // global variable
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { colorTheme, getLoaderColor } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { languageSetting, translationKeys } from '../../../globalVariable/Translation';
 import { SchoolData } from '../../../types/type';
@@ -34,6 +34,7 @@ export default function SchoolTable({ onEditSchool }: SchoolTableProps) {
         rowStyle,
         rowImageStyle,
     } = getDashboardTableStyles(theme === colorTheme.dark);
+    const loaderColor = getLoaderColor(theme);
 
     const rows = schoolData.map((school) => {
         const schoolName =
@@ -101,7 +102,7 @@ export default function SchoolTable({ onEditSchool }: SchoolTableProps) {
                             <Table.Tr>
                                 <Table.Td className={`${bodyCellStyle} text-center`} colSpan={5}>
                                     <div className="flex items-center justify-center gap-2 py-2">
-                                        <Loader size="sm" type="dots" />
+                                        <Loader size="sm" type="dots" color={loaderColor} />
                                     </div>
                                 </Table.Td>
                             </Table.Tr>
