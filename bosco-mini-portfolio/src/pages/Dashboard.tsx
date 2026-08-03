@@ -1,7 +1,7 @@
 // react
 import { useContext, useEffect, useMemo, useState } from 'react'
 // route
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 // mantine
 import { Button, LoadingOverlay, Modal, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -19,6 +19,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import { BiMoon, BiSolidMoon } from 'react-icons/bi';
 // global variable
 import { MapperContext } from '../globalVariable/MapperContextProvider';
+import { useAppNavigate } from '../globalVariable/NavigationLoading';
 import { colorTheme } from '../globalVariable/GlobalVariable';
 import { languageSetting, translationKeys } from '../globalVariable/Translation';
 import { showNotification } from '../globalVariable/Notification';
@@ -65,7 +66,7 @@ export default function Dashboard() {
     const [editingSchool, setEditingSchool] = useState<SchoolData | null>(null);
     const [signOutLoading, setSignOutLoading] = useState(false);
     // url param
-    const navigate = useNavigate();
+    const navigate = useAppNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const widget = searchParams.get("d") ?? "c";
     // dashboard navigation items

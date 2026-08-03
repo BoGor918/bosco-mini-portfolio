@@ -6,7 +6,7 @@ import { useForm } from '@mantine/form';
 // icon
 import { BiMoon, BiSolidMoon } from 'react-icons/bi';
 // navigate
-import { useNavigate } from 'react-router-dom';
+import { useAppNavigate } from '../globalVariable/NavigationLoading';
 // global variable
 import { colorTheme } from '../globalVariable/GlobalVariable';
 import { MapperContext } from '../globalVariable/MapperContextProvider';
@@ -69,7 +69,7 @@ export default function Login() {
     // mode text
     const modeText = useMemo(() => (isSignUp ? t(translationKeys.createAnAccount) : t(translationKeys.signIn)), [isSignUp, t]);
     // navigate
-    const navigate = useNavigate();
+    const navigate = useAppNavigate();
 
     useEffect(() => {
         loadUserData();

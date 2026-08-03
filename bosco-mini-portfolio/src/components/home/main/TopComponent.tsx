@@ -13,8 +13,7 @@ import { languageSetting, translationKeys } from "../../../globalVariable/Transl
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 // component
 import PersonalIconComponent from "../../icon/PersonalIconComponent";
-// react router
-import { useNavigate } from "react-router";
+import { useAppNavigate } from "../../../globalVariable/NavigationLoading";
 
 const CVName = `CHEUNG_Tsz_Lai_Bosco_CV.pdf`;
 
@@ -28,7 +27,7 @@ export default function TopComponent() {
     // global
     const { t, language, setLanguage, theme, setTheme, user } = useContext(MapperContext);
     // url param
-    const navigate = useNavigate();
+    const navigate = useAppNavigate();
     // style list
     const mainDivPaddingXStyle = language === languageSetting.english ? `px-[4rem]` : `px-[6rem]`;
     const mainDivStyle = `flex flex-col sm:flex-col md:flex-col lg:flex-row justify-center lg:justify-between items-center mt-[5rem] ${mainDivPaddingXStyle} self-center w-full max-w-[365px] sm:max-w-[365px] md:max-w-[365px] lg:max-w-[910px] font-light`;

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 // page components
 import MainLoading from "./components/loading/MainLoading";
 import { MapperContext } from "./globalVariable/MapperContextProvider";
+import { NavigationLoadingProvider, useNavigationLoading } from "./globalVariable/NavigationLoading";
 import { translationKeys } from "./globalVariable/Translation";
 // lazy load components
 const Home = lazy(() => import('./pages/Home'));
@@ -13,6 +14,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 function AppContent() {
   const { t, user, authLoading } = useContext(MapperContext);
+  const { isNavigating } = useNavigationLoading();
 
   useEffect(() => {
     document.title = t(translationKeys.boscoPortfolio);
@@ -23,7 +25,7 @@ function AppContent() {
     }
   }, [t]);
 
-  if (authLoading) {
+  if (authLoading || isNavigating) {
     return <MainLoading />;
   }
 
@@ -41,7 +43,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <NavigationLoadingProvider>
+        <AppContent />
+      </NavigationLoadingProvider>
     </Router>
   );
 }
