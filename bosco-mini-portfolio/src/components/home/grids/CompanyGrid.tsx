@@ -19,7 +19,7 @@ import { normalizeImageSource } from '../../util';
 import { languageSetting } from '../../../globalVariable/Translation';
 
 // loading placeholders for skeleton loaders
-const loadingPlaceholders = Array.from({ length: 10 });
+const loadingPlaceholders = Array.from({ length: 45 });
 
 export default function CompanyGrid() {
     // global variable

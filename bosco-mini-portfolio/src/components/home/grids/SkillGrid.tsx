@@ -17,7 +17,7 @@ import { gridStyles, getModalStyle, NoRecordsFoundComponent } from './util';
 import { normalizeImageSource } from '../../util';
 
 // loading placeholders for skeleton loaders
-const loadingPlaceholders = Array.from({ length: 20 });
+const loadingPlaceholders = Array.from({ length: 45 });
 
 export default function SkillGrid() {
     // global variable
