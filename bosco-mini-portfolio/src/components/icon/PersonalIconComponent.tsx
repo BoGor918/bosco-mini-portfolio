@@ -33,7 +33,7 @@ export default function PersonalIconComponent() {
     // style list
     const viewInfoButtonMarginTop = language === languageSetting.english ? `mt-[-2.2rem]` : `mt-[-1.4rem]`;
     const viewInfoButtonStyle = `relative z-20 ${viewInfoButtonMarginTop} px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition uppercase ` + (theme === colorTheme.dark ? `bg-cyan text-dark-blue` : `bg-dark-blue text-white`);
-    const parentContainerStyle = "bg-white dark:bg-dark-blue flex flex-col";
+    const parentContainerStyle = "bg-transparent flex flex-col";
     const personalIconDivStyle = `flex flex-col items-center animate-fade-up animate-delay-0 animate-once`;
     const personalIconStyle = `relative flex justify-center items-center w-[198px] h-[198px] border-[3px] border-transparent rounded-full cursor-pointer overflow-hidden [background:padding-box_var(--bg-color),border-box_var(--border-color)]`
     const lazyLoadImageStyle = `w-full h-full object-cover p-[4px] rounded-full transition-opacity duration-300`;
