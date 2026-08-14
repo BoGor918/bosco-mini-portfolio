@@ -20,7 +20,7 @@ import { BiMoon, BiSolidMoon } from 'react-icons/bi';
 // global variable
 import { MapperContext } from '../globalVariable/MapperContextProvider';
 import { useAppNavigate } from '../globalVariable/NavigationLoading';
-import { colorTheme } from '../globalVariable/GlobalVariable';
+import { color, colorTheme } from '../globalVariable/GlobalVariable';
 import { languageSetting, translationKeys } from '../globalVariable/Translation';
 import { showNotification } from '../globalVariable/Notification';
 // type
@@ -103,13 +103,13 @@ export default function Dashboard() {
     const addEditModalStyles = theme === colorTheme.dark
         ? {
             header: {
-                backgroundColor: "#0B1A33",
+                backgroundColor: color.darkBlue,
             },
             content: {
-                backgroundColor: "#0B1A33",
+                backgroundColor: color.darkBlue,
             },
             title: {
-                color: "#94A3B8",
+                color: color.slate300,
             },
         }
         : undefined;
@@ -126,35 +126,35 @@ export default function Dashboard() {
     const languageSwitchButtonStyle = (isActive: boolean) =>
         `px-2 py-1 border rounded-md text-[11px] font-semibold transition ` + (theme === colorTheme.dark
             ? isActive
-                ? `border-[#21D4F7] bg-[#21D4F7] text-[#0B1A33]`
+                ? `border-cyan bg-cyan text-dark-blue`
                 : `border-white/45 text-white hover:bg-white/10`
             : isActive
-                ? `border-[#0B1A33] bg-[#0B1A33] text-white`
-                : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
-    const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme !== colorTheme.dark ? ` border-[#0B1A33] hover:bg-[#0B1A33]/10` : ` border-[#FFFFFF] hover:bg-[#FFFFFF]/10`);
+                ? `border-dark-blue bg-dark-blue text-white`
+                : `border-dark-blue/45 text-dark-blue hover:bg-dark-blue/10`);
+    const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme !== colorTheme.dark ? ` border-dark-blue hover:bg-dark-blue/10` : ` border-white hover:bg-white/10`);
     const biMoonIconStyle = `text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
-    const biSolidMoonIconStyle = `text-[#FFFFFF] text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
+    const biSolidMoonIconStyle = `text-white text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
     const navContainerStyle = `w-full mb-3 flex flex-wrap gap-2`;
     const navButtonStyle = (isActive: boolean) =>
         `px-2 py-1 border rounded-md text-[14px] font-semibold transition ` + (theme === colorTheme.dark
             ? isActive
-                ? `border-[#21D4F7] bg-[#21D4F7] text-[#0B1A33]`
+                ? `border-cyan bg-cyan text-dark-blue`
                 : `border-white/45 text-white hover:bg-white/10`
             : isActive
-                ? `border-[#0B1A33] bg-[#0B1A33] text-white`
-                : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
+                ? `border-dark-blue bg-dark-blue text-white`
+                : `border-dark-blue/45 text-dark-blue hover:bg-dark-blue/10`);
     const titleAndAddButtonContainerStyle = `flex justify-between items-center w-full mb-2`;
     const welcomeTextContainerStyle = `w-full flex justify-start pb-1`;
-    const welcomeTextStyle = `block text-left font-bold text-xl ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
-    const titleStyle = `font-bold text-xl mr-auto ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
-    const addIconStyle = `cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${theme === colorTheme.dark ? 'text-white hover:text-white/70' : 'text-[#0B1A33] hover:text-[#0B1A33]/70'}`;
-    const unsavedChangesDescriptionStyle = `text-sm ${theme === colorTheme.dark ? 'text-white' : 'text-[#0F172A]'}`;
+    const welcomeTextStyle = `block text-left font-bold text-xl ${theme === colorTheme.dark ? 'text-white' : 'text-slate-900'}`;
+    const titleStyle = `font-bold text-xl mr-auto ${theme === colorTheme.dark ? 'text-white' : 'text-slate-900'}`;
+    const addIconStyle = `cursor-pointer text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px] ${theme === colorTheme.dark ? 'text-white hover:text-white/70' : 'text-dark-blue hover:text-dark-blue/70'}`;
+    const unsavedChangesDescriptionStyle = `text-sm ${theme === colorTheme.dark ? 'text-white' : 'text-slate-900'}`;
     const unsavedChangesButtonContainerStyle = `mt-4 flex justify-end gap-2`;
-    const keepEditingButtonStyle = `px-3 py-2 rounded border` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
-    const discardButtonStyle = `px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white`;
-    const footerActionsContainerStyle = 'w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-[#0B1A33]/15');
-    const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red-600 hover:bg-red-700 text-white mr-2`;
-    const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
+    const keepEditingButtonStyle = `px-3 py-2 rounded border` + (theme === colorTheme.dark ? ` bg-light-blue hover:bg-light-blue/90` : ` bg-dark-blue hover:bg-dark-blue/90`);
+    const discardButtonStyle = `px-3 py-2 rounded bg-red hover:bg-red/90 text-white`;
+    const footerActionsContainerStyle = 'w-full pt-3 mt-3 border-t flex items-center' + (theme === colorTheme.dark ? 'border-white/20' : 'border-dark-blue/15');
+    const signOutButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition bg-red hover:bg-red/90 text-white mr-2`;
+    const backToHomeButtonStyle = `inline-flex items-center rounded-md border px-3 py-1.5 text-[13px] font-semibold transition` + (theme === colorTheme.dark ? ` bg-light-blue hover:bg-light-blue/90` : ` bg-dark-blue hover:bg-dark-blue/90`);
 
     // effect to handle invalid widget in url param
     useEffect(() => {
@@ -445,7 +445,7 @@ export default function Dashboard() {
                             radius: 'sm',
                             blur: 1.5,
                             backgroundOpacity: 0.35,
-                            color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                            color: theme === colorTheme.dark ? color.darkBlue : color.slate500,
                         }}
                     />
                     <p className={unsavedChangesDescriptionStyle}>
@@ -490,7 +490,7 @@ export default function Dashboard() {
                             radius: 'sm',
                             blur: 1.5,
                             backgroundOpacity: 0.35,
-                            color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                            color: theme === colorTheme.dark ? color.darkBlue : color.slate500,
                         }}
                     />
                     <p className={unsavedChangesDescriptionStyle}>

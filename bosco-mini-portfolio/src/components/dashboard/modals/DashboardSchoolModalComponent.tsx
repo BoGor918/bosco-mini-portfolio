@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { LoadingOverlay, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { color, colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
 import { showNotification } from '../../../globalVariable/Notification';
@@ -144,8 +144,8 @@ export default function DashboardSchoolModalComponent({
     const numberInputStyles = {
         ...inputStyles,
         control: {
-            color: theme === colorTheme.dark ? '#FFFFFF' : '#0B1A33',
-            borderColor: theme === colorTheme.dark ? 'rgba(33, 212, 247, 0.45)' : 'rgba(11, 26, 51, 0.25)',
+            color: theme === colorTheme.dark ? color.white : color.darkBlue,
+            borderColor: theme === colorTheme.dark ? color.cyanOverlay : color.darkBlueOverlay,
         },
     };
 
@@ -283,7 +283,7 @@ export default function DashboardSchoolModalComponent({
                     radius: 'sm',
                     blur: 1.5,
                     backgroundOpacity: 0.35,
-                    color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                    color: theme === colorTheme.dark ? color.darkBlue : color.slate500,
                 }}
             />
             {/* form */}

@@ -1,8 +1,8 @@
 export const modalStyles = {
     modalMainDiv: "flex flex-col font-light p-3",
-    modalTextStyle: "text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-[#9A9A9A] dark:text-[#94A3B8]",
-    modalLogoStyle: "flex justify-center items-center bg-[#9a9a9a17] p-[2rem] rounded-lg",
-    modalNameStyle: "text-[#0B1A33] dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px] font-medium mt-5 mb-1",
+        modalTextStyle: "text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-gray-500 dark:text-slate-300",
+        modalLogoStyle: "flex justify-center items-center bg-gray-500-alpha p-[2rem] rounded-lg",
+        modalNameStyle: "text-dark-blue dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px] font-medium mt-5 mb-1",
 }
 
 export const getDetailStyles = (isDarkTheme: boolean) => ({
@@ -10,24 +10,24 @@ export const getDetailStyles = (isDarkTheme: boolean) => ({
     detailCardStyle:
         "rounded-2xl border p-3 " +
         (isDarkTheme
-            ? "border-white/20 bg-[#0B1A33]/20"
-            : "border-[#0B1A33]/15 bg-[#0B1A33]/[0.03]"),
+            ? "border-white/20 bg-dark-blue/20"
+            : "border-dark-blue/15 bg-dark-blue/[0.03]"),
     detailLabelStyle:
         "text-[12px] font-semibold uppercase tracking-[0.16em] " +
-        (isDarkTheme ? "text-[#94A3B8]" : "text-[#475569]"),
+        (isDarkTheme ? "text-slate-300" : "text-slate-400"),
     detailValueStyle:
         "mt-1 text-[16px] leading-[1.5] break-words " +
-        (isDarkTheme ? "text-white" : "text-[#0F172A]"),
+        (isDarkTheme ? "text-white" : "text-slate-900"),
     durationPillStyle:
         "inline-flex items-center rounded-full px-2.5 py-1 text-[13px] font-semibold tracking-[0.08em] uppercase " +
         (isDarkTheme
-            ? "bg-[#21D4F7]/10 text-[#21D4F7]"
-            : "bg-[#0B1A33]/10 text-[#0B1A33]"),
+            ? "bg-cyan/10 text-cyan"
+            : "bg-dark-blue/10 text-dark-blue"),
     durationPillLowerCaseStyle:
         "inline-flex items-center rounded-full px-2.5 py-1 text-[13px] font-semibold tracking-[0.08em] " +
         (isDarkTheme
-            ? "bg-[#21D4F7]/10 text-[#21D4F7]"
-            : "bg-[#0B1A33]/10 text-[#0B1A33]"),
+            ? "bg-cyan/10 text-cyan"
+            : "bg-dark-blue/10 text-dark-blue"),
     durationDivStyle: "mt-1 flex flex-col lg:flex-row items-start gap-2",
 });
 

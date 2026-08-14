@@ -7,7 +7,7 @@ import { DateInput } from '@mantine/dates';
 // global variable
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { color, colorTheme } from '../../../globalVariable/GlobalVariable';
 
 // notification
 export const SuccessNotificationType = "success";
@@ -118,14 +118,14 @@ export const getLocaleTabs = (
 // dashboard input styles and tabs styles
 export const getDashboardInputStyles = (isDarkTheme: boolean) => ({
     label: {
-        color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
+        color: isDarkTheme ? color.white : color.darkBlue,
         fontWeight: 600,
         fontSize: '14px',
     },
     input: {
-        backgroundColor: isDarkTheme ? '#102340' : '#FFFFFF',
-        color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
-        borderColor: isDarkTheme ? 'rgba(33, 212, 247, 0.45)' : 'rgba(11, 26, 51, 0.25)',
+        backgroundColor: isDarkTheme ? color.slate700 : color.white,
+        color: isDarkTheme ? color.white : color.darkBlue,
+        borderColor: isDarkTheme ? color.cyanOverlay : color.darkBlueOverlay,
         fontSize: '14px',
     },
 });
@@ -133,7 +133,7 @@ export const getDashboardInputStyles = (isDarkTheme: boolean) => ({
 // dashboard tabs styles
 export const getDashboardTabsStyles = (isDarkTheme: boolean) => ({
     tab: {
-        color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
+        color: isDarkTheme ? color.white : color.darkBlue,
     },
 });
 
@@ -169,7 +169,7 @@ export function DashboardSubmitDeleteButtonGroup({
                 {showDelete && (
                     <Button
                         type="button"
-                        className={"bg-[#FF0000] hover:bg-red-700" + (disabled ? ' cursor-not-allowed' : '')}
+                        className={"bg-red hover:bg-red/90" + (disabled ? ' cursor-not-allowed' : '')}
                         disabled={isSaving || disabled}
                         onClick={onDeleteClick}
                     >
@@ -181,8 +181,8 @@ export function DashboardSubmitDeleteButtonGroup({
                     disabled={isSaving || disabled}
                     loading={showLoading && isSaving}
                     className={activeTheme === colorTheme.dark
-                        ? `bg-[#4094F4] hover:bg-[#4094F4]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')
-                        : `bg-[#0B1A33] hover:bg-[#0B1A33]/90 text-[#FFFFFF]` + (disabled ? 'text-[#ADB5BD] cursor-not-allowed' : '')}
+                        ? `bg-light-blue hover:bg-light-blue/90 text-white` + (disabled ? 'text-gray-300 cursor-not-allowed' : '')
+                        : `bg-dark-blue hover:bg-dark-blue/90 text-white` + (disabled ? 'text-gray-300 cursor-not-allowed' : '')}
                 >
                     {idleText}
                 </Button>
@@ -286,7 +286,7 @@ export function DashboardExistingImagePreview({
 }: DashboardExistingImagePreviewProps) {
     return (
         <div className={className}>
-            <span className={`text-[14px] font-bold ${isDarkTheme ? 'text-[#FFFFFF]' : 'text-[#0B1A33]'}`}>
+            <span className={`text-[14px] font-bold ${isDarkTheme ? 'text-white' : 'text-dark-blue'}`}>
                 {label}
             </span>
             <img
@@ -314,7 +314,7 @@ export function DashboardPresentCheckbox({
             styles={{
                 ...inputStyles,
                 icon: {
-                    color: isDarkTheme ? '#FFFFFF' : '#0B1A33',
+                    color: isDarkTheme ? color.white : color.darkBlue,
                 },
             }}
             key={componentKey}

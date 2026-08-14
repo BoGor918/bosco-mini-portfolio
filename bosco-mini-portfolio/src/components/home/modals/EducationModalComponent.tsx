@@ -8,7 +8,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
 import { getDetailStyles, modalStyles, calculateDuration } from './util';
 // global variable
-import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { color, colorTheme } from "../../../globalVariable/GlobalVariable";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 // translation
 import { translationKeys } from "../../../globalVariable/Translation";
@@ -76,7 +76,7 @@ export default function EducationModalComponent({
         {
           !isDarkTheme ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
-            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
+            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: color.darkBlue }} />
         }
         {/* school logo */}
         <div className={modalStyles.modalLogoStyle}>

@@ -9,7 +9,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
 import { modalStyles, getDetailStyles, calculateDuration } from './util';
 // global variable
-import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { color, colorTheme } from "../../../globalVariable/GlobalVariable";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 // translation
 import { translationKeys } from "../../../globalVariable/Translation";
@@ -101,7 +101,7 @@ export default function CompanyModalComponent({
         {
           !isDarkTheme ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
-            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
+            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: color.darkBlue }} />
         }
         {/* company logo */}
         <div className={modalStyles.modalLogoStyle}>

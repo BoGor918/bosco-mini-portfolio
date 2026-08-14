@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { LoadingOverlay, MultiSelect } from '@mantine/core';
 import { useForm } from '@mantine/form';
 // global variable
-import { colorTheme } from '../../../globalVariable/GlobalVariable';
+import { color, colorTheme } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { translationKeys } from '../../../globalVariable/Translation';
 import { showNotification } from '../../../globalVariable/Notification';
@@ -297,7 +297,7 @@ export default function DashboardCompanyModalComponent({
                     radius: 'sm',
                     blur: 1.5,
                     backgroundOpacity: 0.35,
-                    color: theme === colorTheme.dark ? '#0B1A33' : '#334155',
+                    color: theme === colorTheme.dark ? color.darkBlue : color.slate500,
                 }}
             />
             {/* form */}

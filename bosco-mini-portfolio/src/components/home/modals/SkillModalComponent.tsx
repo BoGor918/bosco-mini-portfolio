@@ -6,7 +6,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
 import { modalStyles } from './util';
 // global variable
-import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { color, colorTheme } from "../../../globalVariable/GlobalVariable";
 
 export default function SkillModalComponent({
   skillName,
@@ -25,7 +25,7 @@ export default function SkillModalComponent({
         {
           localStorage.getItem(colorTheme.theme) === colorTheme.light ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
-            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
+            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: color.darkBlue }} />
         }
         {/* skill logo */}
         <div className={modalStyles.modalLogoStyle}>

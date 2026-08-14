@@ -8,7 +8,7 @@ import { CompanyData, ProjectData, SchoolData, SkillData, UserProfile } from "..
 // firebase
 import { auth } from "../firebase";
 // global variable
-import { colorTheme } from "./GlobalVariable";
+import { color, colorTheme } from "./GlobalVariable";
 
 // variable interface
 interface MapperContextType {
@@ -262,13 +262,17 @@ export default function MapperContextProvider({ children }: PropsWithChildren) {
     useEffect(() => {
         if (theme === colorTheme.dark) {
             document.documentElement.classList.add(colorTheme.dark);
-            document.body.style.backgroundColor = `#0B1A33`;
-            document.querySelector(`meta[name="theme-color"]`)?.setAttribute(`content`, `#0B1A33`);
+            document.body.style.backgroundColor = color.darkBlue;
+            document.querySelector(`meta[name="theme-color"]`)?.setAttribute(`content`, color.darkBlue);
         } else {
             document.documentElement.classList.remove(colorTheme.dark);
-            document.body.style.backgroundColor = `#FFFFFF`;
-            document.querySelector(`meta[name="theme-color"]`)?.setAttribute(`content`, `#FFFFFF`);
+            document.body.style.backgroundColor = color.white;
+            document.querySelector(`meta[name="theme-color"]`)?.setAttribute(`content`, color.white);
         }
+
+        document.documentElement.style.setProperty('--color-gray-300', color.slate300);
+        document.documentElement.style.setProperty('--color-black', color.black);
+        document.documentElement.style.setProperty('--color-dark-blue-subtle', color.darkBlueSubtle);
 
         localStorage.setItem(colorTheme.theme, theme);
     }, [theme]);

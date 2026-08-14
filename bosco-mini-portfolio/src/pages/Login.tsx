@@ -8,7 +8,7 @@ import { BiMoon, BiSolidMoon } from 'react-icons/bi';
 // navigate
 import { useAppNavigate } from '../globalVariable/NavigationLoading';
 // global variable
-import { colorTheme } from '../globalVariable/GlobalVariable';
+import { color, colorTheme } from '../globalVariable/GlobalVariable';
 import { MapperContext } from '../globalVariable/MapperContextProvider';
 import { showNotification } from '../globalVariable/Notification';
 import { languageSetting, translationKeys } from '../globalVariable/Translation';
@@ -78,35 +78,35 @@ export default function Login() {
     // style list
     const loginContainerStyle = `flex flex-col justify-center items-center my-auto w-full h-screen`;
     const formStyle = `w-full max-w-[365px] px-4 animate-fade-up animate-delay-200 animate-once`;
-    const submitButtonStyle = `text-[#FFFFFF] rounded-md` + (theme === colorTheme.dark ? ` bg-[#4094F4] hover:bg-[#4094F4]/90` : ` bg-[#0B1A33] hover:bg-[#0B1A33]/90`);
+    const submitButtonStyle = `text-white rounded-md` + (theme === colorTheme.dark ? ` bg-light-blue hover:bg-light-blue/90` : ` bg-dark-blue hover:bg-dark-blue/90`);
     const languageSwitchAndThemeContainerStyle = `w-full max-w-[365px] px-4 flex flex-wrap items-center gap-2 justify-center mt-5 mb-3 animate-fade-up animate-delay-100 animate-once`;
     const languageSwitchContainerStyle = `flex items-center gap-2`;
     const languageSwitchButtonStyle = (isActive: boolean) =>
         `px-2 py-1 border rounded-md text-[11px] font-semibold transition ` + (theme === colorTheme.dark
             ? isActive
-                ? `border-[#21D4F7] bg-[#21D4F7] text-[#0B1A33]`
+                ? `border-cyan bg-cyan text-dark-blue`
                 : `border-white/45 text-white hover:bg-white/10`
             : isActive
-                ? `border-[#0B1A33] bg-[#0B1A33] text-white`
-                : `border-[#0B1A33]/45 text-[#0B1A33] hover:bg-[#0B1A33]/10`);
-    const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme !== colorTheme.dark ? ` border-[#0B1A33] hover:bg-[#0B1A33]/10` : ` border-[#FFFFFF] hover:bg-[#FFFFFF]/10`);
+                ? `border-dark-blue bg-dark-blue text-white`
+                : `border-dark-blue/45 text-dark-blue hover:bg-dark-blue/10`);
+    const themeSwitchButtonStyle = `p-1 border-[2px] rounded-full` + (theme !== colorTheme.dark ? ` border-dark-blue hover:bg-dark-blue/10` : ` border-white hover:bg-white/10`);
     const biMoonIconStyle = `text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
-    const biSolidMoonIconStyle = `text-[#FFFFFF] text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
-    const backtoHomeTextStyle = `font-bold text-sm cursor-pointer` + (theme === colorTheme.dark ? ` text-white hover:underline` : ` text-[#0B1A33] hover:underline`);
+    const biSolidMoonIconStyle = `text-white text-[22px] sm:text-[22px] md:text-[22px] lg:text-[24px]`;
+    const backtoHomeTextStyle = `font-bold text-sm cursor-pointer` + (theme === colorTheme.dark ? ` text-white hover:underline` : ` text-dark-blue hover:underline`);
     const inputStyles = {
         label: {
-            color: theme === colorTheme.dark ? '#FFFFFF' : '#334155',
+            color: theme === colorTheme.dark ? color.white : color.slate500,
             fontWeight: 600,
             fontSize: '14px',
         },
         input: {
-            backgroundColor: theme === colorTheme.dark ? '#102340' : '#FFFFFF',
-            color: theme === colorTheme.dark ? '#FFFFFF' : '#0B1A33',
-            borderColor: theme === colorTheme.dark ? 'rgba(33, 212, 247, 0.45)' : 'rgba(11, 26, 51, 0.25)',
+            backgroundColor: theme === colorTheme.dark ? color.slate700 : color.white,
+            color: theme === colorTheme.dark ? color.white : color.darkBlue,
+            borderColor: theme === colorTheme.dark ? color.cyanOverlay : color.darkBlueOverlay,
             fontSize: '14px',
         },
     };
-    const createAccountTextStyle = `text-sm cursor-pointer` + (theme === colorTheme.dark ? ` text-white hover:underline` : ` text-[#0B1A33] hover:underline`);
+    const createAccountTextStyle = `text-sm cursor-pointer` + (theme === colorTheme.dark ? ` text-white hover:underline` : ` text-dark-blue hover:underline`);
 
     const handleThemeSwitch = () => {
         setTheme(theme === colorTheme.dark ? colorTheme.light : colorTheme.dark);

@@ -8,7 +8,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // util
 import { getDetailStyles, modalStyles } from './util';
 // global variable
-import { colorTheme } from "../../../globalVariable/GlobalVariable";
+import { color, colorTheme } from "../../../globalVariable/GlobalVariable";
 import { MapperContext } from "../../../globalVariable/MapperContextProvider";
 // translation
 import { translationKeys } from "../../../globalVariable/Translation"
@@ -39,7 +39,7 @@ export default function ProjectModalComponent({
     detailValueStyle,
     durationPillLowerCaseStyle,
   } = getDetailStyles(isDarkTheme);
-  const linkStyle = "block max-w-full break-all leading-[1.45] text-[#9A9A9A] dark:text-[#94A3B8] hover:underline";
+  const linkStyle = "block max-w-full break-all leading-[1.45] text-gray-500 dark:text-slate-300 hover:underline";
   const linkPillStyle = durationPillLowerCaseStyle + ' w-full sm:w-fit max-w-full';
   const techStackList = techStack.join(' / ');
 
@@ -54,7 +54,7 @@ export default function ProjectModalComponent({
         {
           localStorage.getItem(colorTheme.theme) === colorTheme.light ?
             <LoadingOverlay visible={visible} overlayProps={{ blur: 2 }} /> :
-            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: '#0B1A33' }} />
+            <LoadingOverlay visible={visible} overlayProps={{ blur: 2, color: color.darkBlue }} />
         }
         {/* project logo */}
         <div className={modalStyles.modalLogoStyle}>

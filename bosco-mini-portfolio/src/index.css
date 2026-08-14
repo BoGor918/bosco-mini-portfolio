@@ -21,13 +21,13 @@ body * {
 }
 
 .intro-modal-close-btn {
-    color: #94A3B8 !important;
+    color: var(--color-gray-300) !important;
     outline: none;
     transition: none !important;
 }
 
 .intro-modal-close-btn:hover {
-    color: #000000 !important;
+    color: var(--color-black) !important;
 }
 
 @media (min-width: 1024px) {
@@ -37,8 +37,8 @@ body * {
     }
 
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #94A3B8 0%, #94A3B8 100%);
-        border: 2px solid rgba(11, 26, 51, 0.08);
+        background: linear-gradient(180deg, var(--color-gray-300) 0%, var(--color-gray-300) 100%);
+        border: 2px solid var(--color-dark-blue-subtle);
         border-radius: 9999px;
     }
 }

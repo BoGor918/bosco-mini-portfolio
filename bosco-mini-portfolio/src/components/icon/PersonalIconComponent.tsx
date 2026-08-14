@@ -7,7 +7,7 @@ import { Loader, Modal } from "@mantine/core";
 import packageJson from "../../../package.json"
 // global variable
 import { MapperContext } from '../../globalVariable/MapperContextProvider';
-import { colorTheme, getLoaderColor } from "../../globalVariable/GlobalVariable";
+import { color, colorTheme, getLoaderColor } from "../../globalVariable/GlobalVariable";
 import { languageSetting, translationKeys } from '../../globalVariable/Translation';
 // react lazy load image
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -32,13 +32,13 @@ export default function PersonalIconComponent() {
 
     // style list
     const viewInfoButtonMarginTop = language === languageSetting.english ? `mt-[-2.2rem]` : `mt-[-1.4rem]`;
-    const viewInfoButtonStyle = `relative z-20 ${viewInfoButtonMarginTop} px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition uppercase ` + (theme === colorTheme.dark ? `bg-[#21D4F7] text-[#0B1A33]` : `bg-[#0B1A33] text-[#FFFFFF]`);
-    const parentContainerStyle = "bg-white dark:bg-[#0B1A33] flex flex-col";
+    const viewInfoButtonStyle = `relative z-20 ${viewInfoButtonMarginTop} px-7 py-1 rounded-full text-[10px] font-semibold tracking-[0.3em] hover:brightness-95 transition uppercase ` + (theme === colorTheme.dark ? `bg-cyan text-dark-blue` : `bg-dark-blue text-white`);
+    const parentContainerStyle = "bg-white dark:bg-dark-blue flex flex-col";
     const personalIconDivStyle = `flex flex-col items-center animate-fade-up animate-delay-0 animate-once`;
-    const personalIconStyle = `relative flex justify-center items-center w-[198px] h-[198px] border-[3px] border-[#0000] rounded-full cursor-pointer overflow-hidden [background:padding-box_var(--bg-color),border-box_var(--border-color)]`
+    const personalIconStyle = `relative flex justify-center items-center w-[198px] h-[198px] border-[3px] border-transparent rounded-full cursor-pointer overflow-hidden [background:padding-box_var(--bg-color),border-box_var(--border-color)]`
     const lazyLoadImageStyle = `w-full h-full object-cover p-[4px] rounded-full transition-opacity duration-300`;
     const personalIconLoaderStyle = `absolute inset-0 flex justify-center items-center`;
-    const personalIconFallbackStyle = `w-full h-full flex justify-center items-center text-[42px] font-extrabold rounded-full ` + (theme === colorTheme.dark ? `text-[#21D4F7] bg-[#0F274A]` : `text-[#0B1A33] bg-[#E5E7EB]`);
+    const personalIconFallbackStyle = `w-full h-full flex justify-center items-center text-[42px] font-extrabold rounded-full ` + (theme === colorTheme.dark ? `text-cyan bg-slate-800` : `text-dark-blue bg-gray-200`);
 
     // icon box animation
     useEffect(() => {
@@ -78,9 +78,9 @@ export default function PersonalIconComponent() {
                         {
                             "--angle": "0deg",
                             "--border-color": theme === colorTheme.light
-                                ? `linear-gradient(var(--angle), #0B1A33, #A0A8B0)`
-                                : "linear-gradient(var(--angle), #00A3FF, #21FAC6)",
-                            "--bg-color": theme === colorTheme.light ? `linear-gradient(#FFFFFF, #FFFFFF)` : `linear-gradient(#0B1A33, #0B1A33)`,
+                                ? `linear-gradient(var(--angle), ${color.darkBlue}, ${color.gray400})`
+                                : `linear-gradient(var(--angle), ${color.brightBlue}, ${color.mint})`,
+                            "--bg-color": theme === colorTheme.light ? `linear-gradient(${color.white}, ${color.white})` : `linear-gradient(${color.darkBlue}, ${color.darkBlue})`,
                         } as CSSProperties
                     }
                     className={personalIconStyle}
@@ -128,13 +128,13 @@ export default function PersonalIconComponent() {
                         closeButtonProps={{ className: 'intro-modal-close-btn' }}
                         styles={{
                             header: {
-                                backgroundColor: "#0B1A33",
+                                backgroundColor: color.darkBlue,
                             },
                             content: {
-                                backgroundColor: "#0B1A33",
+                                backgroundColor: color.darkBlue,
                             },
                             title: {
-                                color: "#94A3B8",
+                                color: color.slate300,
                             },
                         }}
                     >

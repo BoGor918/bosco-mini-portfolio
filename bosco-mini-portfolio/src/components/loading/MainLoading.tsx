@@ -9,7 +9,7 @@ export default function MainLoading() {
 
     return (
         <div>
-            <div className={`flex justify-center items-center h-screen ` + (theme === 'light' ? 'bg-white' : 'bg-[#0B1A33]')}>
+            <div className={`flex justify-center items-center h-screen ` + (theme === 'light' ? 'bg-white' : 'bg-dark-blue')}>
                 <Loader size="lg" color={getLoaderColor(theme)} />
             </div>
         </div>
