@@ -71,18 +71,20 @@ The Edit modal is used to update existing content quickly. Users can revise deta
 ## Tech Stack
 
 - Node.js
-- React 18
+- React 19
 - TypeScript
 - Tailwind CSS
+- Rsbuild
 - Mantine
 - Firebase Auth and Firestore
-- Create React App
+- PostCSS and Autoprefixer
 
 ## Getting Started
 
 ### Prerequisites
 
 - Install Node.js from [nodejs.org](https://nodejs.org/en/download)
+- Use Node.js 18.12 or newer for Rsbuild.
 
 ### Environment variables
 
@@ -126,7 +128,6 @@ Inside the bosco-mini-portfolio folder, you can run:
 
 - npm start: Runs the app in development mode
 - npm run build: Builds the app for production
-- npm test: Launches the test runner
 
 ## Project Structure
 
@@ -141,6 +142,8 @@ root/
     |-- node_modules/
     |-- package.json
     |-- package-lock.json
+    |-- postcss.config.cjs
+    |-- rsbuild.config.ts
     |-- tsconfig.json
     |-- tailwind.config.js
     |-- public/
@@ -231,6 +234,13 @@ root/
 
 ## Deployment
 
-The project is deployed on Netlify:
+The project is deployed on Netlify. The repository root contains [netlify.toml](netlify.toml), which configures:
+
+- Base directory: `bosco-mini-portfolio`
+- Build command: `npm run build`
+- Publish directory: `build`
+- SPA fallback for React Router routes
+
+Add the Firebase environment variables from the section above to the Netlify site settings before deploying.
 
 [https://cheungtszlai.netlify.app/](https://cheungtszlai.netlify.app/)
