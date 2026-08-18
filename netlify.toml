@@ -5,6 +5,7 @@
 
   [build.environment]
     GENERATE_SOURCEMAP = "false"
+    NPM_FLAGS = "--include=optional"
 
 [[redirects]]
   from = "/*"
