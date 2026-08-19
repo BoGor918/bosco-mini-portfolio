@@ -1,6 +1,10 @@
 // global variable
 import { color, colorTheme } from "../../../globalVariable/GlobalVariable";
 import { translationKeys, type TranslationKey } from "../../../globalVariable/Translation";
+// mantine
+import { Loader } from '@mantine/core';
+
+const loadingPlaceholders = Array.from({ length: 45 });
 
 export const gridStyles = {
     gridMainDivStyle: "animate-fade animate-delay-0 animate-once flex justify-center items-center mt-[1rem] sm:mt-[1rem] md:mt-[1rem] lg:mt-[2rem] w-full",
@@ -11,6 +15,30 @@ export const gridStyles = {
     gridLazyLoadImageStyle: "w-full h-full object-contain p-4 sm:p-4 md:p-4 lg:p-10 transition-opacity duration-300",
     gridLazyLoaderDivStyle: "absolute inset-0 flex justify-center items-center",
 }
+
+export const GridLoadingPlaceholder = ({
+    loaderColor,
+    small = false,
+    keyPrefix = "grid",
+}: {
+    loaderColor: string;
+    small?: boolean;
+    keyPrefix?: string;
+}) => {
+    return (
+        <>
+            {loadingPlaceholders.map((_, index) => (
+                <div
+                    key={`${keyPrefix}-loading-${index}`}
+                    className={small ? gridStyles.gridLazyLoadImageSmallDivStyle : gridStyles.gridLazyLoadImageDivStyle}
+                    aria-hidden="true"
+                >
+                    <Loader size="lg" type="bars" color={loaderColor} />
+                </div>
+            ))}
+        </>
+    );
+};
 
 export const getModalStyle = (isDarkTheme: boolean) => {
     return isDarkTheme

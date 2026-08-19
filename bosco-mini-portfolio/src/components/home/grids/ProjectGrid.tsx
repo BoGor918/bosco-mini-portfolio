@@ -13,13 +13,10 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // type
 import { ProjectData } from '../../../types/type';
 // util
-import { gridStyles, getModalStyle, NoRecordsFoundComponent } from './util';
+import { gridStyles, getModalStyle, GridLoadingPlaceholder, NoRecordsFoundComponent } from './util';
 import { normalizeImageSource } from '../../util';
 // global variable
 import { languageSetting } from '../../../globalVariable/Translation';
-
-// loading placeholders for skeleton loaders
-const loadingPlaceholders = Array.from({ length: 45 });
 
 export default function ProjectGrid() {
     // global variable
@@ -64,15 +61,7 @@ export default function ProjectGrid() {
             {/* project grid */}
             <div className={gridStyles.gridDivThreeColStyle}>
                 {projectLoading && (
-                    loadingPlaceholders.map((_, index) => (
-                        <div
-                            key={`project-loading-${index}`}
-                            className={gridStyles.gridLazyLoadImageDivStyle}
-                            aria-hidden="true"
-                        >
-                            <Loader size="lg" type="bars" color={loaderColor} />
-                        </div>
-                    ))
+                    <GridLoadingPlaceholder loaderColor={loaderColor} keyPrefix="project" />
                 )}
                 {!projectLoading && projectData.length === 0 && (
                     <NoRecordsFoundComponent translate={t} theme={theme} />

@@ -1,9 +1,9 @@
 // others
-import { lazy, Suspense, useContext, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom';
+import { lazy, Suspense, useContext, useState } from 'react'
 // global components
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { getLoaderColor } from '../../../globalVariable/GlobalVariable';
+import { GridLoadingPlaceholder, gridStyles } from '../grids/util';
 // mantine components
 import { Loader } from '@mantine/core';
 // icons
@@ -18,24 +18,15 @@ const EduGrid = lazy(() => import('../grids/EduGrid'));
 const ProjectGrid = lazy(() => import('../grids/ProjectGrid'));
 const SkillGrid = lazy(() => import('../grids/SkillGrid'));
 
-const validWidgets = new Set(["1", "2", "3", "4"]);
-
 export default function BottomComponent() {
     // translation
     const { t, theme } = useContext(MapperContext)
-    const [searchParams, setSearchParams] = useSearchParams();
-    const widget = searchParams.get("w") ?? "1";
+    const [widget, setWidget] = useState<"1" | "2" | "3" | "4">("1");
     const loaderColor = getLoaderColor(theme);
-
-    useEffect(() => {
-        if (!validWidgets.has(widget)) {
-            setSearchParams({ w: "1" }, { replace: true });
-        }
-    }, [setSearchParams, widget]);
 
     // set nav function
     const navClicked = (value: "1" | "2" | "3" | "4") => {
-        setSearchParams({ w: value });
+        setWidget(value);
     }
 
     // style variable
@@ -101,9 +92,17 @@ export default function BottomComponent() {
             </nav>
             {/* display grid */}
             <div className={displayGridDivStyle}>
-                <Suspense fallback={<Loader className='my-[2rem]' color={loaderColor} />}>
+                <Suspense
+                    fallback={(
+                        <div className={gridStyles.gridMainDivStyle}>
+                            <div className={widget === "4" ? gridStyles.gridDivFiveColStyle : gridStyles.gridDivThreeColStyle}>
+                                <GridLoadingPlaceholder loaderColor={loaderColor} small={widget === "4"} keyPrefix={`widget-${widget}`} />
+                            </div>
+                        </div>
+                    )}
+                >
                     {
-                        widget === "1" || widget === null ? <CompanyGrid /> : widget === "2" ? <EduGrid /> : widget === "3" ? <ProjectGrid /> : widget === "4" ? <SkillGrid /> : <></>
+                        widget === "1" ? <CompanyGrid /> : widget === "2" ? <EduGrid /> : widget === "3" ? <ProjectGrid /> : <SkillGrid />
                     }
                 </Suspense>
             </div>

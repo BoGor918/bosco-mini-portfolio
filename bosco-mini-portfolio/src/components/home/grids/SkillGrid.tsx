@@ -13,11 +13,8 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 // types
 import { SkillData } from '../../../types/type';
 // util
-import { gridStyles, getModalStyle, NoRecordsFoundComponent } from './util';
+import { gridStyles, getModalStyle, GridLoadingPlaceholder, NoRecordsFoundComponent } from './util';
 import { normalizeImageSource } from '../../util';
-
-// loading placeholders for skeleton loaders
-const loadingPlaceholders = Array.from({ length: 45 });
 
 export default function SkillGrid() {
     // global variable
@@ -61,15 +58,7 @@ export default function SkillGrid() {
             {/* skill grid */}
             <div className={gridStyles.gridDivFiveColStyle}>
                 {skillLoading && (
-                    loadingPlaceholders.map((_, index) => (
-                        <div
-                            key={`skill-loading-${index}`}
-                            className={gridStyles.gridLazyLoadImageSmallDivStyle}
-                            aria-hidden="true"
-                        >
-                            <Loader size="lg" type="bars" color={loaderColor} />
-                        </div>
-                    ))
+                    <GridLoadingPlaceholder loaderColor={loaderColor} small keyPrefix="skill" />
                 )}
                 {!skillLoading && skillData.length === 0 && (
                     <NoRecordsFoundComponent translate={t} theme={theme} />
