@@ -22,6 +22,8 @@ import {
 } from 'firebase/auth';
 // query
 import { saveUserDocument } from '../query/UserQuery';
+// notification
+import { NotificationSuccess, NotificationError } from '../globalVariable/Notification';
 
 // form submit handler type
 type SubmitHandler = {
@@ -123,12 +125,12 @@ export default function Login() {
                 const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signUpEmail);
 
                 if (!isEmail) {
-                    showNotification(t(translationKeys.authValidEmailRequired), 'error');
+                    showNotification(t(translationKeys.authValidEmailRequired), NotificationError);
                     setLoading(false);
                     return;
                 }
                 if (!signUpUsername) {
-                    showNotification(t(translationKeys.authUsernameRequired), 'error');
+                    showNotification(t(translationKeys.authUsernameRequired), NotificationError);
                     setLoading(false);
                     return;
                 }
@@ -142,7 +144,7 @@ export default function Login() {
                     IsAdmin: false,
                 });
 
-                showNotification(t(translationKeys.authAccountCreatedSuccess), 'success');
+                showNotification(t(translationKeys.authAccountCreatedSuccess), NotificationSuccess);
                 return;
             }
 
@@ -152,7 +154,7 @@ export default function Login() {
             if (!isEmail) {
                 const userProfile = userData.find((profile) => profile.Username === inputValue);
                 if (!userProfile || !userProfile.Email) {
-                    showNotification(t(translationKeys.authInvalidUsernameOrPassword), 'error');
+                    showNotification(t(translationKeys.authInvalidUsernameOrPassword), NotificationError);
                     setLoading(false);
                     return;
                 }
@@ -160,12 +162,12 @@ export default function Login() {
             }
 
             await signInWithEmailAndPassword(auth, emailFromUserProfile ?? inputValue, values.password);
-            showNotification(t(translationKeys.authLoggedInSuccess), 'success');
+            showNotification(t(translationKeys.authLoggedInSuccess), NotificationSuccess);
 
             navigate('/dashboard');
         } catch (error: any) {
             const notificationMessage = getFirebaseErrorMessage(error?.code, t)
-            showNotification(notificationMessage, 'error');
+            showNotification(notificationMessage, NotificationError);
         } finally {
             form.setFieldValue('password', '');
             setLoading(false);

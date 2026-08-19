@@ -110,3 +110,5 @@ export type UserProfile = {
     UID?: string,
     IsAdmin?: boolean,
 }
+
+export type NotificationType = 'success' | 'error'

@@ -4,10 +4,15 @@ import { CheckIcon, XIcon } from '@phosphor-icons/react';
 import { notifications } from '@mantine/notifications';
 // translation
 import { languageSetting, translations, translationKeys } from './Translation';
+// types
+import type { NotificationType } from '../types/type';
+
+export const NotificationSuccess = 'success';
+export const NotificationError = 'error';
 
 export const showNotification = (
     message: string,
-    type: 'success' | 'error',
+    type: NotificationType,
 ) => {
     const storedLanguage = localStorage.getItem(languageSetting.key);
     const language = storedLanguage === languageSetting.traditionalChinese || storedLanguage === languageSetting.simplifiedChinese
@@ -19,9 +24,9 @@ export const showNotification = (
     const checkIcon = <CheckIcon size={20} />;
 
     notifications.show({
-        title: translations[language][type === 'success' ? translationKeys.notificationSuccess : translationKeys.notificationError],
+        title: translations[language][type === NotificationSuccess ? translationKeys.notificationSuccess : translationKeys.notificationError],
         message: message,
-        icon: type === 'success' ? checkIcon : xIcon,
-        color: type === 'success' ? 'teal' : 'red',
+        icon: type === NotificationSuccess ? checkIcon : xIcon,
+        color: type === NotificationSuccess ? 'teal' : 'red',
     });
 };
