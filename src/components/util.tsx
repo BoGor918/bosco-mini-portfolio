@@ -1,3 +1,10 @@
+// grid type
+export type GridType = "company" | "education" | "project" | "skill";
+export const CompanyGridType: GridType = "company";
+export const EducationGridType: GridType = "education";
+export const ProjectGridType: GridType = "project";
+export const SkillGridType: GridType = "skill";
+
 // normalize image source to be used in <img> tag
 export const normalizeImageSource = (logoSource: string) => {
     const source = logoSource.trim();

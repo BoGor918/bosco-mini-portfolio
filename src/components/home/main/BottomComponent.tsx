@@ -4,13 +4,13 @@ import { lazy, Suspense, useContext, useState } from 'react'
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
 import { getLoaderColor } from '../../../globalVariable/GlobalVariable';
 import { GridLoadingPlaceholder, gridStyles } from '../grids/util';
-// mantine components
-import { Loader } from '@mantine/core';
 // icons
 import { MdOutlineWorkOutline, MdOutlineSchool } from "react-icons/md";
 import { BiBookContent, BiCalendarCheck } from "react-icons/bi";
 // translation
 import { translationKeys } from '../../../globalVariable/Translation';
+// util
+import { GridType, CompanyGridType, EducationGridType, ProjectGridType, SkillGridType } from '../../util';
 
 // lazy load component
 const CompanyGrid = lazy(() => import('../grids/CompanyGrid'));
@@ -21,11 +21,11 @@ const SkillGrid = lazy(() => import('../grids/SkillGrid'));
 export default function BottomComponent() {
     // translation
     const { t, theme } = useContext(MapperContext)
-    const [widget, setWidget] = useState<"1" | "2" | "3" | "4">("1");
+    const [widget, setWidget] = useState<GridType>("company");
     const loaderColor = getLoaderColor(theme);
 
     // set nav function
-    const navClicked = (value: "1" | "2" | "3" | "4") => {
+    const navClicked = (value: GridType) => {
         setWidget(value);
     }
 
@@ -57,35 +57,35 @@ export default function BottomComponent() {
                 {/* nav button */}
                 <div className={navButtonDivStyle}>
                     {/* option 1 */}
-                    <button type="button" onClick={() => navClicked("1")} className={navButtonStyle}>
-                        <div className={widget === "1" || widget === null ? selectedStyle : unSelectedStyle} />
+                    <button type="button" onClick={() => navClicked(CompanyGridType)} className={navButtonStyle}>
+                        <div className={widget === CompanyGridType || widget === null ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
-                            <MdOutlineWorkOutline className={widget === "1" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "1" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.work)}</span>
+                            <MdOutlineWorkOutline className={widget === CompanyGridType || widget === null ? iconStyleSelected : iconStyleUnSelected} size={30} />
+                            <span className={widget === CompanyGridType || widget === null ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.work)}</span>
                         </div>
                     </button>
                     {/* option 2 */}
-                    <button type="button" onClick={() => navClicked("2")} className={navButtonStyle}>
-                        <div className={widget === "2" ? selectedStyle : unSelectedStyle} />
+                    <button type="button" onClick={() => navClicked(EducationGridType)} className={navButtonStyle}>
+                        <div className={widget === EducationGridType ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
-                            <MdOutlineSchool className={widget === "2" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "2" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.education)}</span>
+                            <MdOutlineSchool className={widget === EducationGridType ? iconStyleSelected : iconStyleUnSelected} size={30} />
+                            <span className={widget === EducationGridType ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.education)}</span>
                         </div>
                     </button>
                     {/* option 3 */}
-                    <button type="button" onClick={() => navClicked("3")} className={navButtonStyle}>
-                        <div className={widget === "3" ? selected3Style : unSelected3Style} />
+                    <button type="button" onClick={() => navClicked(ProjectGridType)} className={navButtonStyle}>
+                        <div className={widget === ProjectGridType ? selected3Style : unSelected3Style} />
                         <div className={navIconDivStyle}>
-                            <BiBookContent className={widget === "3" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "3" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.project)}</span>
+                            <BiBookContent className={widget === ProjectGridType ? iconStyleSelected : iconStyleUnSelected} size={30} />
+                            <span className={widget === ProjectGridType ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.project)}</span>
                         </div>
                     </button>
                     {/* option 4 */}
-                    <button type="button" onClick={() => navClicked("4")} className={navButtonStyle}>
-                        <div className={widget === "4" ? selectedStyle : unSelectedStyle} />
+                    <button type="button" onClick={() => navClicked(SkillGridType)} className={navButtonStyle}>
+                        <div className={widget === SkillGridType ? selectedStyle : unSelectedStyle} />
                         <div className={navIconDivStyle}>
-                            <BiCalendarCheck className={widget === "4" ? iconStyleSelected : iconStyleUnSelected} size={30} />
-                            <span className={widget === "4" ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.skill)}</span>
+                            <BiCalendarCheck className={widget === SkillGridType ? iconStyleSelected : iconStyleUnSelected} size={30} />
+                            <span className={widget === SkillGridType ? textSytleSelected : textSytleUnSelected}>{t(translationKeys.skill)}</span>
                         </div>
                     </button>
                 </div>
@@ -95,14 +95,14 @@ export default function BottomComponent() {
                 <Suspense
                     fallback={(
                         <div className={gridStyles.gridMainDivStyle}>
-                            <div className={widget === "4" ? gridStyles.gridDivFiveColStyle : gridStyles.gridDivThreeColStyle}>
-                                <GridLoadingPlaceholder loaderColor={loaderColor} small={widget === "4"} keyPrefix={`widget-${widget}`} />
+                            <div className={widget === SkillGridType ? gridStyles.gridDivFiveColStyle : gridStyles.gridDivThreeColStyle}>
+                                <GridLoadingPlaceholder loaderColor={loaderColor} small={widget === SkillGridType} keyPrefix={`widget-${widget}`} />
                             </div>
                         </div>
                     )}
                 >
                     {
-                        widget === "1" ? <CompanyGrid /> : widget === "2" ? <EduGrid /> : widget === "3" ? <ProjectGrid /> : <SkillGrid />
+                        widget === CompanyGridType ? <CompanyGrid /> : widget === EducationGridType ? <EduGrid /> : widget === ProjectGridType ? <ProjectGrid /> : <SkillGrid />
                     }
                 </Suspense>
             </div>
