@@ -71,21 +71,21 @@ export default function Dashboard() {
     const widget = searchParams.get("d") ?? "c";
     // dashboard navigation items
     const dashboardNavItems = useMemo(() => [
-        { key: 'c', label: t(translationKeys.company) },
-        { key: 'e', label: t(translationKeys.education) },
-        { key: 'p', label: t(translationKeys.project) },
-        { key: 's', label: t(translationKeys.skill) },
+        { key: 'c', label: t(translationKeys.works) },
+        { key: 'e', label: t(translationKeys.educations) },
+        { key: 'p', label: t(translationKeys.projects) },
+        { key: 's', label: t(translationKeys.skills) },
     ], [t]);
     // modal title
     const modalTitle = widget === dashboardNavItems[0].key
-        ? companyModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.company)}` : `${t(translationKeys.add)}${t(translationKeys.company)}`
+        ? companyModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.work)}` : `${t(translationKeys.add)}${t(translationKeys.work)}`
         : widget === dashboardNavItems[3].key
             ? skillModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.skill)}` : `${t(translationKeys.add)}${t(translationKeys.skill)}`
             : widget === dashboardNavItems[2].key
                 ? projectModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.project)}` : `${t(translationKeys.add)}${t(translationKeys.project)}`
                 : schoolModalMode === 'edit' ? `${t(translationKeys.edit)}${t(translationKeys.education)}` : `${t(translationKeys.add)}${t(translationKeys.education)}`;
     // dashboard title
-    const dashboardTitle = widget === "c" ? `${t(translationKeys.companys)}` : widget === "s" ? `${t(translationKeys.skills)}` : widget === "p" ? `${t(translationKeys.projects)}` : `${t(translationKeys.educations)}`;
+    const dashboardTitle = widget === "c" ? `${t(translationKeys.works)}` : widget === "s" ? `${t(translationKeys.skills)}` : widget === "p" ? `${t(translationKeys.projects)}` : `${t(translationKeys.educations)}`;
     // modal handle
     const isEditModalOpen =
         (widget === 'c' && companyModalMode === modalEditMode) ||
