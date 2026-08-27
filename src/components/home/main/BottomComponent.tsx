@@ -32,7 +32,7 @@ export default function BottomComponent() {
     // style variable
     const mainDivStyle = "self-center w-full max-w-[365px] sm:max-w-[355px] md:max-w-[355px] lg:max-w-[910px] flex flex-col items-center justify-center font-light mb-[5rem]";
     const navDivStyle = "py-[1rem] flex flex-col justify-between items-center sticky top-[-0.1px] z-10 bg-white dark:bg-dark-blue w-full max-w-[365px] sm:max-w-[355px] md:max-w-[355px] lg:max-w-[910px]";
-    const navTextStyle = "ml-[5px] self-start text-lg font-light text-dark-blue dark:text-white lg:hidden animate-fade-up animate-delay-200 animate-once";
+    const navTextStyle = "ml-[5px] self-start text-lg text-slate-500 dark:text-slate-300 text-sm lg:hidden animate-fade-up animate-delay-200 animate-once";
     const navLineDivStyle = "overflow-hidden animate-fade-up animate-delay-200 animate-once flex flex-col justify-end items-end";
     const navLineStyle = "w-[355px] sm:w-[355px] md:w-[355px] lg:w-[900px] h-[1px] bg-dark-blue/35 dark:bg-white/35";
     const navButtonDivStyle = "flex animate-fade-up animate-delay-200 animate-once";
