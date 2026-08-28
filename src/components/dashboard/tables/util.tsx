@@ -1,3 +1,9 @@
+// mantine
+import { Loader } from "@mantine/core";
+// global variable
+import { TranslationKey, translationKeys } from "../../../globalVariable/Translation";
+import { colorTheme } from "../../../globalVariable/GlobalVariable";
+
 // dashboard table styles
 export const getDashboardTableStyles = (isDarkTheme: boolean) => ({
     tableMainStyle: `min-w-[980px]`,
@@ -39,4 +45,18 @@ export const toPeriod = (
     }
 
     return `${startDate} - ${toDisplayDate(endDateSeconds)}`;
+};
+
+export const TableDotLoader = ({ loaderColor }: { loaderColor: string }) => (
+    <div className="h-[241.5px] w-full flex items-center justify-center gap-2 py-2">
+        <Loader size="sm" type="dots" color={loaderColor} />
+    </div>
+);
+
+export const TableNoRecordsFoundComponent = ({ translate, theme }: { translate: (key: TranslationKey) => string, theme: string }) => {
+    return (
+        <div className={`h-[241.5px] w-full flex items-center justify-center rounded-md text-sm font-semibold ${theme === colorTheme.dark ? 'text-white' : 'text-slate-500'}`}>
+            {translate(translationKeys.noRecordsFound)}
+        </div>
+    );
 };

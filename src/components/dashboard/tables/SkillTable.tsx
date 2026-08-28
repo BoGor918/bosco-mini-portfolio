@@ -1,7 +1,7 @@
 // react
 import { useContext } from 'react';
 // mantine
-import { Loader, Table, Tooltip } from '@mantine/core';
+import { Table, Tooltip } from '@mantine/core';
 // global variable
 import { colorTheme, getLoaderColor } from '../../../globalVariable/GlobalVariable';
 import { MapperContext } from '../../../globalVariable/MapperContextProvider';
@@ -11,8 +11,7 @@ import { SkillData } from '../../../types/type';
 import { MdEdit } from "react-icons/md";
 // util
 import { normalizeImageSource } from '../../util';
-import { getDashboardTableStyles } from './util';
-import { NoRecordsFoundComponent } from '../../home/grids/util';
+import { getDashboardTableStyles, TableDotLoader, TableNoRecordsFoundComponent } from './util';
 
 type SkillTableProps = {
     onEditSkill?: (skill: SkillData) => void;
@@ -58,6 +57,7 @@ export default function SkillTable({ onEditSkill }: SkillTableProps) {
             </Table.Td>
         </Table.Tr>
     ));
+    const showTablePlaceholder = skillLoading || rows.length === 0;
 
     return (
         <div className={tableWrapperStyle}>
@@ -70,26 +70,12 @@ export default function SkillTable({ onEditSkill }: SkillTableProps) {
                             <Table.Th className={headCellStyle}></Table.Th>
                         </Table.Tr>
                     </Table.Thead>
-                    <Table.Tbody>
-                        {skillLoading ? (
-                            <Table.Tr>
-                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={3}>
-                                    <div className="flex items-center justify-center gap-2 py-2">
-                                        <Loader size="sm" type="dots" color={loaderColor} />
-                                    </div>
-                                </Table.Td>
-                            </Table.Tr>
-                        ) : rows.length > 0 ? (
-                            rows
-                        ) : (
-                            <Table.Tr>
-                                <Table.Td className={`${bodyCellStyle} text-center`} colSpan={3}>
-                                    <NoRecordsFoundComponent translate={t} theme={theme} />
-                                </Table.Td>
-                            </Table.Tr>
-                        )}
-                    </Table.Tbody>
+                    {!showTablePlaceholder && <Table.Tbody>{rows}</Table.Tbody>}
                 </Table>
+                {showTablePlaceholder && (skillLoading
+                    ? <TableDotLoader loaderColor={loaderColor} />
+                    : <TableNoRecordsFoundComponent translate={t} theme={theme} />
+                )}
             </div>
         </div>
     )
