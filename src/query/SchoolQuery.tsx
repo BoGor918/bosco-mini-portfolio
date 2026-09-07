@@ -14,7 +14,7 @@ export const fetchSchoolCollectionData = (
     onData: (companies: SchoolData[]) => void,
     onError?: () => void,
 ) => {
-    const schoolQuery = query(collection(firestore, 'School'), orderBy('CreateDate', 'desc'));
+    const schoolQuery = query(collection(firestore, 'School'), orderBy('StartDate', 'desc'));
 
     return onSnapshot(
         schoolQuery,

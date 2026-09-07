@@ -14,7 +14,7 @@ export const fetchCompanyCollectionData = (
     onData: (companies: CompanyData[]) => void,
     onError?: () => void,
 ) => {
-    const companyQuery = query(collection(firestore, 'Company'), orderBy('CreateDate', 'desc'));
+    const companyQuery = query(collection(firestore, 'Company'), orderBy('StartDate', 'desc'));
 
     return onSnapshot(
         companyQuery,
