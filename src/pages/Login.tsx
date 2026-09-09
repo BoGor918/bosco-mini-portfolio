@@ -239,6 +239,7 @@ export default function Login() {
                             label={t(translationKeys.username)}
                             key={form.key('username')}
                             styles={inputStyles}
+                            maxLength={20}
                             {...form.getInputProps('username')}
                         />
                     </>

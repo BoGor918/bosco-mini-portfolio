@@ -12,6 +12,7 @@ export type LanguageType =
 
 const en = {
     introModalTitle: 'Welcome to My Mini Portfolio Website',
+    introModalTitleWithUser: 'Welcome {{Username}} to My Mini Portfolio Website',
     introModalDescription: 'This Mini Portfolio Website is a dynamic and efficient web application built using a powerful stack consisting of Node, React, TypeScript, Tailwind CSS, Mantine, and Firebase. This combination of cutting-edge technologies forms a solid foundation for showcasing my information in an effective way. With its responsive design, the website presents my work experience, education, projects, and skills visually engaging and user-friendly, ensuring visitors have an enjoyable and informative experience while exploring my portfolio.',
     aboutThisWebsite: 'About This Website',
     viewIntro: "View<br/>Intro",
@@ -129,6 +130,7 @@ const en = {
 
 const zhHK = {
     introModalTitle: '歡迎來到我的個人網站',
+    introModalTitleWithUser: '歡迎 {{Username}} 來到我的個人網站',
     introModalDescription: '這個個人網站是一個動態且高效的網頁應用程式，使用 Node、React、TypeScript、Tailwind CSS、Mantine 與 Firebase 建置而成。這些先進技術的組合，為我有效展示個人資訊提供了穩固基礎。透過響應式設計，網站能以視覺化且易用的方式呈現我的工作經驗、學歷、專案與技能，讓訪客在瀏覽作品集時獲得愉快且具資訊性的體驗。',
     aboutThisWebsite: '關於這個網站',
     viewIntro: "查看簡介",
@@ -245,6 +247,7 @@ const zhHK = {
 }
 const zhCN = {
     introModalTitle: '欢迎来到我的个人网站',
+    introModalTitleWithUser: '欢迎 {{Username}} 来到我的个人网站',
     introModalDescription: '这个个人网站是一个动态且高效的网页应用程式，使用 Node、React、TypeScript、Tailwind CSS、Mantine 与 Firebase 建置而成。这些先进技术的组合，为我有效展示个人资讯提供了稳固基础。透过响应式设计，网站能以视觉化且易用的方式呈现我的工作经验、学历、专案与技能，让访客在浏览作品集时获得愉快且具资讯性的体验。',
     aboutThisWebsite: '关于这个网站',
     viewIntro: "查看简介",
@@ -362,6 +365,7 @@ const zhCN = {
 
 export const translationKeys = {
     introModalTitle: 'introModalTitle',
+    introModalTitleWithUser: 'introModalTitleWithUser',
     introModalDescription: 'introModalDescription',
     aboutThisWebsite: 'aboutThisWebsite',
     viewIntro: 'viewIntro',
@@ -484,3 +488,10 @@ export const translations = {
     'zh-HK': zhHK,
     'zh-CN': zhCN,
 } as const;
+
+export const getIntroModalTitle = (language: LanguageType, username?: string) => {
+    if (!username) {
+        return translations[language].introModalTitle;
+    }
+    return translations[language].introModalTitleWithUser.replace('{{Username}}', username);
+};

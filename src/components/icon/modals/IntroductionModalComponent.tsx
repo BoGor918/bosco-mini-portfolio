@@ -2,20 +2,20 @@
 import { useContext } from "react"
 import { modalStyles } from "../../home/modals/util"
 import { MapperContext } from "../../../globalVariable/MapperContextProvider"
-import { translationKeys } from "../../../globalVariable/Translation"
+import { getIntroModalTitle, translationKeys } from "../../../globalVariable/Translation"
 
 export default function IntroductionModalComponent() {
   // style variable
   const headlineStyle = 'text-center font-medium text-slate-500 dark:text-white text-[20px] sm:text-[20px] md:text-[20px] lg:text-[25px]'
   const textStyle = 'mt-[0.5rem] text-justify text-[14px] sm:text-[14px] md:text-[14px] lg:text-[16px] text-slate-500 dark:text-slate-300'
   // translation
-  const { t } = useContext(MapperContext)
+  const { t, loginUser, language } = useContext(MapperContext)
 
   return (
     <div className={modalStyles.modalMainDiv}>
       {/* headline */}
       <span className={headlineStyle}>
-        {t(translationKeys.introModalTitle)}
+        {getIntroModalTitle(language, loginUser?.Username)}
       </span>
       {/* description */}
       <span className={textStyle}>
