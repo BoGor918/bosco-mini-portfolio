@@ -203,7 +203,7 @@ export default function TopComponent() {
                     <div className={focusContactDivStyle}>
                         <div className={focusBoxStyle}>
                             <div className={focusTitleStyle}>
-                                {t(translationKeys.contactBosco)}
+                                {t(translationKeys.contact)}
                             </div>
                             <div className={focusContentDivStyle}>
                                 <div className={focusItemStyle}>
